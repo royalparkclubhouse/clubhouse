@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0043)file:///C:/Users/robbi/Downloads/index.html -->
+<!-- saved from url=(0061)file:///C:/Users/robbi/Downloads/Clubhouse_v0.6.13_index.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -10,7 +10,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="format-detection" content="telephone=no">
-<title>Clubhouse — Royal Park Golf v0.6.12</title>
+<title>Clubhouse — Royal Park Golf v0.6.13</title>
 <style>
 :root{
   --green:#184c37;--green2:#24684c;--gold:#c8a44d;--ink:#18211c;--muted:#66736b;
@@ -19,10 +19,10 @@
 }
 *{box-sizing:border-box}
 html{font-size:17px}
-body{margin:0;font-family:Arial,Segoe UI,sans-serif;background:var(--bg);color:var(--ink)}
+body{margin:0;font-family:Arial,Segoe UI,sans-serif;background:var(--bg);color:var(--ink);padding-top:env(safe-area-inset-top);padding-right:env(safe-area-inset-right);padding-bottom:env(safe-area-inset-bottom);padding-left:env(safe-area-inset-left)}
 button,input,select{font:inherit}
 .app{max-width:760px;margin:auto;min-height:100vh;background:#fff}
-header{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 14px;background:var(--green);color:#fff;position:sticky;top:0;z-index:20}
+header{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 14px;background:var(--green);color:#fff;position:sticky;top:env(safe-area-inset-top);z-index:20}
 .brand{display:flex;align-items:center;gap:10px;min-width:0}
 .logo{width:48px;height:48px;border-radius:12px;object-fit:cover;border:2px solid rgba(255,255,255,.85)}
 .brand h1{font-size:1.15rem;margin:0}.brand small{display:block;opacity:.82;margin-top:2px;white-space:nowrap}
@@ -38,6 +38,18 @@ p{line-height:1.48}.sub{color:var(--muted);font-size:.9rem;margin-top:0}
 label{display:block;font-size:.82rem;font-weight:800;color:#52645a;margin:13px 0 6px}
 input,select{width:100%;padding:14px 12px;border:1px solid #c6d3ca;border-radius:12px;background:#fff;min-height:50px}
 input:focus,select:focus{outline:3px solid rgba(36,104,76,.16);border-color:var(--green2)}
+.player-search-wrap{position:relative}
+.player-suggestions{display:none;position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:40;
+background:#fff;border:1px solid #c6d3ca;border-radius:12px;box-shadow:0 10px 24px rgba(24,76,55,.16);
+max-height:260px;overflow-y:auto}
+.player-suggestions.show{display:block}
+.player-suggestion{width:100%;border:0;border-bottom:1px solid var(--line);background:#fff;
+padding:13px 12px;text-align:left;cursor:pointer;color:var(--ink)}
+.player-suggestion:last-child{border-bottom:0}
+.player-suggestion b{display:block;color:var(--green);font-size:.98rem}
+.player-suggestion span{display:block;color:var(--muted);font-size:.78rem;margin-top:3px}
+.player-suggestion:active{background:#edf4ef}
+
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .player-card{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:10px;background:#fbfdfb}
 .player-card h3{margin:0;font-size:1.05rem}.player-meta{font-size:.8rem;color:var(--muted);margin-top:5px}
@@ -121,8 +133,10 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
   <div class="card">
     <div class="row"><div><b id="roundCompLabel"></b><div class="small" id="roundDateLabel"></div></div><span class="badge" id="cardsCount">0 cards entered</span></div>
     <label>Player</label>
-    <input id="playerSearch" list="playerOptions" autocomplete="off" placeholder="Type a first name or surname" oninput="playerSelected()">
-    <datalist id="playerOptions"></datalist>
+    <div class="player-search-wrap">
+      <input id="playerSearch" autocomplete="off" placeholder="Type a first name or surname" oninput="playerSelected()" onfocus="playerSelected()">
+      <div id="playerSuggestions" class="player-suggestions"></div>
+    </div>
     <div id="playerInfo" class="notice" style="margin-top:12px">Select a player to display the handicap.</div>
     <label>Gross score</label><input id="grossInput" type="number" inputmode="numeric" min="1" placeholder="Enter gross score">
     <button class="btn btn-primary" onclick="addScorecard()">Add Completed Card</button>
@@ -685,7 +699,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
   <div id="reviewContent" class="review-grid"></div>
 </section>
 </main>
-<footer>Clubhouse Prototype v0.6.12</footer>
+<footer>Clubhouse v0.6.13</footer>
 </div>
 
 <div id="editModal" class="modal"><div class="modal-sheet">
@@ -858,23 +872,67 @@ function activeHandicap(p){
  }
  return p.current
 }
-function populatePlayerSelect(){
+function availablePlayers(){
  const used=new Set(round.scores.map(x=>x.playerId));
- const list=document.getElementById("playerOptions");
- list.innerHTML=players.filter(p=>!used.has(p.id)).map(p=>`<option value="${p.name}">${p.id} · ${signed(activeHandicap(p))}</option>`).join("");
+ return players.filter(p=>!used.has(p.id))
+}
+function populatePlayerSelect(){
  document.getElementById("playerSearch").value="";
  document.getElementById("grossInput").value="";
- document.getElementById("playerInfo").textContent="Start typing a first name or surname."
+ document.getElementById("playerInfo").textContent="Start typing a first name or surname.";
+ hidePlayerSuggestions()
 }
 function selectedPlayer(){
  const typed=document.getElementById("playerSearch").value.trim().toLowerCase();
- return players.find(p=>p.name.toLowerCase()===typed)
+ return availablePlayers().find(p=>p.name.toLowerCase()===typed)
+}
+function selectSuggestedPlayer(id){
+ const p=availablePlayers().find(x=>x.id===id);
+ if(!p)return;
+ document.getElementById("playerSearch").value=p.name;
+ document.getElementById("playerInfo").innerHTML=
+   `<b>${p.name}</b><br>Reference ${p.id} · Handicap <b>${signed(activeHandicap(p))}</b>`;
+ hidePlayerSuggestions();
+ document.getElementById("grossInput").focus()
+}
+function hidePlayerSuggestions(){
+ const box=document.getElementById("playerSuggestions");
+ if(box){box.classList.remove("show");box.innerHTML=""}
 }
 function playerSelected(){
+ const input=document.getElementById("playerSearch");
+ const typed=input.value.trim().toLowerCase();
  const p=selectedPlayer();
- document.getElementById("playerInfo").innerHTML=p
-   ? `<b>${p.name}</b><br>Reference ${p.id} · Handicap <b>${signed(activeHandicap(p))}</b>`
-   : "Continue typing, then select the full player name from the list."
+ const box=document.getElementById("playerSuggestions");
+
+ if(p){
+   document.getElementById("playerInfo").innerHTML=
+     `<b>${p.name}</b><br>Reference ${p.id} · Handicap <b>${signed(activeHandicap(p))}</b>`;
+   hidePlayerSuggestions();
+   return
+ }
+
+ document.getElementById("playerInfo").textContent=
+   typed ? "Tap the correct player from the list below." : "Start typing a first name or surname.";
+
+ if(!typed){hidePlayerSuggestions();return}
+
+ const matches=availablePlayers().filter(p=>{
+   const words=p.name.toLowerCase().split(/\s+/);
+   return p.name.toLowerCase().includes(typed) || words.some(w=>w.startsWith(typed))
+ }).slice(0,12);
+
+ if(!matches.length){
+   box.innerHTML='<div class="player-suggestion"><span>No matching player found.</span></div>';
+   box.classList.add("show");
+   return
+ }
+
+ box.innerHTML=matches.map(p=>
+   `<button type="button" class="player-suggestion" onclick="selectSuggestedPlayer('${p.id}')">`+
+   `<b>${p.name}</b><span>Reference ${p.id} · Handicap ${signed(activeHandicap(p))}</span></button>`
+ ).join("");
+ box.classList.add("show")
 }
 function addScorecard(){
  const p=selectedPlayer();
@@ -1166,6 +1224,12 @@ function buildReviewPack(){const samplePlayers=players.slice(0,4);document.getEl
 <div class="review-screen"><h2>6. Handicap Adjustments and JSON</h2><p>0–20 players: +2/+1 and −2/−1.</p><p>21+ players: +3/+2/+1 and −3/−2/−1.</p><p>Mick may alter the suggested changes before saving.</p><p>After saving, email the complete JSON round record to Robbie.</p></div>
 <div class="review-screen"><h2>7. Finalise Round</h2><p>Updated handicaps remain saved. Active score-entry information is cleared for the next round only after confirmation.</p></div><div class="review-screen"><h2>8. Current Handicaps</h2><p>Full names, reference numbers and editable current handicaps. Save changes before the next round.</p></div>`}
 function formatDate(s){if(!s)return"";return new Date(s+"T12:00:00").toLocaleDateString("en-AU",{weekday:"long",day:"numeric",month:"long",year:"numeric"})}
+
+document.addEventListener("click",function(e){
+ const wrap=e.target.closest(".player-search-wrap");
+ if(!wrap)hidePlayerSuggestions()
+});
+
 </script>
 
 </body></html>
