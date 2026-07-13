@@ -1,16 +1,10 @@
 <!DOCTYPE html>
-<!-- saved from url=(0061)file:///C:/Users/robbi/Downloads/Clubhouse_v0.6.13_index.html -->
+<!-- saved from url=(0068)file:///C:/Users/robbi/Downloads/Clubhouse_v0.6.13_master_index.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#184c37">
-<meta name="application-name" content="Clubhouse">
-<meta name="apple-mobile-web-app-title" content="Clubhouse">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="format-detection" content="telephone=no">
-<title>Clubhouse — Royal Park Golf v0.6.13</title>
+<title>Clubhouse v0.6.13</title>
 <style>
 :root{
   --green:#184c37;--green2:#24684c;--gold:#c8a44d;--ink:#18211c;--muted:#66736b;
@@ -22,7 +16,7 @@ html{font-size:17px}
 body{margin:0;font-family:Arial,Segoe UI,sans-serif;background:var(--bg);color:var(--ink);padding-top:env(safe-area-inset-top);padding-right:env(safe-area-inset-right);padding-bottom:env(safe-area-inset-bottom);padding-left:env(safe-area-inset-left)}
 button,input,select{font:inherit}
 .app{max-width:760px;margin:auto;min-height:100vh;background:#fff}
-header{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 14px;background:var(--green);color:#fff;position:sticky;top:env(safe-area-inset-top);z-index:20}
+header{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:calc(13px + env(safe-area-inset-top)) 14px 13px;background:var(--green);color:#fff;position:sticky;top:0;z-index:20}
 .brand{display:flex;align-items:center;gap:10px;min-width:0}
 .logo{width:48px;height:48px;border-radius:12px;object-fit:cover;border:2px solid rgba(255,255,255,.85)}
 .brand h1{font-size:1.15rem;margin:0}.brand small{display:block;opacity:.82;margin-top:2px;white-space:nowrap}
@@ -38,18 +32,6 @@ p{line-height:1.48}.sub{color:var(--muted);font-size:.9rem;margin-top:0}
 label{display:block;font-size:.82rem;font-weight:800;color:#52645a;margin:13px 0 6px}
 input,select{width:100%;padding:14px 12px;border:1px solid #c6d3ca;border-radius:12px;background:#fff;min-height:50px}
 input:focus,select:focus{outline:3px solid rgba(36,104,76,.16);border-color:var(--green2)}
-.player-search-wrap{position:relative}
-.player-suggestions{display:none;position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:40;
-background:#fff;border:1px solid #c6d3ca;border-radius:12px;box-shadow:0 10px 24px rgba(24,76,55,.16);
-max-height:260px;overflow-y:auto}
-.player-suggestions.show{display:block}
-.player-suggestion{width:100%;border:0;border-bottom:1px solid var(--line);background:#fff;
-padding:13px 12px;text-align:left;cursor:pointer;color:var(--ink)}
-.player-suggestion:last-child{border-bottom:0}
-.player-suggestion b{display:block;color:var(--green);font-size:.98rem}
-.player-suggestion span{display:block;color:var(--muted);font-size:.78rem;margin-top:3px}
-.player-suggestion:active{background:#edf4ef}
-
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .player-card{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:10px;background:#fbfdfb}
 .player-card h3{margin:0;font-size:1.05rem}.player-meta{font-size:.8rem;color:var(--muted);margin-top:5px}
@@ -94,7 +76,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
 </header>
 
 <main>
-<section id="home" class="screen">
+<section id="home" class="screen active">
   <div class="hero"><h2>Clubhouse</h2><p>Enter completed scorecards, calculate prizes, update handicaps and prepare the Honour Board.</p></div>
   <button class="btn btn-primary" onclick="openTodayRound()">Today’s Round</button>
   <button class="btn btn-secondary" onclick="showScreen(&#39;handicaps&#39;)">Current Handicaps</button>
@@ -131,17 +113,15 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
   <h2>Enter Scorecards</h2>
   <p class="sub">Enter only the gross score from each completed card.</p>
   <div class="card">
-    <div class="row"><div><b id="roundCompLabel"></b><div class="small" id="roundDateLabel"></div></div><span class="badge" id="cardsCount">0 cards entered</span></div>
+    <div class="row"><div><b id="roundCompLabel">Stroke</b><div class="small" id="roundDateLabel">Sunday 12 July 2026</div></div><span class="badge" id="cardsCount">0 players</span></div>
     <label>Player</label>
-    <div class="player-search-wrap">
-      <input id="playerSearch" autocomplete="off" placeholder="Type a first name or surname" oninput="playerSelected()" onfocus="playerSelected()">
-      <div id="playerSuggestions" class="player-suggestions"></div>
-    </div>
-    <div id="playerInfo" class="notice" style="margin-top:12px">Select a player to display the handicap.</div>
+    <input id="playerSearch" list="playerOptions" autocomplete="off" placeholder="Type a first name or surname" oninput="playerSelected()">
+    <datalist id="playerOptions"><option value="Ken Anderson">P001 · −5</option><option value="Stephen (Ando) Anderson">P002 · −4</option><option value="Michael Barnes">P003 · −3</option><option value="John Bastow">P004 · +2</option><option value="Greg Bennett">P005 · +1</option><option value="Garry Brown">P006 · −6</option><option value="Gary Bull">P007 · +2</option><option value="Jason Cuthbertson">P008 · −10</option><option value="Charles Eliot">P009 · −3</option><option value="Chris Falzon">P010 · −6</option><option value="John Featherston">P011 · −7</option><option value="Glen (SHARKY) Fisher">P012 · +0</option><option value="Allan Freeman">P013 · −2</option><option value="Peter Guest">P014 · −1</option><option value="Philip Hayes">P015 · −5</option><option value="Ross Higgins">P016 · +0</option><option value="Gerard Holdstock">P017 · −5</option><option value="Jim Isabella">P018 · −9</option><option value="Denis James">P019 · −2</option><option value="Mick Keohane">P020 · −3</option><option value="Chris Koo">P021 · −5</option><option value="Roy Krul">P022 · −5</option><option value="Sam LaRosa">P023 · +1</option><option value="Peter Macleod">P024 · +3</option><option value="Ian (NARKY) Macmillan">P025 · −5</option><option value="Bernie Magennis">P026 · +1</option><option value="Lui Marini">P027 · +3</option><option value="Ian (RED) Martyn">P028 · −6</option><option value="Dave Matthews">P029 · −4</option><option value="Robbie Menezes">P030 · −2</option><option value="Eren Monza">P031 · −6</option><option value="Stephen Munro">P032 · −1</option><option value="Mick Murray">P033 · +1</option><option value="Barry Ogston">P034 · −5</option><option value="Grant Pearse">P035 · −6</option><option value="Tony Ring">P036 · −8</option><option value="Andrew Sandilands">P037 · +0</option><option value="Perry Sandilands">P038 · −8</option><option value="Peter Slevison">P039 · +3</option><option value="Peter Smith">P040 · −6</option><option value="Stephen Squirrell">P041 · −8</option><option value="Philip Taylor">P042 · +1</option><option value="John Taylor">P043 · +0</option><option value="Glenn Todd">P044 · −3</option><option value="Rich Watkiss">P045 · +3</option></datalist>
+    <div id="playerInfo" class="notice" style="margin-top:12px">Continue typing, then select the full player name from the list.</div>
     <label>Gross score</label><input id="grossInput" type="number" inputmode="numeric" min="1" placeholder="Enter gross score">
     <button class="btn btn-primary" onclick="addScorecard()">Add Completed Card</button>
   </div>
-  <div id="enteredCards"></div>
+  <div id="enteredCards"><div class="notice">No completed scorecards entered yet.</div></div>
   <button class="btn btn-dark" onclick="finishRound()">Finish and Calculate Results</button>
   <button class="btn btn-secondary" onclick="showScreen(&#39;setup&#39;)">Back</button>
 </section>
@@ -223,7 +203,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
   </div>
 </section>
 
-<section id="handicaps" class="screen active">
+<section id="handicaps" class="screen">
   <h2>Current Handicaps</h2>
   <p class="sub">Review or amend a handicap, then save the complete list.</p>
   <div class="notice">Use whole numbers. Positive handicaps display with a plus sign and negative handicaps with a minus sign.</div>
@@ -685,7 +665,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
 <section id="reports" class="screen">
   <h2>Previous Results / Round History</h2>
   <p class="sub">Saved competition results are kept here, separate from Current Handicaps.</p>
-  <div id="reportsList"></div>
+  <div id="reportsList"><div class="notice">No saved reports yet.</div></div>
   <button class="btn btn-secondary" onclick="goHome()">Back</button>
 </section>
 
@@ -872,67 +852,23 @@ function activeHandicap(p){
  }
  return p.current
 }
-function availablePlayers(){
- const used=new Set(round.scores.map(x=>x.playerId));
- return players.filter(p=>!used.has(p.id))
-}
 function populatePlayerSelect(){
+ const used=new Set(round.scores.map(x=>x.playerId));
+ const list=document.getElementById("playerOptions");
+ list.innerHTML=players.filter(p=>!used.has(p.id)).map(p=>`<option value="${p.name}">${p.id} · ${signed(activeHandicap(p))}</option>`).join("");
  document.getElementById("playerSearch").value="";
  document.getElementById("grossInput").value="";
- document.getElementById("playerInfo").textContent="Start typing a first name or surname.";
- hidePlayerSuggestions()
+ document.getElementById("playerInfo").textContent="Start typing a first name or surname."
 }
 function selectedPlayer(){
  const typed=document.getElementById("playerSearch").value.trim().toLowerCase();
- return availablePlayers().find(p=>p.name.toLowerCase()===typed)
-}
-function selectSuggestedPlayer(id){
- const p=availablePlayers().find(x=>x.id===id);
- if(!p)return;
- document.getElementById("playerSearch").value=p.name;
- document.getElementById("playerInfo").innerHTML=
-   `<b>${p.name}</b><br>Reference ${p.id} · Handicap <b>${signed(activeHandicap(p))}</b>`;
- hidePlayerSuggestions();
- document.getElementById("grossInput").focus()
-}
-function hidePlayerSuggestions(){
- const box=document.getElementById("playerSuggestions");
- if(box){box.classList.remove("show");box.innerHTML=""}
+ return players.find(p=>p.name.toLowerCase()===typed)
 }
 function playerSelected(){
- const input=document.getElementById("playerSearch");
- const typed=input.value.trim().toLowerCase();
  const p=selectedPlayer();
- const box=document.getElementById("playerSuggestions");
-
- if(p){
-   document.getElementById("playerInfo").innerHTML=
-     `<b>${p.name}</b><br>Reference ${p.id} · Handicap <b>${signed(activeHandicap(p))}</b>`;
-   hidePlayerSuggestions();
-   return
- }
-
- document.getElementById("playerInfo").textContent=
-   typed ? "Tap the correct player from the list below." : "Start typing a first name or surname.";
-
- if(!typed){hidePlayerSuggestions();return}
-
- const matches=availablePlayers().filter(p=>{
-   const words=p.name.toLowerCase().split(/\s+/);
-   return p.name.toLowerCase().includes(typed) || words.some(w=>w.startsWith(typed))
- }).slice(0,12);
-
- if(!matches.length){
-   box.innerHTML='<div class="player-suggestion"><span>No matching player found.</span></div>';
-   box.classList.add("show");
-   return
- }
-
- box.innerHTML=matches.map(p=>
-   `<button type="button" class="player-suggestion" onclick="selectSuggestedPlayer('${p.id}')">`+
-   `<b>${p.name}</b><span>Reference ${p.id} · Handicap ${signed(activeHandicap(p))}</span></button>`
- ).join("");
- box.classList.add("show")
+ document.getElementById("playerInfo").innerHTML=p
+   ? `<b>${p.name}</b><br>Reference ${p.id} · Handicap <b>${signed(activeHandicap(p))}</b>`
+   : "Continue typing, then select the full player name from the list."
 }
 function addScorecard(){
  const p=selectedPlayer();
@@ -1224,12 +1160,6 @@ function buildReviewPack(){const samplePlayers=players.slice(0,4);document.getEl
 <div class="review-screen"><h2>6. Handicap Adjustments and JSON</h2><p>0–20 players: +2/+1 and −2/−1.</p><p>21+ players: +3/+2/+1 and −3/−2/−1.</p><p>Mick may alter the suggested changes before saving.</p><p>After saving, email the complete JSON round record to Robbie.</p></div>
 <div class="review-screen"><h2>7. Finalise Round</h2><p>Updated handicaps remain saved. Active score-entry information is cleared for the next round only after confirmation.</p></div><div class="review-screen"><h2>8. Current Handicaps</h2><p>Full names, reference numbers and editable current handicaps. Save changes before the next round.</p></div>`}
 function formatDate(s){if(!s)return"";return new Date(s+"T12:00:00").toLocaleDateString("en-AU",{weekday:"long",day:"numeric",month:"long",year:"numeric"})}
-
-document.addEventListener("click",function(e){
- const wrap=e.target.closest(".player-search-wrap");
- if(!wrap)hidePlayerSuggestions()
-});
-
 </script>
 
 </body></html>
