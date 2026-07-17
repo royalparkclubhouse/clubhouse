@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- saved from url=(0068)file:///C:/Users/robbi/Downloads/Clubhouse_v0.6.13_master_index.html -->
+<!-- saved from url=(0055)file:///C:/Users/robbi/Downloads/Clubhouse_v0.6.15.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#184c37">
-<title>Clubhouse v0.6.14</title>
+<title>Clubhouse v0.6.15</title>
 <style>
 :root{
   --green:#184c37;--green2:#24684c;--gold:#c8a44d;--ink:#18211c;--muted:#66736b;
@@ -44,13 +44,22 @@ input:focus,select:focus{outline:3px solid rgba(36,104,76,.16);border-color:var(
 .award.stick{border-color:var(--orange)}.award.nett{border-color:var(--green2)}.award.runner{border-color:var(--blue)}.award.pink{border-color:var(--pink)}.award.purple{border-color:var(--purple)}
 .adjustment{border:1px solid var(--line);border-radius:13px;padding:13px;margin-bottom:9px;background:#fbfdfb}
 .adjustment strong{color:var(--green)}.adjustment .change{font-weight:900}
-.honour{background:linear-gradient(145deg,#fffdf6,#f3e8ce);border:4px double var(--gold);border-radius:20px;padding:20px}
-.honour-head{text-align:center;border-bottom:1px solid rgba(150,116,35,.35);padding-bottom:14px;margin-bottom:14px}
-.honour-head img{width:110px;height:110px;border-radius:16px;object-fit:cover;border:3px solid #fff;box-shadow:0 5px 15px rgba(0,0,0,.18)}
-.honour-head h2{font-family:Georgia,serif;color:#5c4518;margin-top:10px}
-.honour-item{padding:12px;border-radius:12px;background:rgba(255,255,255,.74);border:1px solid rgba(170,136,51,.25);margin-bottom:9px}
-.honour-item span{display:block;font-size:.7rem;font-weight:900;text-transform:uppercase;color:#7b642d}
-.honour-item b{display:block;font-size:1.05rem;margin-top:4px}
+.honour{background:linear-gradient(145deg,#fffdf6,#f3e8ce);border:3px double var(--gold);border-radius:16px;padding:11px}
+.honour-head{text-align:center;border-bottom:1px solid rgba(150,116,35,.35);padding-bottom:7px;margin-bottom:8px}
+.honour-head img{width:62px;height:62px;border-radius:11px;object-fit:cover;border:2px solid #fff;box-shadow:0 3px 9px rgba(0,0,0,.16)}
+.honour-head h2{font-family:Georgia,serif;color:#5c4518;margin:5px 0 2px;font-size:1.32rem}
+.honour-head .small{font-size:.66rem}
+#honourItems{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.honour-item{padding:7px 8px;border-radius:9px;background:rgba(255,255,255,.82);border:1px solid rgba(170,136,51,.25);margin:0;min-height:52px}
+.honour-item span{display:block;font-size:.57rem;font-weight:900;text-transform:uppercase;color:#604d25;line-height:1.15}
+.honour-item b{display:block;font-size:.82rem;margin-top:3px;line-height:1.12}
+.honour-item.stick{border-left:6px solid var(--orange);background:#fff4e8}
+.honour-item.nett-runner{border-left:6px solid var(--blue);background:#eef6ff}
+.honour-item.nett-winner{border-left:6px solid var(--green2);background:#edf7f0}
+.honour-item.pink-runner{border-left:6px solid var(--purple);background:#f4f0fb}
+.honour-item.pink-winner{border-left:6px solid var(--pink);background:#fff0f5}
+.honour-item.novelty{border-left:6px solid var(--gold);background:#fffaf0}
+@media(max-width:380px){#honourItems{gap:4px}.honour-item{padding:6px}.honour-item b{font-size:.76rem}.honour-item span{font-size:.53rem}}
 .row{display:flex;gap:8px;align-items:center;justify-content:space-between}.small{font-size:.75rem;color:var(--muted)}
 .iconbtn{border:1px solid rgba(255,255,255,.5);background:transparent;color:#fff;border-radius:9px;padding:9px 11px;font-weight:700}
 .hidden{display:none!important}
@@ -213,7 +222,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
   <button class="btn btn-secondary" onclick="emailJSON()">Prepare Final Results for Robbie</button>
   <div id="completeJsonStatus" class="notice" style="margin-top:12px">Final results have not yet been prepared.</div>
   <button class="btn btn-dark" onclick="finaliseRound()">FINISH ROUND</button>
-  <button class="btn btn-secondary" onclick="showScreen('confirmHandicaps')">Back to Updated Handicaps</button>
+  <button class="btn btn-secondary" onclick="showScreen(&#39;confirmHandicaps&#39;)">Back to Updated Handicaps</button>
 </section>
 
 <section id="honour" class="screen">
@@ -300,7 +309,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
      </div>
      <div style="width:92px">
        <label style="margin:0 0 5px">H/C</label>
-       <input type="number" inputmode="numeric" id="hc-6" value="2" style="text-align:center">
+       <input type="number" inputmode="numeric" id="hc-6" value="3" style="text-align:center">
      </div>
    </div>
    <div class="player-card">
@@ -310,7 +319,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
      </div>
      <div style="width:92px">
        <label style="margin:0 0 5px">H/C</label>
-       <input type="number" inputmode="numeric" id="hc-7" value="-10" style="text-align:center">
+       <input type="number" inputmode="numeric" id="hc-7" value="-8" style="text-align:center">
      </div>
    </div>
    <div class="player-card">
@@ -410,7 +419,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
      </div>
      <div style="width:92px">
        <label style="margin:0 0 5px">H/C</label>
-       <input type="number" inputmode="numeric" id="hc-17" value="-9" style="text-align:center">
+       <input type="number" inputmode="numeric" id="hc-17" value="-8" style="text-align:center">
      </div>
    </div>
    <div class="player-card">
@@ -430,7 +439,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
      </div>
      <div style="width:92px">
        <label style="margin:0 0 5px">H/C</label>
-       <input type="number" inputmode="numeric" id="hc-19" value="-3" style="text-align:center">
+       <input type="number" inputmode="numeric" id="hc-19" value="-5" style="text-align:center">
      </div>
    </div>
    <div class="player-card">
@@ -570,7 +579,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
      </div>
      <div style="width:92px">
        <label style="margin:0 0 5px">H/C</label>
-       <input type="number" inputmode="numeric" id="hc-33" value="-5" style="text-align:center">
+       <input type="number" inputmode="numeric" id="hc-33" value="-6" style="text-align:center">
      </div>
    </div>
    <div class="player-card">
@@ -670,7 +679,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
      </div>
      <div style="width:92px">
        <label style="margin:0 0 5px">H/C</label>
-       <input type="number" inputmode="numeric" id="hc-43" value="-3" style="text-align:center">
+       <input type="number" inputmode="numeric" id="hc-43" value="-1" style="text-align:center">
      </div>
    </div>
    <div class="player-card">
@@ -704,7 +713,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
   <div id="reviewContent" class="review-grid"></div>
 </section>
 </main>
-<footer>Clubhouse v0.6.14</footer>
+<footer>Clubhouse v0.6.15</footer>
 </div>
 
 <div id="editModal" class="modal"><div class="modal-sheet">
@@ -769,7 +778,7 @@ const officialPlayers=[
 {id:"P044",name:"Glenn Todd",current:-1,green:null},
 {id:"P045",name:"Rich Watkiss",current:3,green:null}
 ];
-const PLAYER_REGISTRY_VERSION="2026-07-10-FIELD-TRIAL";
+const PLAYER_REGISTRY_VERSION="2026-07-18-V0615";
 let storedRegistryVersion=localStorage.getItem("clubhousePlayerRegistryVersion");
 let storedPlayers=JSON.parse(localStorage.getItem("clubhousePlayers")||"null");
 let players;
@@ -800,17 +809,18 @@ if(storedRegistryVersion!==PLAYER_REGISTRY_VERSION || !storedPlayers || storedPl
 })();
 
 
-const v0614Handicaps={"P001":-5,"P002":-4,"P003":-3,"P004":2,"P005":1,"P006":-6,"P007":3,"P008":-10,"P009":-3,"P010":-6,"P011":-7,"P012":0,"P013":-2,"P014":-1,"P015":-5,"P016":0,"P017":-5,"P018":-9,"P019":-2,"P020":-5,"P021":-5,"P022":-5,"P023":1,"P024":3,"P025":-5,"P026":1,"P027":3,"P028":-6,"P029":-4,"P030":-2,"P031":-6,"P032":-1,"P033":1,"P034":-6,"P035":-6,"P036":-8,"P037":0,"P038":-8,"P039":3,"P040":-6,"P041":-8,"P042":1,"P043":0,"P044":-1,"P045":3};
-if(localStorage.getItem("clubhouseHandicapVersion")!=="0.6.14"){
+const v0614Handicaps={"P001":-5,"P002":-4,"P003":-3,"P004":2,"P005":1,"P006":-6,"P007":3,"P008":-8,"P009":-3,"P010":-6,"P011":-7,"P012":0,"P013":-2,"P014":-1,"P015":-5,"P016":0,"P017":-5,"P018":-8,"P019":-2,"P020":-5,"P021":-5,"P022":-5,"P023":1,"P024":3,"P025":-5,"P026":1,"P027":3,"P028":-6,"P029":-4,"P030":-2,"P031":-6,"P032":-1,"P033":1,"P034":-6,"P035":-6,"P036":-8,"P037":0,"P038":-8,"P039":3,"P040":-6,"P041":-8,"P042":1,"P043":0,"P044":-1,"P045":3};
+if(localStorage.getItem("clubhouseHandicapVersion")!=="0.6.15"){
  players=players.map(p=>Object.prototype.hasOwnProperty.call(v0614Handicaps,p.id)?{...p,current:v0614Handicaps[p.id]}:p);
  localStorage.setItem("clubhousePlayers",JSON.stringify(players));
- localStorage.setItem("clubhouseHandicapVersion","0.6.14");
+ localStorage.setItem("clubhouseHandicapVersion","0.6.15");
 }
 
 let round={competition:"",date:"",freezeDate:"",frozenHandicaps:{},scores:[],results:null,novelties:{},adjustments:[],applied:false,prepared:false};
-let editingName=null,pendingTies=[],currentTieIndex=0;
+let editingName=null,pendingTies=[],currentTieIndex=0,currentCountbackHole=9;
 
 function signed(n){return(n>=0?"+":"−")+Math.abs(n)}
+function capHandicap(n){return Math.max(-8,Math.min(3,Number(n)))}
 function showScreen(id){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));document.getElementById(id).classList.add("active");window.scrollTo({top:0,behavior:"smooth"});if(id==="handicaps")renderHandicaps();if(id==="reports")renderReports()}
 function goHome(){showScreen("home")}
 function openTodayRound(){if(!document.getElementById("roundDate").value)document.getElementById("roundDate").value=new Date().toISOString().slice(0,10);showScreen("setup")}
@@ -924,7 +934,7 @@ function finishRound(){
  showScreen("recap")
 }
 function awardSlots(){
- return round.scores.length>=21?3:2
+ return 2
 }
 function tiedAwardGroups(){
  const groups=[];
@@ -940,7 +950,7 @@ function tiedAwardGroups(){
    if(tied.length>1){
      const positions=[];
      const before=nettSorted.filter(s=>s.nett<v).length;
-     for(let i=before;i<Math.min(before+tied.length,slots);i++)positions.push(i===0?"Nett Winner":i===1?"Nett Runner-up":"Nett Second Runner-up");
+     for(let i=before;i<Math.min(before+tied.length,slots);i++)positions.push(i===0?"Nett Winner":"Nett Runner-up");
      groups.push({key:"nett-"+v,type:"nett",label:positions.join(" / "),players:tied})
    }
  });
@@ -950,7 +960,7 @@ function tiedAwardGroups(){
    if(tied.length>1){
      const positions=[];
      const before=highSorted.filter(s=>s.gross>v).length;
-     for(let i=before;i<Math.min(before+tied.length,slots);i++)positions.push(i===0?"Pinkies Winner":i===1?"Pinkies Runner-up":"Pinkies Second Runner-up");
+     for(let i=before;i<Math.min(before+tied.length,slots);i++)positions.push(i===0?"Pinkies Winner":"Pinkies Runner-up");
      groups.push({key:"pink-"+v,type:"pinkies",label:positions.join(" / "),players:tied})
    }
  });
@@ -969,10 +979,15 @@ function renderRecap(){
    </div>`).join("")
 }
 function continueFromRecap(){
- pendingTies=tiedAwardGroups();
+ pendingTies=tiedAwardGroups().map(t=>({...t,currentHole:9}));
  currentTieIndex=0;
  if(pendingTies.length)openNextTie();
  else calculateResults()
+}
+function countbackSignature(player,fromHole=9,toHole=6){
+ const values=[];
+ for(let h=fromHole;h>=toHole;h--)values.push(player.holes[h]??null);
+ return values.join("|")
 }
 function openNextTie(){
  if(currentTieIndex>=pendingTies.length){
@@ -981,11 +996,11 @@ function openNextTie(){
    return
  }
  const tie=pendingTies[currentTieIndex];
- document.getElementById("countbackTitle").textContent="Countback Required — "+tie.label;
- document.getElementById("countbackInputs").innerHTML=tie.players.map(p=>`
-   <div class="card"><b>${p.name}</b><div class="grid2">${
-     [9,8,7,6].map(h=>`<div><label>Hole ${h}</label><input type="number" min="1" inputmode="numeric" data-player="${p.name}" data-hole="${h}" value="${p.holes[h]??""}"></div>`).join("")
-   }</div></div>`).join("");
+ currentCountbackHole=tie.currentHole;
+ document.getElementById("countbackTitle").textContent=`${tie.label} — Enter Hole ${currentCountbackHole}`;
+ document.getElementById("countbackInputs").innerHTML=`
+   <div class="notice" style="margin-bottom:10px"><b>Enter Hole ${currentCountbackHole} only.</b><br>If the tie remains, CLUBHOUSE will ask only the players still tied for Hole ${currentCountbackHole-1}.</div>`+
+   tie.players.map(p=>`<div class="card"><b>${p.name}</b><label>Hole ${currentCountbackHole}</label><input type="number" min="1" inputmode="numeric" data-player="${p.name}" data-hole="${currentCountbackHole}" value="${p.holes[currentCountbackHole]??""}"></div>`).join("");
  document.getElementById("countbackModal").classList.add("show")
 }
 function backFromCountback(){
@@ -995,11 +1010,28 @@ function backFromCountback(){
 }
 function saveCountback(){
  const inputs=[...document.querySelectorAll("#countbackInputs input")];
- if(inputs.some(i=>!i.value)){alert("Please enter Holes 9, 8, 7 and 6 for each tied player.");return}
+ if(inputs.some(i=>!i.value)){alert(`Please enter Hole ${currentCountbackHole} for each tied player.`);return}
  inputs.forEach(i=>{
-   const s=round.scores.find(x=>x.name===i.dataset.player);
-   s.holes[i.dataset.hole]=Number(i.value)
+   const score=round.scores.find(x=>x.name===i.dataset.player);
+   score.holes[i.dataset.hole]=Number(i.value)
  });
+ const tie=pendingTies[currentTieIndex];
+ if(currentCountbackHole>6){
+   const unresolved=[];
+   const buckets={};
+   tie.players.forEach(p=>{
+     const key=countbackSignature(p,9,currentCountbackHole);
+     (buckets[key]??=[]).push(p)
+   });
+   Object.values(buckets).filter(group=>group.length>1).forEach(group=>{
+     unresolved.push({...tie,players:group,currentHole:currentCountbackHole-1})
+   });
+   if(unresolved.length){
+     pendingTies.splice(currentTieIndex,1,...unresolved);
+     openNextTie();
+     return
+   }
+ }
  currentTieIndex++;
  openNextTie()
 }
@@ -1022,14 +1054,12 @@ function calculateResults(){
  showScreen("results")
 }
 function renderResults(){
- const r=round.results,large=round.scores.length>=21;
+ const r=round.results;
  document.getElementById("awards").innerHTML=`
  <div class="award stick"><span>Winner of the Stick</span><b>${r.stick.name} — ${r.stick.gross} Gross</b></div>
  <div class="award runner"><span>Nett Runner-up</span><b>${r.nettRunner.name} — ${r.nettRunner.nett} Nett</b></div>
- ${large&&r.nettSecond?`<div class="award runner"><span>Nett Second Runner-up</span><b>${r.nettSecond.name} — ${r.nettSecond.nett} Nett</b></div>`:""}
  <div class="award nett"><span>Nett Winner</span><b>${r.nettWinner.name} — ${r.nettWinner.nett} Nett</b></div>
  <div class="award purple"><span>Pinkies Runner-up</span><b>${r.pinkRunner.name} — ${r.pinkRunner.nett} Nett</b></div>
- ${large&&r.pinkSecond?`<div class="award purple"><span>Pinkies Second Runner-up</span><b>${r.pinkSecond.name} — ${r.pinkSecond.nett} Nett</b></div>`:""}
  <div class="award pink"><span>Pinkies Winner</span><b>${r.pinkWinner.name} — ${r.pinkWinner.nett} Nett</b></div>`
 }
 function openNovelty(){
@@ -1041,14 +1071,27 @@ function openNovelty(){
  });
  showScreen("novelty")
 }
-function showAdjustments(){document.getElementById("emailJsonBtn").classList.toggle("hidden",!round.applied);document.getElementById("finalFilePanel").classList.toggle("hidden",!round.applied);if(round.applied)document.getElementById("finalFileName").textContent=finalJsonFilename();document.getElementById("finalisePanel").classList.toggle("hidden",!round.prepared);const large=round.scores.length>=21,r=round.results,changes=[];function add(p,delta,label){if(!p)return;changes.push({name:p.name,delta,label})}if(large){add(r.nettWinner,3,"Nett Winner");add(r.nettRunner,2,"Nett Runner-up");add(r.nettSecond,1,"Nett Second Runner-up");add(r.pinkWinner,-3,"Pinkies Winner");add(r.pinkRunner,-2,"Pinkies Runner-up");add(r.pinkSecond,-1,"Pinkies Second Runner-up")}else{add(r.nettWinner,2,"Nett Winner");add(r.nettRunner,1,"Nett Runner-up");add(r.pinkWinner,-2,"Pinkies Winner");add(r.pinkRunner,-1,"Pinkies Runner-up")}const grouped={};changes.forEach(c=>{grouped[c.name]??={name:c.name,delta:0,reasons:[]};grouped[c.name].delta+=c.delta;grouped[c.name].reasons.push(c.label)});round.adjustments=Object.values(grouped).map(x=>{const p=players.find(p=>p.name===x.name);return {...x,old:p.current,new:p.current+x.delta}});document.getElementById("adjustmentRule").textContent=large?"21 or more players: Nett +3/+2/+1 and Pinkies −3/−2/−1.":"0–20 players: Nett +2/+1 and Pinkies −2/−1.";document.getElementById("adjustmentList").innerHTML=round.adjustments.map((a,i)=>`<div class="adjustment">
-<strong>${a.name}</strong>
-<div class="small">${a.reasons.join(" and ")}</div>
+function showAdjustments(){
+ document.getElementById("emailJsonBtn").classList.toggle("hidden",!round.applied);
+ document.getElementById("finalFilePanel").classList.toggle("hidden",!round.applied);
+ if(round.applied)document.getElementById("finalFileName").textContent=finalJsonFilename();
+ document.getElementById("finalisePanel").classList.toggle("hidden",!round.prepared);
+ const r=round.results,changes=[];
+ function add(p,delta,label){if(p)changes.push({name:p.name,delta,label})}
+ add(r.nettWinner,2,"Nett Winner");add(r.nettRunner,1,"Nett Runner-up");
+ add(r.pinkWinner,-2,"Pinkies Winner");add(r.pinkRunner,-1,"Pinkies Runner-up");
+ const grouped={};
+ changes.forEach(c=>{grouped[c.name]??={name:c.name,delta:0,reasons:[]};grouped[c.name].delta+=c.delta;grouped[c.name].reasons.push(c.label)});
+ round.adjustments=Object.values(grouped).map(x=>{const p=players.find(p=>p.name===x.name);return {...x,old:p.current,new:capHandicap(p.current+x.delta)}});
+ document.getElementById("adjustmentRule").textContent="All rounds: Nett Winner +2, Nett Runner-up +1, Pinkies Winner −2 and Pinkies Runner-up −1. Handicaps are capped from −8 to +3.";
+ document.getElementById("adjustmentList").innerHTML=round.adjustments.map((a,i)=>`<div class="adjustment">
+<strong>${a.name}</strong><div class="small">${a.reasons.join(" and ")}</div>
 <div style="margin-top:8px">Current handicap: <b>${signed(a.old)}</b></div>
-<label>Mick's adjustment</label>
-<input type="number" inputmode="numeric" value="${a.delta}" onchange="updateManualAdjustment(${i},this.value)">
+<label>Mick's adjustment</label><input type="number" inputmode="numeric" value="${a.delta}" onchange="updateManualAdjustment(${i},this.value)">
 <div style="margin-top:8px">New handicap: <b id="newHandicap-${i}">${signed(a.new)}</b></div>
-</div>`).join("");showScreen("adjustments")}
+<div class="small">Allowed range: −8 to +3</div></div>`).join("");
+ showScreen("adjustments")
+}
 function reviewUpdatedHandicaps(){
  document.getElementById("confirmHandicapList").innerHTML=round.adjustments.map(a=>`
    <div class="player-card">
@@ -1065,7 +1108,7 @@ function updateManualAdjustment(index,value){
  const delta=Number(value);
  const a=round.adjustments[index];
  a.delta=Number.isFinite(delta)?delta:0;
- a.new=a.old+a.delta;
+ a.new=capHandicap(a.old+a.delta);
  const el=document.getElementById("newHandicap-"+index);
  if(el)el.textContent=signed(a.new)
 }
@@ -1087,7 +1130,7 @@ function applyAdjustments(){
  }
  round.adjustments.forEach(a=>{
    const p=players.find(p=>p.name===a.name);
-   p.current=a.new;
+   p.current=capHandicap(a.new);
  });
  localStorage.setItem("clubhousePlayers",JSON.stringify(players));
  round.applied=true;
@@ -1099,7 +1142,7 @@ function applyAdjustments(){
  showScreen("complete");
 }
 function buildHonour(){
- const r=round.results,large=round.scores.length>=21;
+ const r=round.results;
  document.getElementById("honourMeta").textContent=`${formatDate(round.date)} · ${round.competition}${round.freezeDate?` · Handicaps frozen ${formatDate(round.freezeDate)}`:""}`;
  const novelty=[
   ["Hole 1 — Nearest to the Pin",round.novelties.n1],
@@ -1109,14 +1152,12 @@ function buildHonour(){
   ["Hole 7 — Longest Drive",round.novelties.n7]
  ];
  document.getElementById("honourItems").innerHTML=`
- <div class="honour-item"><span>Winner of the Stick</span><b>${r.stick.name} (Gross ${r.stick.gross})</b></div>
- <div class="honour-item"><span>Nett Runner-up</span><b>${r.nettRunner.name} (Nett ${r.nettRunner.nett})</b></div>
- ${large&&r.nettSecond?`<div class="honour-item"><span>Nett Second Runner-up</span><b>${r.nettSecond.name} (Nett ${r.nettSecond.nett})</b></div>`:""}
- <div class="honour-item"><span>Nett Winner</span><b>${r.nettWinner.name} (Nett ${r.nettWinner.nett})</b></div>
- <div class="honour-item"><span>Pinkies Runner-up</span><b>${r.pinkRunner.name} (Nett ${r.pinkRunner.nett})</b></div>
- ${large&&r.pinkSecond?`<div class="honour-item"><span>Pinkies Second Runner-up</span><b>${r.pinkSecond.name} (Nett ${r.pinkSecond.nett})</b></div>`:""}
- <div class="honour-item"><span>Pinkies Winner</span><b>${r.pinkWinner.name} (Nett ${r.pinkWinner.nett})</b></div>
- ${novelty.map(n=>`<div class="honour-item"><span>${n[0]}</span><b>${n[1]&&n[1]!=="—"?n[1]:"NADA"}</b></div>`).join("")}`;
+ <div class="honour-item stick"><span>Winner of the Stick</span><b>${r.stick.name} · Gross ${r.stick.gross}</b></div>
+ <div class="honour-item nett-runner"><span>Nett Runner-up</span><b>${r.nettRunner.name} · Nett ${r.nettRunner.nett}</b></div>
+ <div class="honour-item nett-winner"><span>Nett Winner</span><b>${r.nettWinner.name} · Nett ${r.nettWinner.nett}</b></div>
+ <div class="honour-item pink-runner"><span>Pinkies Runner-up</span><b>${r.pinkRunner.name} · Nett ${r.pinkRunner.nett}</b></div>
+ <div class="honour-item pink-winner"><span>Pinkies Winner</span><b>${r.pinkWinner.name} · Nett ${r.pinkWinner.nett}</b></div>
+ ${novelty.map(n=>`<div class="honour-item novelty"><span>${n[0]}</span><b>${n[1]&&n[1]!=="—"?n[1]:"NADA"}</b></div>`).join("")}`;
  showScreen("honour")
 }
 function saveReport(){const reports=JSON.parse(localStorage.getItem("clubhouseReports")||"[]"),record={id:Date.now(),date:round.date,competition:round.competition,playerCount:round.scores.length,scores:round.scores,results:round.results,novelties:round.novelties,adjustments:round.adjustments,greenJacketUsed:round.competition==="Green Jacket Day",freezeDate:round.freezeDate||null};reports.unshift(record);localStorage.setItem("clubhouseReports",JSON.stringify(reports))}
@@ -1160,7 +1201,7 @@ function saveCurrentHandicaps(){
      const raw=document.getElementById("hc-"+i).value;
      const value=Number(raw);
      if(raw===""||!Number.isInteger(value))throw new Error("Enter a whole-number handicap for "+p.name);
-     return {...p,current:value}
+     return {...p,current:capHandicap(value)}
    });
    players=updated;
    localStorage.setItem("clubhousePlayers",JSON.stringify(players));
@@ -1171,17 +1212,15 @@ function saveCurrentHandicaps(){
  }
 }
 function honourText(){
- const r=round.results,large=round.scores.length>=21;
+ const r=round.results;
  return `OLD FARTS – RESULTS BOARD
 ${formatDate(round.date)} — ${round.competition}
 
 Winner of the Stick: ${r.stick.name} (Gross ${r.stick.gross})
 Nett Runner-up: ${r.nettRunner.name} (Nett ${r.nettRunner.nett})
-${large&&r.nettSecond?`Nett Second Runner-up: ${r.nettSecond.name} (Nett ${r.nettSecond.nett})
-`:""}Nett Winner: ${r.nettWinner.name} (Nett ${r.nettWinner.nett})
+Nett Winner: ${r.nettWinner.name} (Nett ${r.nettWinner.nett})
 Pinkies Runner-up: ${r.pinkRunner.name} (Nett ${r.pinkRunner.nett})
-${large&&r.pinkSecond?`Pinkies Second Runner-up: ${r.pinkSecond.name} (Nett ${r.pinkSecond.nett})
-`:""}Pinkies Winner: ${r.pinkWinner.name} (Nett ${r.pinkWinner.nett})
+Pinkies Winner: ${r.pinkWinner.name} (Nett ${r.pinkWinner.nett})
 
 Hole 1 NTP: ${round.novelties.n1&&round.novelties.n1!=="—"?round.novelties.n1:"NADA"}
 Hole 4 NTP: ${round.novelties.n4&&round.novelties.n4!=="—"?round.novelties.n4:"NADA"}
@@ -1192,7 +1231,7 @@ Hole 7 Longest Drive: ${round.novelties.n7&&round.novelties.n7!=="—"?round.nov
 async function shareHonour(){const text=honourText();if(navigator.share){try{await navigator.share({title:"OLD FARTS – RESULTS BOARD",text});return}catch(e){if(e.name==="AbortError")return}}try{await navigator.clipboard.writeText(text);alert("Results Board copied. Open WhatsApp and paste it to the Reporter.")}catch(e){prompt("Copy this Results Board and paste it into WhatsApp for the Reporter:",text)}}
 async function emailJSON(){
  if(!round.applied){alert("Please review and save the handicaps before emailing the JSON file.");return;}if(!confirm("Prepare the final results for Robbie at robbiem2@live.com.au?"))return;
- const payload={schemaVersion:"1.0",appVersion:"0.6.14",club:"Royal Park Golf — Old Farts",exportedAt:new Date().toISOString(),emailTo:"robbiem2@live.com.au",round:{date:round.date,competition:round.competition,playerCount:round.scores.length,greenJacketUsed:round.competition==="Green Jacket Day",freezeDate:round.freezeDate||null,frozenHandicapsUsed:round.competition==="Green Jacket Day"?round.scores.map(s=>({playerId:s.playerId,name:s.name,handicap:s.handicapUsed})):[],scores:round.scores,results:round.results,novelties:round.novelties,handicapAdjustments:round.adjustments,currentHandicapsAfterRound:players.map(p=>({playerId:p.id,name:p.name,current:p.current,greenJacketFrozen:p.green})),honourBoardText:honourText(),handicapsReviewedAndSaved:true}};
+ const payload={schemaVersion:"1.0",appVersion:"0.6.15",club:"Royal Park Golf — Old Farts",exportedAt:new Date().toISOString(),emailTo:"robbiem2@live.com.au",round:{date:round.date,competition:round.competition,playerCount:round.scores.length,greenJacketUsed:round.competition==="Green Jacket Day",freezeDate:round.freezeDate||null,frozenHandicapsUsed:round.competition==="Green Jacket Day"?round.scores.map(s=>({playerId:s.playerId,name:s.name,handicap:s.handicapUsed})):[],scores:round.scores,results:round.results,novelties:round.novelties,handicapAdjustments:round.adjustments,currentHandicapsAfterRound:players.map(p=>({playerId:p.id,name:p.name,current:p.current,greenJacketFrozen:p.green})),honourBoardText:honourText(),handicapsReviewedAndSaved:true}};
  const json=JSON.stringify(payload,null,2);
  const filename=finalJsonFilename();
  const file=new File([json],filename,{type:"application/json"});
@@ -1213,7 +1252,7 @@ async function emailJSON(){
  }
  const blob=new Blob([json],{type:"application/json"});
  const a=document.createElement("a");
- a.href=URL.createObjectURL(blob);a.download=filename;a.click();URL.revokeObjectURL(a.href);
+ const url=URL.createObjectURL(blob);a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);
  round.prepared=true;
  const status=document.getElementById("completeJsonStatus");
  if(status)status.innerHTML="<b>✓ Final results downloaded successfully.</b><br>Open your email app and attach the file to robbiem2@live.com.au.";
@@ -1242,7 +1281,7 @@ function buildReviewPack(){const samplePlayers=players.slice(0,4);document.getEl
 <div class="review-screen"><h2>3. Enter Scorecards</h2><p>Type a first name or surname, select the full player name, see the signed handicap, enter gross score, and add the completed card.</p>${samplePlayers.map((p,i)=>`<p><b>${p.name}</b> — Handicap ${signed(p.current)} — Gross ${40+i}</p>`).join("")}</div>
 <div class="review-screen"><h2>4. Results and Novelty Prizes</h2><p>Winner of the Stick</p><p>Nett Runner-up</p><p>Nett Winner</p><p>Pinkies Runner-up</p><p>Pinkies Winner</p><p>Novelty prize selections</p></div>
 <div class="review-screen"><h2>5. Honour Board</h2><p>Results plus novelty winners form the Honour Board.</p><p>Share the Honour Board with the Reporter through the phone’s Share menu.</p></div>
-<div class="review-screen"><h2>6. Handicap Adjustments and JSON</h2><p>0–20 players: +2/+1 and −2/−1.</p><p>21+ players: +3/+2/+1 and −3/−2/−1.</p><p>Mick may alter the suggested changes before saving.</p><p>After saving, email the complete JSON round record to Robbie.</p></div>
+<div class="review-screen"><h2>6. Handicap Adjustments and JSON</h2><p>0–20 players: +2/+1 and −2/−1.</p><p>All rounds: Nett +2/+1 and Pinkies −2/−1, capped from −8 to +3.</p><p>Mick may alter the suggested changes before saving.</p><p>After saving, email the complete JSON round record to Robbie.</p></div>
 <div class="review-screen"><h2>7. Finalise Round</h2><p>Updated handicaps remain saved. Active score-entry information is cleared for the next round only after confirmation.</p></div><div class="review-screen"><h2>8. Current Handicaps</h2><p>Full names, reference numbers and editable current handicaps. Save changes before the next round.</p></div>`}
 function formatDate(s){if(!s)return"";return new Date(s+"T12:00:00").toLocaleDateString("en-AU",{weekday:"long",day:"numeric",month:"long",year:"numeric"})}
 </script>
