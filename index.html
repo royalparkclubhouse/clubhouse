@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0055)file:///C:/Users/robbi/Downloads/Clubhouse_v0.6.15.html -->
+<!-- saved from url=(0085)file:///C:/Users/robbi/Downloads/Clubhouse_v0.6.16b_CORRECTED_STARTING_HANDICAPS.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -309,7 +309,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
      </div>
      <div style="width:92px">
        <label style="margin:0 0 5px">H/C</label>
-       <input type="number" inputmode="numeric" id="hc-6" value="3" style="text-align:center">
+       <input type="number" inputmode="numeric" id="hc-6" value="2" style="text-align:center">
      </div>
    </div>
    <div class="player-card">
@@ -319,7 +319,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
      </div>
      <div style="width:92px">
        <label style="margin:0 0 5px">H/C</label>
-       <input type="number" inputmode="numeric" id="hc-7" value="-8" style="text-align:center">
+       <input type="number" inputmode="numeric" id="hc-7" value="-10" style="text-align:center">
      </div>
    </div>
    <div class="player-card">
@@ -419,7 +419,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
      </div>
      <div style="width:92px">
        <label style="margin:0 0 5px">H/C</label>
-       <input type="number" inputmode="numeric" id="hc-17" value="-8" style="text-align:center">
+       <input type="number" inputmode="numeric" id="hc-17" value="-9" style="text-align:center">
      </div>
    </div>
    <div class="player-card">
@@ -439,7 +439,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
      </div>
      <div style="width:92px">
        <label style="margin:0 0 5px">H/C</label>
-       <input type="number" inputmode="numeric" id="hc-19" value="-5" style="text-align:center">
+       <input type="number" inputmode="numeric" id="hc-19" value="-3" style="text-align:center">
      </div>
    </div>
    <div class="player-card">
@@ -579,7 +579,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
      </div>
      <div style="width:92px">
        <label style="margin:0 0 5px">H/C</label>
-       <input type="number" inputmode="numeric" id="hc-33" value="-6" style="text-align:center">
+       <input type="number" inputmode="numeric" id="hc-33" value="-5" style="text-align:center">
      </div>
    </div>
    <div class="player-card">
@@ -679,7 +679,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
      </div>
      <div style="width:92px">
        <label style="margin:0 0 5px">H/C</label>
-       <input type="number" inputmode="numeric" id="hc-43" value="-1" style="text-align:center">
+       <input type="number" inputmode="numeric" id="hc-43" value="-3" style="text-align:center">
      </div>
    </div>
    <div class="player-card">
@@ -814,6 +814,13 @@ if(localStorage.getItem("clubhouseHandicapVersion")!=="0.6.15"){
  players=players.map(p=>Object.prototype.hasOwnProperty.call(v0614Handicaps,p.id)?{...p,current:v0614Handicaps[p.id]}:p);
  localStorage.setItem("clubhousePlayers",JSON.stringify(players));
  localStorage.setItem("clubhouseHandicapVersion","0.6.15");
+}
+// v0.6.16b correction: restore the correct STARTING handicaps before the 17 July round is re-entered.
+// The app will calculate Allan −2 → −1 and Charles −3 → −5 once, after results are confirmed.
+if(localStorage.getItem("clubhouseHandicapPatchVersion")!=="0.6.16b"){
+ players=players.map(p=>p.id==="P013"?{...p,current:-2}:p.id==="P009"?{...p,current:-3}:p);
+ localStorage.setItem("clubhousePlayers",JSON.stringify(players));
+ localStorage.setItem("clubhouseHandicapPatchVersion","0.6.16b");
 }
 
 let round={competition:"",date:"",freezeDate:"",frozenHandicaps:{},scores:[],results:null,novelties:{},adjustments:[],applied:false,prepared:false};
@@ -1082,14 +1089,23 @@ function showAdjustments(){
  add(r.pinkWinner,-2,"Pinkies Winner");add(r.pinkRunner,-1,"Pinkies Runner-up");
  const grouped={};
  changes.forEach(c=>{grouped[c.name]??={name:c.name,delta:0,reasons:[]};grouped[c.name].delta+=c.delta;grouped[c.name].reasons.push(c.label)});
- round.adjustments=Object.values(grouped).map(x=>{const p=players.find(p=>p.name===x.name);return {...x,old:p.current,new:capHandicap(p.current+x.delta)}});
- document.getElementById("adjustmentRule").textContent="All rounds: Nett Winner +2, Nett Runner-up +1, Pinkies Winner −2 and Pinkies Runner-up −1. Handicaps are capped from −8 to +3.";
+ // Build proposed changes only once. Reopening this page must never apply or compound them.
+ if(!round.adjustments.length){
+   round.adjustments=Object.values(grouped).map(x=>{
+     const score=round.scores.find(s=>s.name===x.name);
+     const p=players.find(p=>p.name===x.name);
+     const starting=score ? score.currentBefore : p.current;
+     return {...x,old:starting,new:capHandicap(starting+x.delta)};
+   });
+ }
+ document.getElementById("adjustmentRule").textContent="Handicaps are calculated once from each player's starting handicap. Moving backward or forward cannot apply them again. Allowed range: −8 to +3.";
  document.getElementById("adjustmentList").innerHTML=round.adjustments.map((a,i)=>`<div class="adjustment">
 <strong>${a.name}</strong><div class="small">${a.reasons.join(" and ")}</div>
 <div style="margin-top:8px">Current handicap: <b>${signed(a.old)}</b></div>
-<label>Mick's adjustment</label><input type="number" inputmode="numeric" value="${a.delta}" onchange="updateManualAdjustment(${i},this.value)">
-<div style="margin-top:8px">New handicap: <b id="newHandicap-${i}">${signed(a.new)}</b></div>
-<div class="small">Allowed range: −8 to +3</div></div>`).join("");
+<div style="margin-top:8px">Calculated adjustment: <b>${a.delta>=0?"+":""}${a.delta}</b></div>
+<label>Final handicap — alter if required</label><input type="number" inputmode="numeric" min="-8" max="3" value="${a.new}" onchange="updateFinalHandicap(${i},this.value)">
+<div style="margin-top:8px">Handicap to save: <b id="newHandicap-${i}">${signed(a.new)}</b></div>
+<div class="small">Allowed range: −8 to +3. This value is saved only after confirmation.</div></div>`).join("");
  showScreen("adjustments")
 }
 function reviewUpdatedHandicaps(){
@@ -1104,11 +1120,10 @@ function confirmAndSaveHandicaps(){
  if(!confirm("Confirm and save these updated handicaps?"))return;
  applyAdjustments()
 }
-function updateManualAdjustment(index,value){
- const delta=Number(value);
+function updateFinalHandicap(index,value){
+ const requested=Number(value);
  const a=round.adjustments[index];
- a.delta=Number.isFinite(delta)?delta:0;
- a.new=capHandicap(a.old+a.delta);
+ a.new=capHandicap(Number.isFinite(requested)?requested:a.new);
  const el=document.getElementById("newHandicap-"+index);
  if(el)el.textContent=signed(a.new)
 }
@@ -1231,7 +1246,7 @@ Hole 7 Longest Drive: ${round.novelties.n7&&round.novelties.n7!=="—"?round.nov
 async function shareHonour(){const text=honourText();if(navigator.share){try{await navigator.share({title:"OLD FARTS – RESULTS BOARD",text});return}catch(e){if(e.name==="AbortError")return}}try{await navigator.clipboard.writeText(text);alert("Results Board copied. Open WhatsApp and paste it to the Reporter.")}catch(e){prompt("Copy this Results Board and paste it into WhatsApp for the Reporter:",text)}}
 async function emailJSON(){
  if(!round.applied){alert("Please review and save the handicaps before emailing the JSON file.");return;}if(!confirm("Prepare the final results for Robbie at robbiem2@live.com.au?"))return;
- const payload={schemaVersion:"1.0",appVersion:"0.6.15",club:"Royal Park Golf — Old Farts",exportedAt:new Date().toISOString(),emailTo:"robbiem2@live.com.au",round:{date:round.date,competition:round.competition,playerCount:round.scores.length,greenJacketUsed:round.competition==="Green Jacket Day",freezeDate:round.freezeDate||null,frozenHandicapsUsed:round.competition==="Green Jacket Day"?round.scores.map(s=>({playerId:s.playerId,name:s.name,handicap:s.handicapUsed})):[],scores:round.scores,results:round.results,novelties:round.novelties,handicapAdjustments:round.adjustments,currentHandicapsAfterRound:players.map(p=>({playerId:p.id,name:p.name,current:p.current,greenJacketFrozen:p.green})),honourBoardText:honourText(),handicapsReviewedAndSaved:true}};
+ const payload={schemaVersion:"1.0",appVersion:"0.6.16b",club:"Royal Park Golf — Old Farts",exportedAt:new Date().toISOString(),emailTo:"robbiem2@live.com.au",round:{date:round.date,competition:round.competition,playerCount:round.scores.length,greenJacketUsed:round.competition==="Green Jacket Day",freezeDate:round.freezeDate||null,frozenHandicapsUsed:round.competition==="Green Jacket Day"?round.scores.map(s=>({playerId:s.playerId,name:s.name,handicap:s.handicapUsed})):[],scores:round.scores,results:round.results,novelties:round.novelties,handicapAdjustments:round.adjustments,currentHandicapsAfterRound:players.map(p=>({playerId:p.id,name:p.name,current:p.current,greenJacketFrozen:p.green})),honourBoardText:honourText(),handicapsReviewedAndSaved:true}};
  const json=JSON.stringify(payload,null,2);
  const filename=finalJsonFilename();
  const file=new File([json],filename,{type:"application/json"});
