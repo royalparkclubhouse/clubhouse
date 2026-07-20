@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- saved from url=(0076)file:///C:/Users/robbi/Downloads/Clubhouse_v0.6.19_17JUL_CORRECTED_TEST.html -->
+<!-- saved from url=(0076)file:///C:/Users/robbi/Downloads/Clubhouse_v0.6.20_17JUL_REPLAY_AMENDED.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#184c37">
-<title>Clubhouse v0.6.19 — 17 July Corrected Test</title>
+<title>Clubhouse v0.6.20 — 17 July Replay</title>
 <style>
 :root{
   --green:#184c37;--green2:#24684c;--gold:#c8a44d;--ink:#18211c;--muted:#66736b;
@@ -95,7 +95,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
 </header>
 
 <main>
-<section id="home" class="screen">
+<section id="home" class="screen active">
   <div class="hero"><h2>Clubhouse</h2><p>Enter completed scorecards, calculate prizes, update handicaps and prepare the Honour Board.</p></div>
   <button class="btn btn-primary" onclick="openTodayRound()">Today’s Round</button>
   <button class="btn btn-secondary" onclick="showScreen(&#39;handicaps&#39;)">Current Handicaps</button>
@@ -131,7 +131,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
   <h2>Enter Scorecards</h2>
   <p class="sub">Enter only the gross score from each completed card.</p>
   <div class="card">
-    <div class="row"><div><b id="roundCompLabel">Stroke</b><div class="small" id="roundDateLabel">Sunday 12 July 2026</div></div><span class="badge" id="cardsCount">0 players</span></div>
+    <div class="row"><div><b id="roundCompLabel">Stroke</b><div class="small" id="roundDateLabel">Friday 17 July 2026</div></div><span class="badge" id="cardsCount">0 players</span></div>
     <label>Player</label>
     <input id="playerSearch" list="playerOptions" autocomplete="off" placeholder="Type a first name or surname" oninput="playerSelected()">
     <datalist id="playerOptions"><option value="Ken Anderson">P001 · −5</option><option value="Stephen (Ando) Anderson">P002 · −4</option><option value="Michael Barnes">P003 · −3</option><option value="John Bastow">P004 · +2</option><option value="Greg Bennett">P005 · +1</option><option value="Garry Brown">P006 · −6</option><option value="Gary Bull">P007 · +3</option><option value="Jason Cuthbertson">P008 · −8</option><option value="Charles Eliot">P009 · −3</option><option value="Chris Falzon">P010 · −6</option><option value="John Featherston">P011 · −7</option><option value="Glen (SHARKY) Fisher">P012 · +0</option><option value="Allan Freeman">P013 · −2</option><option value="Peter Guest">P014 · −1</option><option value="Philip Hayes">P015 · −5</option><option value="Ross Higgins">P016 · +0</option><option value="Gerard Holdstock">P017 · −5</option><option value="Jim Isabella">P018 · −8</option><option value="Denis James">P019 · −2</option><option value="Mick Keohane">P020 · −5</option><option value="Chris Koo">P021 · −5</option><option value="Roy Krul">P022 · −5</option><option value="Sam LaRosa">P023 · +1</option><option value="Peter Macleod">P024 · +3</option><option value="Ian (NARKY) Macmillan">P025 · −5</option><option value="Bernie Magennis">P026 · +1</option><option value="Lui Marini">P027 · +3</option><option value="Ian (RED) Martyn">P028 · −6</option><option value="Dave Matthews">P029 · −4</option><option value="Robbie Menezes">P030 · −2</option><option value="Eren Monza">P031 · −6</option><option value="Stephen Munro">P032 · −1</option><option value="Mick Murray">P033 · +1</option><option value="Barry Ogston">P034 · −6</option><option value="Grant Pearse">P035 · −6</option><option value="Tony Ring">P036 · −8</option><option value="Andrew Sandilands">P037 · +0</option><option value="Perry Sandilands">P038 · −8</option><option value="Peter Slevison">P039 · +3</option><option value="Peter Smith">P040 · −6</option><option value="Stephen Squirrell">P041 · −8</option><option value="Philip Taylor">P042 · +1</option><option value="John Taylor">P043 · +0</option><option value="Glenn Todd">P044 · −1</option><option value="Rich Watkiss">P045 · +3</option></datalist>
@@ -231,7 +231,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
   </div>
 </section>
 
-<section id="handicaps" class="screen active">
+<section id="handicaps" class="screen">
   <h2>Current Handicaps</h2>
   <p class="sub">Review or amend a handicap, then save the complete list.</p>
   <div class="notice">Use whole numbers. Positive handicaps display with a plus sign and negative handicaps with a minus sign.</div>
@@ -707,7 +707,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
   <div id="reviewContent" class="review-grid"></div>
 </section>
 </main>
-<footer>Clubhouse v0.6.19 — 17 July Corrected Test</footer>
+<footer>Clubhouse v0.6.20 — Pinkies Nett Fix</footer>
 </div>
 
 <div id="editModal" class="modal"><div class="modal-sheet">
@@ -772,7 +772,7 @@ const officialPlayers=[
 {id:"P044",name:"Glenn Todd",current:-1,green:null},
 {id:"P045",name:"Rich Watkiss",current:3,green:null}
 ];
-const PLAYER_REGISTRY_VERSION="2026-07-20-17JUL-CORRECTED-TEST";
+const PLAYER_REGISTRY_VERSION="2026-07-20-V0.6.20-17JUL-REPLAY-START";
 let storedRegistryVersion=localStorage.getItem("clubhousePlayerRegistryVersion");
 let storedPlayers=JSON.parse(localStorage.getItem("clubhousePlayers")||"null");
 let players;
@@ -787,7 +787,7 @@ if(storedRegistryVersion!==PLAYER_REGISTRY_VERSION || !storedPlayers || storedPl
   });
 }
 // Remove only the field-trial reports created on 10 July 2026.
-// New competition reports, including the 15 July round, will save normally.
+// The genuine 15 July report remains; after this replay is finalised, 17 July becomes the latest Previous Result.
 (function removeFieldTrialReports(){
   try{
     const reports=JSON.parse(localStorage.getItem("clubhouseReports")||"[]");
@@ -804,18 +804,12 @@ if(storedRegistryVersion!==PLAYER_REGISTRY_VERSION || !storedPlayers || storedPl
 
 
 const v0614Handicaps={"P001":-5,"P002":-4,"P003":-3,"P004":2,"P005":1,"P006":-6,"P007":3,"P008":-8,"P009":-3,"P010":-6,"P011":-7,"P012":0,"P013":-2,"P014":-1,"P015":-5,"P016":0,"P017":-5,"P018":-8,"P019":-2,"P020":-5,"P021":-5,"P022":-5,"P023":1,"P024":3,"P025":-5,"P026":1,"P027":3,"P028":-6,"P029":-4,"P030":-2,"P031":-6,"P032":-1,"P033":1,"P034":-6,"P035":-6,"P036":-8,"P037":0,"P038":-8,"P039":3,"P040":-6,"P041":-8,"P042":1,"P043":0,"P044":-1,"P045":3};
-if(localStorage.getItem("clubhouseHandicapVersion")!=="0.6.19-17JUL"){
+if(localStorage.getItem("clubhouseHandicapVersion")!=="0.6.20-17JUL-REPLAY"){
  players=players.map(p=>Object.prototype.hasOwnProperty.call(v0614Handicaps,p.id)?{...p,current:v0614Handicaps[p.id]}:p);
  localStorage.setItem("clubhousePlayers",JSON.stringify(players));
- localStorage.setItem("clubhouseHandicapVersion","0.6.19-17JUL");
+ localStorage.setItem("clubhouseHandicapVersion","0.6.20-17JUL-REPLAY");
 }
-// v0.6.17 correction: restore the correct STARTING handicaps before the 17 July round is re-entered.
-// The app will calculate Allan −2 → −1 and Charles −3 → −5 once, after results are confirmed.
-if(localStorage.getItem("clubhouseHandicapPatchVersion")!=="0.6.19-17JUL"){
- players=players.map(p=>p.id==="P013"?{...p,current:-2}:p.id==="P009"?{...p,current:-3}:p);
- localStorage.setItem("clubhousePlayers",JSON.stringify(players));
- localStorage.setItem("clubhouseHandicapPatchVersion","0.6.19-17JUL");
-}
+// v0.6.20 replay baseline: official handicaps in force at the start of 17 July 2026.
 
 let round={competition:"",date:"",freezeDate:"",frozenHandicaps:{},scores:[],results:null,novelties:{},adjustments:[],applied:false,prepared:false,locked:false,lockedSnapshot:null,reportSaved:false};
 let editingName=null,pendingTies=[],currentTieIndex=0,currentCountbackHole=9;
@@ -944,7 +938,7 @@ function awardSlots(){
 function tiedAwardGroups(){
  const groups=[];
  const nettSorted=[...round.scores].sort((a,b)=>a.nett-b.nett);
- const highSorted=[...round.scores].sort((a,b)=>b.gross-a.gross);
+ const highSorted=[...round.scores].sort((a,b)=>b.nett-a.nett);
  const lowGross=Math.min(...round.scores.map(s=>s.gross));
  const stick=round.scores.filter(s=>s.gross===lowGross);
  if(stick.length>1)groups.push({key:"stick-"+lowGross,type:"stick",label:"Winner off the Stick",players:stick});
@@ -959,12 +953,12 @@ function tiedAwardGroups(){
      groups.push({key:"nett-"+v,type:"nett",label:positions.join(" / "),players:tied})
    }
  });
- const grossValues=[...new Set(highSorted.slice(0,slots).map(s=>s.gross))];
- grossValues.forEach(v=>{
-   const tied=round.scores.filter(s=>s.gross===v);
+ const pinkiesNettValues=[...new Set(highSorted.slice(0,slots).map(s=>s.nett))];
+ pinkiesNettValues.forEach(v=>{
+   const tied=round.scores.filter(s=>s.nett===v);
    if(tied.length>1){
      const positions=[];
-     const before=highSorted.filter(s=>s.gross>v).length;
+     const before=highSorted.filter(s=>s.nett>v).length;
      for(let i=before;i<Math.min(before+tied.length,slots);i++)positions.push(i===0?"Pinkies Winner":"Pinkies Runner-up");
      groups.push({key:"pink-"+v,type:"pinkies",label:positions.join(" / "),players:tied})
    }
@@ -1054,7 +1048,7 @@ function countbackDetail(type,player){
  let tied=[],mode="low";
  if(type==="stick")tied=source.filter(s=>s.gross===actual.gross);
  else if(type==="nett")tied=source.filter(s=>s.nett===actual.nett);
- else {tied=source.filter(s=>s.gross===actual.gross);mode="high"}
+ else {tied=source.filter(s=>s.nett===actual.nett);mode="high"}
  // No genuine tie means no countback wording, including Winner off the Stick.
  if(tied.length<2)return "";
  const ordered=[...tied].sort((a,b)=>compareLatest(a,b,mode));
@@ -1075,10 +1069,10 @@ function countbackHtml(type,player){const note=countbackDetail(type,player);retu
 function calculateResults(){
  const nett=[...round.scores].sort((a,b)=>a.nett-b.nett||compareLatest(a,b,"low"));
  const lowGross=[...round.scores].sort((a,b)=>a.gross-b.gross||compareLatest(a,b,"low"));
- const highGross=[...round.scores].sort((a,b)=>b.gross-a.gross||compareLatest(a,b,"high"));
+ const highNett=[...round.scores].sort((a,b)=>b.nett-a.nett||compareLatest(a,b,"high"));
  round.results={
    stick:lowGross[0],nettWinner:nett[0],nettRunner:nett[1],nettSecond:nett[2]||null,
-   pinkWinner:highGross[0],pinkRunner:highGross[1],pinkSecond:highGross[2]||null
+   pinkWinner:highNett[0],pinkRunner:highNett[1],pinkSecond:highNett[2]||null
  };
  renderResults();
  showScreen("results")
@@ -1148,7 +1142,7 @@ function updateFinalHandicap(index,value){
  if(el)el.textContent=signed(a.new)
 }
 function finalJsonFilename(){
- return `Clubhouse_${round.date||"Round"}_${round.competition.replace(/[^a-z0-9]+/gi,"_")}_v0.6.19.json`
+ return `Clubhouse_${round.date||"Round"}_${round.competition.replace(/[^a-z0-9]+/gi,"_")}_v0.6.20.json`
 }
 function showFinalFileReady(){
  const panel=document.getElementById("finalFilePanel");
@@ -1263,7 +1257,7 @@ async function shareHonour(){
 async function emailJSON(){
  if(!round.applied){alert("Please review and save the handicaps before emailing the JSON file.");return;}if(!confirm("Prepare the final results for Robbie at robbiem2@live.com.au?"))return;
  const locked=lockedData();
- const payload={schemaVersion:"1.0",appVersion:"0.6.19",exportSource:"CURRENT_LOCKED_ROUND",club:"Royal Park Golf — Old Farts",exportedAt:new Date().toISOString(),emailTo:"robbiem2@live.com.au",round:{date:locked.date,competition:locked.competition,playerCount:locked.playerCount,greenJacketUsed:locked.competition==="Green Jacket Day",freezeDate:locked.freezeDate||null,frozenHandicapsUsed:locked.competition==="Green Jacket Day"?locked.scores.map(s=>({playerId:s.playerId,name:s.name,handicap:s.handicapUsed})):[],scores:locked.scores,results:locked.results,novelties:locked.novelties,handicapAdjustments:locked.adjustments,currentHandicapsAfterRound:players.map(p=>({playerId:p.id,name:p.name,current:p.current,greenJacketFrozen:p.green})),honourBoardText:honourText(),handicapsReviewedAndSaved:true}};
+ const payload={schemaVersion:"1.0",appVersion:"0.6.20",exportSource:"CURRENT_LOCKED_ROUND",club:"Royal Park Golf — Old Farts",exportedAt:new Date().toISOString(),emailTo:"robbiem2@live.com.au",round:{date:locked.date,competition:locked.competition,playerCount:locked.playerCount,greenJacketUsed:locked.competition==="Green Jacket Day",freezeDate:locked.freezeDate||null,frozenHandicapsUsed:locked.competition==="Green Jacket Day"?locked.scores.map(s=>({playerId:s.playerId,name:s.name,handicap:s.handicapUsed})):[],scores:locked.scores,results:locked.results,novelties:locked.novelties,handicapAdjustments:locked.adjustments,currentHandicapsAfterRound:players.map(p=>({playerId:p.id,name:p.name,current:p.current,greenJacketFrozen:p.green})),honourBoardText:honourText(),handicapsReviewedAndSaved:true}};
  const json=JSON.stringify(payload,null,2);
  const filename=finalJsonFilename();
  const file=new File([json],filename,{type:"application/json"});
