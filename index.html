@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- saved from url=(0075)file:///C:/Users/robbi/Downloads/Clubhouse_v0.6.28_STANDALONE_VERIFIED.html -->
+<!-- saved from url=(0047)file:///C:/Users/robbi/Downloads/index(12).html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#184c37">
-<title>Clubhouse v0.6.28 — Official Post-22 July Recovery</title>
+<title>Clubhouse v0.6.29 — JSON Import + Results Board Refresh</title>
 <style>
 :root{
   --green:#184c37;--green2:#24684c;--gold:#c8a44d;--ink:#18211c;--muted:#66736b;
@@ -47,16 +47,16 @@ input:focus,select:focus{outline:3px solid rgba(36,104,76,.16);border-color:var(
 .honour{background:linear-gradient(145deg,#fffdf6,#f3e8ce);border:3px double var(--gold);border-radius:16px;padding:12px}
 .honour-head{text-align:center;border-bottom:1px solid rgba(150,116,35,.35);padding-bottom:10px;margin-bottom:10px}
 .honour-head img{width:62px;height:62px;border-radius:11px;object-fit:cover;border:2px solid #fff;box-shadow:0 3px 9px rgba(0,0,0,.16)}
-.honour-head h2{font-family:Georgia,serif;color:#5c4518;margin:6px 0 3px;font-size:1.48rem}
-.honour-head .small{font-size:.82rem;font-weight:800;color:#4f5f57}
-#honourItems{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.honour-item{padding:11px 12px;border-radius:10px;background:rgba(255,255,255,.86);border:1px solid rgba(170,136,51,.25);margin:0;min-height:76px}
-.honour-item.result{grid-column:1/-1;min-height:98px;padding:13px 15px}
-.honour-item span{display:block;font-size:.78rem;font-weight:900;text-transform:uppercase;color:#604d25;line-height:1.15;letter-spacing:.25px}
-.honour-item b{display:block;font-size:1.16rem;margin-top:6px;line-height:1.18;color:#18211c}
-.honour-item.result b{font-size:1.42rem}
-.honour-score{display:block;margin-top:4px;font-size:1.18rem;font-weight:900;line-height:1.12}
-.honour-item.result .honour-score{font-size:1.28rem}
+.honour-head h2{font-family:Georgia,serif;color:#5c4518;margin:6px 0 3px;font-size:1.68rem}
+.honour-head .small{font-size:.94rem;font-weight:900;color:#4f5f57}
+#honourItems{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.honour-item{padding:12px 13px;border-radius:11px;background:rgba(255,255,255,.9);border:1px solid rgba(170,136,51,.28);margin:0;min-height:78px}
+.honour-item.result{grid-column:1/-1;min-height:108px;padding:15px 17px}
+.honour-item span{display:block;font-size:.83rem;font-weight:900;text-transform:uppercase;color:#604d25;line-height:1.15;letter-spacing:.35px}
+.honour-item b{display:block;font-size:1.24rem;margin-top:6px;line-height:1.16;color:#18211c}
+.honour-item.result b{font-size:1.68rem}
+.honour-score{display:block;margin-top:5px;font-size:1.28rem;font-weight:900;line-height:1.1}
+.honour-item.result .honour-score{font-size:1.48rem}
 .countback-note{margin-top:7px;font-style:italic;font-size:.94rem;font-weight:800;line-height:1.25;color:#3e4a43}
 .honour-item.stick{border-left:7px solid var(--orange);background:#fff4e8}
 .honour-item.nett-runner{border-left:7px solid var(--blue);background:#eef6ff}
@@ -65,8 +65,8 @@ input:focus,select:focus{outline:3px solid rgba(36,104,76,.16);border-color:var(
 .honour-item.pink-winner{border-left:7px solid var(--pink);background:#fff0f5}
 .honour-item.novelty{border-left:7px solid var(--gold);background:#fffaf0;min-height:92px}
 .honour-item.novelty span{font-size:.8rem}
-.honour-item.novelty b{font-size:1.12rem}
-.honour-total{margin-top:10px;padding:11px 12px;border-radius:10px;background:#0f2f55;color:#fff;text-align:center;font-size:1.05rem;font-weight:900;letter-spacing:.3px}
+.honour-item.novelty b{font-size:1.2rem}
+.honour-total{margin-top:10px;padding:13px 12px;border-radius:10px;background:#0f2f55;color:#fff;text-align:center;font-size:1.16rem;font-weight:900;letter-spacing:.35px}
 @media(max-width:380px){#honourItems{gap:6px}.honour-item{padding:9px}.honour-item.result{padding:11px 12px}.honour-item.result b{font-size:1.28rem}.honour-item.novelty b{font-size:1rem}.countback-note{font-size:.88rem}}
 .row{display:flex;gap:8px;align-items:center;justify-content:space-between}.small{font-size:.75rem;color:var(--muted)}
 .iconbtn{border:1px solid rgba(255,255,255,.5);background:transparent;color:#fff;border-radius:9px;padding:9px 11px;font-weight:700}
@@ -84,6 +84,8 @@ input:focus,select:focus{outline:3px solid rgba(36,104,76,.16);border-color:var(
 .complete-check{display:flex;gap:10px;padding:12px;border-radius:12px;background:#edf4ef;border:1px solid #cfe0d5;margin-bottom:9px}
 .complete-tick{color:var(--green);font-size:1.25rem;font-weight:900}
 .btn-orange{background:var(--orange);color:#fff}
+.btn-import{background:#e8f1ff;color:#174f88;border:1px solid #bdd2ea}
+.import-status{margin-top:12px;padding:12px 13px;border-radius:12px;background:#edf7f0;border:1px solid #c9dfd0;color:#1d5b40;font-size:.86rem;line-height:1.4}
 
 footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
 @media(max-width:560px){.grid2{grid-template-columns:1fr}.brand small{display:none}html{font-size:16px}}
@@ -103,11 +105,14 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
 </header>
 
 <main>
-<section id="home" class="screen">
+<section id="home" class="screen active">
   <div class="hero"><h2>Clubhouse</h2><p>Enter completed scorecards, calculate prizes, update handicaps and prepare the Honour Board.</p></div>
   <button class="btn btn-primary" onclick="openTodayRound()">Today’s Round</button>
   <button class="btn btn-secondary" onclick="showScreen(&#39;handicaps&#39;)">Current Handicaps</button>
   <button class="btn btn-secondary" onclick="showScreen(&#39;reports&#39;)">Previous Results / Round History</button>
+  <button class="btn btn-import" onclick="choosePreviousCompetitionFile()">⬇️ Update CLUBHOUSE from Previous Competition</button>
+  <input id="previousCompetitionFile" class="hidden" type="file" accept="application/json,.json" onchange="importPreviousCompetition(event)">
+  <div id="lastImportStatus" class="import-status hidden"></div>
 </section>
 
 <section id="setup" class="screen">
@@ -239,7 +244,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
   </div>
 </section>
 
-<section id="handicaps" class="screen active">
+<section id="handicaps" class="screen">
   <h2>Current Handicaps</h2>
   <p class="sub">Review or amend a handicap, then save the complete list.</p>
   <div class="notice">Use whole numbers. Positive handicaps display with a plus sign and negative handicaps with a minus sign.</div>
@@ -733,7 +738,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
   <div id="reviewContent" class="review-grid"></div>
 </section>
 </main>
-<footer>Clubhouse v0.6.28 — Official Post-22 July Recovery</footer>
+<footer>Clubhouse v0.6.29 — JSON Import + Results Board Refresh</footer>
 </div>
 
 <div id="editModal" class="modal"><div class="modal-sheet">
@@ -798,7 +803,7 @@ const officialPlayers=[
 {id:"P044",name:"Glenn Todd",current:-1,green:null},
 {id:"P045",name:"Rich Watkiss",current:3,green:null}
 ];
-const PLAYER_REGISTRY_VERSION="2026-07-22-V0.6.28-OFFICIAL-CLOSING-HANDICAPS";
+const PLAYER_REGISTRY_VERSION="2026-07-22-V0.6.29-OFFICIAL-CLOSING-HANDICAPS";
 let storedRegistryVersion=localStorage.getItem("clubhousePlayerRegistryVersion");
 let storedPlayers=JSON.parse(localStorage.getItem("clubhousePlayers")||"null");
 let players;
@@ -1177,8 +1182,74 @@ function updateFinalHandicap(index,value){
  const el=document.getElementById("newHandicap-"+index);
  if(el)el.textContent=signed(a.new)
 }
+function choosePreviousCompetitionFile(){
+ const input=document.getElementById("previousCompetitionFile");
+ input.value="";
+ input.click();
+}
+function importedReportFromPayload(payload){
+ const r=payload.round;
+ return {
+  id:Date.now(),date:r.date,competition:r.competition,playerCount:Number(r.playerCount)||(Array.isArray(r.scores)?r.scores.length:0),
+  scores:Array.isArray(r.scores)?r.scores:[],results:r.results||null,novelties:r.novelties||{},
+  adjustments:Array.isArray(r.handicapAdjustments)?r.handicapAdjustments:[],
+  greenJacketUsed:!!r.greenJacketUsed,freezeDate:r.freezeDate||null,imported:true
+ };
+}
+function updateLastImportStatus(){
+ const box=document.getElementById("lastImportStatus");
+ if(!box)return;
+ try{
+  const info=JSON.parse(localStorage.getItem("clubhouseLastImportedCompetition")||"null");
+  if(!info){box.classList.add("hidden");return}
+  box.innerHTML=`<b>✓ CLUBHOUSE is up to date</b><br>Last imported: ${formatDate(info.date)} · ${info.competition}<br>${info.playerCount} Players`;
+  box.classList.remove("hidden");
+ }catch(e){box.classList.add("hidden")}
+}
+async function importPreviousCompetition(event){
+ const file=event.target.files&&event.target.files[0];
+ if(!file)return;
+ try{
+  const payload=JSON.parse(await file.text());
+  const r=payload&&payload.round;
+  if(!r||!r.date||!r.competition||!Array.isArray(r.currentHandicapsAfterRound)||!r.results){
+   throw new Error("This is not a complete CLUBHOUSE competition file.");
+  }
+  if(payload.club&& !String(payload.club).toLowerCase().includes("old farts")){
+   throw new Error("This file does not appear to belong to the Old Farts competition.");
+  }
+  const playerCount=Number(r.playerCount)||(Array.isArray(r.scores)?r.scores.length:0);
+  const message=`Import this completed competition?\n\nDate: ${formatDate(r.date)}\nCompetition: ${r.competition}\nPlayers: ${playerCount}\n\nThis will update Current Handicaps and Previous Results.`;
+  if(!confirm(message))return;
+
+  const byId=new Map(r.currentHandicapsAfterRound.map(h=>[String(h.playerId||""),h]));
+  const byName=new Map(r.currentHandicapsAfterRound.map(h=>[String(h.name||"").trim().toLowerCase(),h]));
+  let matched=0;
+  players=players.map(p=>{
+   const h=byId.get(String(p.id))||byName.get(String(p.name).trim().toLowerCase());
+   if(!h||!Number.isFinite(Number(h.current)))return p;
+   matched++;
+   return {...p,current:capHandicap(Number(h.current)),green:h.greenJacketFrozen??p.green};
+  });
+  if(matched===0)throw new Error("No player handicaps in this file matched the CLUBHOUSE player list.");
+  localStorage.setItem("clubhousePlayers",JSON.stringify(players));
+  localStorage.setItem("clubhousePlayerRegistryVersion",PLAYER_REGISTRY_VERSION);
+
+  const reports=JSON.parse(localStorage.getItem("clubhouseReports")||"[]");
+  const record=importedReportFromPayload(payload);
+  const existingIndex=reports.findIndex(x=>x&&x.date===record.date&&x.competition===record.competition);
+  if(existingIndex>=0)reports[existingIndex]=record; else reports.unshift(record);
+  reports.sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")));
+  localStorage.setItem("clubhouseReports",JSON.stringify(reports));
+  localStorage.setItem("clubhouseLastImportedCompetition",JSON.stringify({date:r.date,competition:r.competition,playerCount,filename:file.name,importedAt:new Date().toISOString()}));
+  updateLastImportStatus();
+  alert(`Competition imported successfully.\n\n${matched} player handicaps updated.\nCLUBHOUSE is now up to date.`);
+ }catch(err){
+  alert("Import could not be completed.\n\n"+err.message);
+ }
+}
 function finalJsonFilename(){
- return `Clubhouse_${round.date||"Round"}_${round.competition.replace(/[^a-z0-9]+/gi,"_")}_v0.6.28.json`
+ return `Clubhouse_${round.date||"Round"}_${round.competition.replace(/[^a-z0-9]+/gi,"_")}_v0.6.29.json`
 }
 function showFinalFileReady(){
  const panel=document.getElementById("finalFilePanel");
@@ -1197,7 +1268,7 @@ const status=document.getElementById("completeJsonStatus");if(status)status.text
 function buildHonour(){
 if(!round.locked){["n1","n4","n6","n3","n7"].forEach(id=>{const e=document.getElementById(id);if(e)round.novelties[id]=e.value})}
 const d=lockedData(),r=d.results,n=d.novelties||{},v=x=>x&&x!=="—"?x:"NADA";
-document.getElementById("honourMeta").textContent=`${formatDate(d.date)} · ${d.competition}`;
+document.getElementById("honourMeta").textContent=`${formatDate(d.date)} · ${d.competition} · ${d.playerCount} Players`;
 document.getElementById("honourItems").innerHTML=`<div class="honour-item result stick"><span>Winner off the Stick</span><b>${r.stick.name}</b><div class="honour-score">${r.stick.gross} Gross</div>${countbackHtml("stick",r.stick)}</div><div class="honour-item result nett-runner"><span>Nett Runner-up</span><b>${r.nettRunner.name}</b><div class="honour-score">${r.nettRunner.nett} Nett</div>${countbackHtml("nett",r.nettRunner)}</div><div class="honour-item result nett-winner"><span>Nett Winner</span><b>${r.nettWinner.name}</b><div class="honour-score">${r.nettWinner.nett} Nett</div>${countbackHtml("nett",r.nettWinner)}</div><div class="honour-item result pink-runner"><span>Pinkies Runner-up</span><b>${r.pinkRunner.name}</b><div class="honour-score">${r.pinkRunner.nett} Nett</div>${countbackHtml("pinkies",r.pinkRunner)}</div><div class="honour-item result pink-winner"><span>Pinkies Winner</span><b>${r.pinkWinner.name}</b><div class="honour-score">${r.pinkWinner.nett} Nett</div>${countbackHtml("pinkies",r.pinkWinner)}</div><div class="honour-item novelty"><span>🚩 1st NTP</span><b>${v(n.n1)}</b></div><div class="honour-item novelty"><span>🏌 3rd D&amp;P</span><b>${v(n.n3)}</b></div><div class="honour-item novelty"><span>🚩 4th NTP</span><b>${v(n.n4)}</b></div><div class="honour-item novelty"><span>🚩 6th NTP</span><b>${v(n.n6)}</b></div><div class="honour-item novelty" style="grid-column:1/-1"><span>🏌 7th L/D</span><b>${v(n.n7)}</b></div>`;
 document.getElementById("honourTotal").textContent=`TOTAL PLAYERS: ${d.playerCount}`;showScreen("honour")}
 function saveReport(){const reports=JSON.parse(localStorage.getItem("clubhouseReports")||"[]"),record={id:Date.now(),date:round.date,competition:round.competition,playerCount:round.scores.length,scores:round.scores,results:round.results,novelties:round.novelties,adjustments:round.adjustments,greenJacketUsed:round.competition==="Green Jacket Day",freezeDate:round.freezeDate||null};reports.unshift(record);localStorage.setItem("clubhouseReports",JSON.stringify(reports))}
@@ -1272,7 +1343,7 @@ async function shareHonour(){
  const d=lockedData(),r=d.results,n=d.novelties||{},v=x=>x&&x!=="—"?x:"NADA";
  const c=document.createElement("canvas");c.width=1000;c.height=1320;const x=c.getContext("2d");
  x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);
- x.fillStyle="#0f2f55";x.fillRect(8,8,984,106);x.fillStyle="#fff";x.textAlign="center";x.font="bold 32px Arial";x.fillText("OLD FARTS – RESULTS BOARD",500,49);x.font="bold 19px Arial";x.fillText(`${formatDate(d.date)} · ${d.competition}`,500,84);
+ x.fillStyle="#0f2f55";x.fillRect(8,8,984,106);x.fillStyle="#fff";x.textAlign="center";x.font="bold 32px Arial";x.fillText("OLD FARTS – RESULTS BOARD",500,49);x.font="bold 20px Arial";x.fillText(`${formatDate(d.date)} · ${d.competition} · ${d.playerCount} PLAYERS`,500,84);
  const rows=[
   ["WINNER OFF THE STICK",r.stick,`${r.stick.gross} GROSS`,"#fff0a8","stick"],
   ["NETT RUNNER-UP",r.nettRunner,`${r.nettRunner.nett} NETT`,"#dff1b8","nett"],
@@ -1281,7 +1352,7 @@ async function shareHonour(){
   ["PINKIES WINNER",r.pinkWinner,`${r.pinkWinner.nett} NETT`,"#f7bfd0","pinkies"]
  ];
  let y=122;
- rows.forEach(q=>{const note=countbackDetail(q[4],q[1]);const h=note?142:116;x.fillStyle=q[3];x.fillRect(8,y,984,h);x.fillStyle="#18211c";x.textAlign="left";x.font="bold 22px Arial";x.fillText(q[0],28,y+34);x.font="bold 29px Arial";x.fillText(q[1].name,28,y+75);x.textAlign="right";x.font="bold 28px Arial";x.fillText(q[2],972,y+75);if(note){x.textAlign="left";x.font="italic bold 20px Arial";x.fillText(note,28,y+112)}y+=h+7});
+ rows.forEach(q=>{const note=countbackDetail(q[4],q[1]);const h=note?142:116;x.fillStyle=q[3];x.fillRect(8,y,984,h);x.fillStyle="#18211c";x.textAlign="left";x.font="bold 24px Arial";x.fillText(q[0],28,y+35);x.font="bold 34px Arial";x.fillText(q[1].name,28,y+79);x.textAlign="right";x.font="bold 32px Arial";x.fillText(q[2],972,y+79);if(note){x.textAlign="left";x.font="italic bold 20px Arial";x.fillText(note,28,y+112)}y+=h+7});
  x.fillStyle="#12662f";x.fillRect(8,y,984,54);x.fillStyle="#fff";x.textAlign="center";x.font="bold 24px Arial";x.fillText("NOVELTY PRIZES",500,y+36);y+=54;
  const nov=[
   ["1st NTP",v(n.n1)],["3rd D&P",v(n.n3)],
@@ -1299,7 +1370,7 @@ async function shareHonour(){
 async function emailJSON(){
  if(!round.applied){alert("Please review and save the handicaps before emailing the JSON file.");return;}if(!confirm("Prepare the final results for Robbie at robbiem2@live.com.au?"))return;
  const locked=lockedData();
- const payload={schemaVersion:"1.0",appVersion:"0.6.28",exportSource:"CURRENT_LOCKED_ROUND",club:"Royal Park Golf — Old Farts",exportedAt:new Date().toISOString(),emailTo:"robbiem2@live.com.au",round:{date:locked.date,competition:locked.competition,playerCount:locked.playerCount,greenJacketUsed:locked.competition==="Green Jacket Day",freezeDate:locked.freezeDate||null,frozenHandicapsUsed:locked.competition==="Green Jacket Day"?locked.scores.map(s=>({playerId:s.playerId,name:s.name,handicap:s.handicapUsed})):[],scores:locked.scores,results:locked.results,novelties:locked.novelties,handicapAdjustments:locked.adjustments,currentHandicapsAfterRound:players.map(p=>({playerId:p.id,name:p.name,current:p.current,greenJacketFrozen:p.green})),honourBoardText:honourText(),handicapsReviewedAndSaved:true}};
+ const payload={schemaVersion:"1.0",appVersion:"0.6.29",exportSource:"CURRENT_LOCKED_ROUND",club:"Royal Park Golf — Old Farts",exportedAt:new Date().toISOString(),emailTo:"robbiem2@live.com.au",round:{date:locked.date,competition:locked.competition,playerCount:locked.playerCount,greenJacketUsed:locked.competition==="Green Jacket Day",freezeDate:locked.freezeDate||null,frozenHandicapsUsed:locked.competition==="Green Jacket Day"?locked.scores.map(s=>({playerId:s.playerId,name:s.name,handicap:s.handicapUsed})):[],scores:locked.scores,results:locked.results,novelties:locked.novelties,handicapAdjustments:locked.adjustments,currentHandicapsAfterRound:players.map(p=>({playerId:p.id,name:p.name,current:p.current,greenJacketFrozen:p.green})),honourBoardText:honourText(),handicapsReviewedAndSaved:true}};
  const json=JSON.stringify(payload,null,2);
  const filename=finalJsonFilename();
  const file=new File([json],filename,{type:"application/json"});
@@ -1357,6 +1428,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     renderHandicaps();
     renderReports();
     goHome();
+updateLastImportStatus();
   }catch(e){
     console.error("Clubhouse startup error:",e);
   }
