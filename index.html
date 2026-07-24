@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- saved from url=(0047)file:///C:/Users/robbi/Downloads/index(12).html -->
+<!-- saved from url=(0047)file:///C:/Users/robbi/Downloads/index(13).html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#184c37">
-<title>Clubhouse v0.6.29 — JSON Import + Results Board Refresh</title>
+<title>Clubhouse v0.6.30 — Historical Results Board</title>
 <style>
 :root{
   --green:#184c37;--green2:#24684c;--gold:#c8a44d;--ink:#18211c;--muted:#66736b;
@@ -81,6 +81,9 @@ input:focus,select:focus{outline:3px solid rgba(36,104,76,.16);border-color:var(
 .history-stick{color:var(--orange);padding:3px 0}
 .history-nett{color:var(--green2);padding:3px 0}
 .history-pink{color:var(--pink);padding:3px 0}
+.history-button{display:block;width:100%;text-align:left;font:inherit;color:inherit;cursor:pointer}
+.history-button:active{transform:scale(.995)}
+.history-open{margin-top:9px;padding-top:8px;border-top:1px solid var(--line);font-size:.78rem;font-weight:900;color:var(--blue)}
 .complete-check{display:flex;gap:10px;padding:12px;border-radius:12px;background:#edf4ef;border:1px solid #cfe0d5;margin-bottom:9px}
 .complete-tick{color:var(--green);font-size:1.25rem;font-weight:900}
 .btn-orange{background:var(--orange);color:#fff}
@@ -238,9 +241,10 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
     <div id="honourItems"></div><div id="honourTotal" class="honour-total"></div>
   </div>
   <div class="no-print">
-    <button class="btn btn-primary" onclick="shareHonour()">Share Results Board as Image</button>
-    <button class="btn btn-secondary" onclick="showAdjustments()">Continue to Handicap Review</button>
-    <button class="btn btn-secondary" onclick="showScreen(&#39;results&#39;)">Back to Results</button>
+    <button id="shareHonourBtn" class="btn btn-primary" onclick="shareHonour()">Share Results Board as Image</button>
+    <button id="honourContinueBtn" class="btn btn-secondary" onclick="showAdjustments()">Continue to Handicap Review</button>
+    <button id="honourBackResultsBtn" class="btn btn-secondary" onclick="showScreen(&#39;results&#39;)">Back to Results</button>
+    <button id="honourBackHistoryBtn" class="btn btn-secondary hidden" onclick="closeHistoricalResultsBoard()">Back to Previous Results</button>
   </div>
 </section>
 
@@ -706,25 +710,28 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
 <section id="reports" class="screen">
   <h2>Previous Results / Round History</h2>
   <p class="sub">Saved competition results are kept here, separate from Current Handicaps.</p>
-  <div id="reportsList"><div class="report-card history-card">
+  <div id="reportsList"><button type="button" class="report-card history-card history-button" onclick="openHistoricalResultsBoard(0)">
          <div class="history-title">Wednesday 22 July 2026 — Stroke</div>
          <div class="history-count">17 Players</div>
          <div class="history-stick">Winner off the Stick: <b>Sam LaRosa</b></div>
          <div class="history-nett">Nett Winner: <b>Dave Matthews</b></div>
          <div class="history-pink">Pinkies Winner: <b>Philip Hayes</b></div>
-       </div><div class="report-card history-card">
+         <div class="history-open">Tap to open the exact Results Board</div>
+       </button><button type="button" class="report-card history-card history-button" onclick="openHistoricalResultsBoard(1)">
          <div class="history-title">Friday 17 July 2026 — Stroke</div>
          <div class="history-count">13 Players</div>
          <div class="history-stick">Winner off the Stick: <b>Peter Macleod</b></div>
          <div class="history-nett">Nett Winner: <b>Peter Macleod</b></div>
          <div class="history-pink">Pinkies Winner: <b>Charles Eliot</b></div>
-       </div><div class="report-card history-card">
+         <div class="history-open">Tap to open the exact Results Board</div>
+       </button><button type="button" class="report-card history-card history-button" onclick="openHistoricalResultsBoard(2)">
          <div class="history-title">Wednesday 15 July 2026 — Stroke</div>
          <div class="history-count">12 Players</div>
          <div class="history-stick">Winner off the Stick: <b>Gary Bull</b></div>
          <div class="history-nett">Nett Winner: <b>Glenn Todd</b></div>
          <div class="history-pink">Pinkies Winner: <b>Mick Keohane</b></div>
-       </div></div>
+         <div class="history-open">Tap to open the exact Results Board</div>
+       </button></div>
   <button class="btn btn-secondary" onclick="goHome()">Back</button>
 </section>
 
@@ -738,7 +745,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
   <div id="reviewContent" class="review-grid"></div>
 </section>
 </main>
-<footer>Clubhouse v0.6.29 — JSON Import + Results Board Refresh</footer>
+<footer>Clubhouse v0.6.30 — Historical Results Board</footer>
 </div>
 
 <div id="editModal" class="modal"><div class="modal-sheet">
@@ -853,12 +860,13 @@ if(storedRegistryVersion!==PLAYER_REGISTRY_VERSION || !storedPlayers || storedPl
 })();
 
 let round={competition:"",date:"",freezeDate:"",frozenHandicaps:{},scores:[],results:null,novelties:{},adjustments:[],applied:false,prepared:false,locked:false,lockedSnapshot:null,reportSaved:false};
+let historicalBoardData=null;
 let editingName=null,pendingTies=[],currentTieIndex=0,currentCountbackHole=9;
 
 function signed(n){return(n>=0?"+":"−")+Math.abs(n)}
 function capHandicap(n){return Math.max(-8,Math.min(3,Number(n)))}
 function showScreen(id){const blocked=["entry","recap","results","novelty","adjustments","confirmHandicaps"];if(round.locked&&blocked.includes(id)){alert("This round is locked. Please complete the final steps.");id="complete"}document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));document.getElementById(id).classList.add("active");window.scrollTo({top:0,behavior:"smooth"});if(id==="handicaps")renderHandicaps();if(id==="reports")renderReports()}
-function goHome(){showScreen("home")}
+function goHome(){historicalBoardData=null;showScreen("home")}
 function openTodayRound(){if(!document.getElementById("roundDate").value)document.getElementById("roundDate").value=new Date().toISOString().slice(0,10);showScreen("setup")}
 function competitionChanged(){
  const c=document.getElementById("competition").value;
@@ -926,7 +934,7 @@ function continueRound(){
 }
 function deepCopy(v){return JSON.parse(JSON.stringify(v))}
 function lockRoundSnapshot(){if(!round.lockedSnapshot)round.lockedSnapshot={date:round.date,competition:round.competition,freezeDate:round.freezeDate||"",scores:deepCopy(round.scores),results:deepCopy(round.results),novelties:deepCopy(round.novelties),adjustments:deepCopy(round.adjustments),playerCount:round.scores.length};round.locked=true}
-function lockedData(){return round.lockedSnapshot||{date:round.date,competition:round.competition,freezeDate:round.freezeDate||"",scores:round.scores,results:round.results,novelties:round.novelties,adjustments:round.adjustments,playerCount:round.scores.length}}
+function lockedData(){return historicalBoardData||round.lockedSnapshot||{date:round.date,competition:round.competition,freezeDate:round.freezeDate||"",scores:round.scores,results:round.results,novelties:round.novelties,adjustments:round.adjustments,playerCount:round.scores.length}}
 function setFinishEnabled(){const b=document.getElementById("finishRoundBtn");if(b)b.disabled=!round.prepared}
 function activeHandicap(p){
  if(round.competition==="Green Jacket Day"){
@@ -1249,7 +1257,7 @@ async function importPreviousCompetition(event){
  }
 }
 function finalJsonFilename(){
- return `Clubhouse_${round.date||"Round"}_${round.competition.replace(/[^a-z0-9]+/gi,"_")}_v0.6.29.json`
+ return `Clubhouse_${round.date||"Round"}_${round.competition.replace(/[^a-z0-9]+/gi,"_")}_v0.6.30.json`
 }
 function showFinalFileReady(){
  const panel=document.getElementById("finalFilePanel");
@@ -1270,7 +1278,20 @@ if(!round.locked){["n1","n4","n6","n3","n7"].forEach(id=>{const e=document.getEl
 const d=lockedData(),r=d.results,n=d.novelties||{},v=x=>x&&x!=="—"?x:"NADA";
 document.getElementById("honourMeta").textContent=`${formatDate(d.date)} · ${d.competition} · ${d.playerCount} Players`;
 document.getElementById("honourItems").innerHTML=`<div class="honour-item result stick"><span>Winner off the Stick</span><b>${r.stick.name}</b><div class="honour-score">${r.stick.gross} Gross</div>${countbackHtml("stick",r.stick)}</div><div class="honour-item result nett-runner"><span>Nett Runner-up</span><b>${r.nettRunner.name}</b><div class="honour-score">${r.nettRunner.nett} Nett</div>${countbackHtml("nett",r.nettRunner)}</div><div class="honour-item result nett-winner"><span>Nett Winner</span><b>${r.nettWinner.name}</b><div class="honour-score">${r.nettWinner.nett} Nett</div>${countbackHtml("nett",r.nettWinner)}</div><div class="honour-item result pink-runner"><span>Pinkies Runner-up</span><b>${r.pinkRunner.name}</b><div class="honour-score">${r.pinkRunner.nett} Nett</div>${countbackHtml("pinkies",r.pinkRunner)}</div><div class="honour-item result pink-winner"><span>Pinkies Winner</span><b>${r.pinkWinner.name}</b><div class="honour-score">${r.pinkWinner.nett} Nett</div>${countbackHtml("pinkies",r.pinkWinner)}</div><div class="honour-item novelty"><span>🚩 1st NTP</span><b>${v(n.n1)}</b></div><div class="honour-item novelty"><span>🏌 3rd D&amp;P</span><b>${v(n.n3)}</b></div><div class="honour-item novelty"><span>🚩 4th NTP</span><b>${v(n.n4)}</b></div><div class="honour-item novelty"><span>🚩 6th NTP</span><b>${v(n.n6)}</b></div><div class="honour-item novelty" style="grid-column:1/-1"><span>🏌 7th L/D</span><b>${v(n.n7)}</b></div>`;
-document.getElementById("honourTotal").textContent=`TOTAL PLAYERS: ${d.playerCount}`;showScreen("honour")}
+document.getElementById("honourTotal").textContent=`TOTAL PLAYERS: ${d.playerCount}`;
+const historical=!!historicalBoardData;
+document.getElementById("honourContinueBtn").classList.toggle("hidden",historical);
+document.getElementById("honourBackResultsBtn").classList.toggle("hidden",historical);
+document.getElementById("honourBackHistoryBtn").classList.toggle("hidden",!historical);
+showScreen("honour")}
+function openHistoricalResultsBoard(index){
+ const reports=JSON.parse(localStorage.getItem("clubhouseReports")||"[]");
+ const r=reports[index];
+ if(!r||!r.results){alert("This saved round does not contain a complete Results Board.");return}
+ historicalBoardData={date:r.date,competition:r.competition||"Competition",freezeDate:r.freezeDate||"",scores:Array.isArray(r.scores)?r.scores:[],results:r.results,novelties:r.novelties||{},adjustments:Array.isArray(r.adjustments)?r.adjustments:[],playerCount:Number(r.playerCount)||(Array.isArray(r.scores)?r.scores.length:0)};
+ buildHonour();
+}
+function closeHistoricalResultsBoard(){historicalBoardData=null;showScreen("reports")}
 function saveReport(){const reports=JSON.parse(localStorage.getItem("clubhouseReports")||"[]"),record={id:Date.now(),date:round.date,competition:round.competition,playerCount:round.scores.length,scores:round.scores,results:round.results,novelties:round.novelties,adjustments:round.adjustments,greenJacketUsed:round.competition==="Green Jacket Day",freezeDate:round.freezeDate||null};reports.unshift(record);localStorage.setItem("clubhouseReports",JSON.stringify(reports))}
 function renderHandicaps(){
  document.getElementById("handicapList").innerHTML=players.map((p,i)=>`
@@ -1290,19 +1311,20 @@ function renderReports(){
  const list=document.getElementById("reportsList");
  if(!list)return;
  list.innerHTML=reports.length
-   ? reports.map(r=>{
+   ? reports.map((r,index)=>{
        const count=Number.isFinite(Number(r.playerCount)) ? Number(r.playerCount) : (Array.isArray(r.scores) ? r.scores.length : null);
        const countText=count===null ? "Player count unavailable" : `${count} Players`;
        const stick=r.results&&r.results.stick&&r.results.stick.name ? r.results.stick.name : "Not recorded";
        const nett=r.results&&r.results.nettWinner&&r.results.nettWinner.name ? r.results.nettWinner.name : "Not recorded";
        const pink=r.results&&r.results.pinkWinner&&r.results.pinkWinner.name ? r.results.pinkWinner.name : "Not recorded";
-       return `<div class="report-card history-card">
+       return `<button type="button" class="report-card history-card history-button" onclick="openHistoricalResultsBoard(${index})">
          <div class="history-title">${formatDate(r.date)} — ${r.competition||"Competition"}</div>
          <div class="history-count">${countText}</div>
          <div class="history-stick">Winner off the Stick: <b>${stick}</b></div>
          <div class="history-nett">Nett Winner: <b>${nett}</b></div>
          <div class="history-pink">Pinkies Winner: <b>${pink}</b></div>
-       </div>`;
+         <div class="history-open">Tap to open the exact Results Board</div>
+       </button>`;
      }).join("")
    : '<div class="notice">No saved reports yet.</div>';
 }
@@ -1370,7 +1392,7 @@ async function shareHonour(){
 async function emailJSON(){
  if(!round.applied){alert("Please review and save the handicaps before emailing the JSON file.");return;}if(!confirm("Prepare the final results for Robbie at robbiem2@live.com.au?"))return;
  const locked=lockedData();
- const payload={schemaVersion:"1.0",appVersion:"0.6.29",exportSource:"CURRENT_LOCKED_ROUND",club:"Royal Park Golf — Old Farts",exportedAt:new Date().toISOString(),emailTo:"robbiem2@live.com.au",round:{date:locked.date,competition:locked.competition,playerCount:locked.playerCount,greenJacketUsed:locked.competition==="Green Jacket Day",freezeDate:locked.freezeDate||null,frozenHandicapsUsed:locked.competition==="Green Jacket Day"?locked.scores.map(s=>({playerId:s.playerId,name:s.name,handicap:s.handicapUsed})):[],scores:locked.scores,results:locked.results,novelties:locked.novelties,handicapAdjustments:locked.adjustments,currentHandicapsAfterRound:players.map(p=>({playerId:p.id,name:p.name,current:p.current,greenJacketFrozen:p.green})),honourBoardText:honourText(),handicapsReviewedAndSaved:true}};
+ const payload={schemaVersion:"1.0",appVersion:"0.6.30",exportSource:"CURRENT_LOCKED_ROUND",club:"Royal Park Golf — Old Farts",exportedAt:new Date().toISOString(),emailTo:"robbiem2@live.com.au",round:{date:locked.date,competition:locked.competition,playerCount:locked.playerCount,greenJacketUsed:locked.competition==="Green Jacket Day",freezeDate:locked.freezeDate||null,frozenHandicapsUsed:locked.competition==="Green Jacket Day"?locked.scores.map(s=>({playerId:s.playerId,name:s.name,handicap:s.handicapUsed})):[],scores:locked.scores,results:locked.results,novelties:locked.novelties,handicapAdjustments:locked.adjustments,currentHandicapsAfterRound:players.map(p=>({playerId:p.id,name:p.name,current:p.current,greenJacketFrozen:p.green})),honourBoardText:honourText(),handicapsReviewedAndSaved:true}};
  const json=JSON.stringify(payload,null,2);
  const filename=finalJsonFilename();
  const file=new File([json],filename,{type:"application/json"});
