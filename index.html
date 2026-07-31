@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- saved from url=(0066)file:///C:/Users/robbi/Downloads/Clubhouse_v0.6.31_21plus_fix.html -->
+<!-- saved from url=(0071)file:///C:/Users/robbi/Downloads/Clubhouse_v0.6.32_21plus_complete.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#184c37">
-<title>Clubhouse v0.6.31 — Historical Results Board</title>
+<title>Clubhouse v0.6.32 — 21+ Player Complete</title>
 <style>
 :root{
   --green:#184c37;--green2:#24684c;--gold:#c8a44d;--ink:#18211c;--muted:#66736b;
@@ -745,7 +745,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
   <div id="reviewContent" class="review-grid"></div>
 </section>
 </main>
-<footer>Clubhouse v0.6.31 — Historical Results Board</footer>
+<footer>Clubhouse v0.6.32 — 21+ Player Complete</footer>
 </div>
 
 <div id="editModal" class="modal"><div class="modal-sheet">
@@ -1128,14 +1128,14 @@ function calculateResults(){
 }
 function renderResults(){
  const r=round.results;
- const largeField=Number(round.playerCount)>=21;
+ const largeField=round.scores.length>=21;
  document.getElementById("awards").innerHTML=`
  <div class="award stick"><span>Winner off the Stick</span><b>${r.stick.name} — ${r.stick.gross} Gross</b>${countbackHtml("stick",r.stick)}</div>
- <div class="award runner"><span>Nett Runner-up</span><b>${r.nettRunner.name} — ${r.nettRunner.nett} Nett</b>${countbackHtml("nett",r.nettRunner)}</div>
  ${largeField&&r.nettSecond?`<div class="award runner"><span>Nett 2nd Runner-up</span><b>${r.nettSecond.name} — ${r.nettSecond.nett} Nett</b>${countbackHtml("nett",r.nettSecond)}</div>`:""}
+ <div class="award runner"><span>Nett Runner-up</span><b>${r.nettRunner.name} — ${r.nettRunner.nett} Nett</b>${countbackHtml("nett",r.nettRunner)}</div>
  <div class="award nett"><span>Nett Winner</span><b>${r.nettWinner.name} — ${r.nettWinner.nett} Nett</b>${countbackHtml("nett",r.nettWinner)}</div>
- <div class="award purple"><span>Pinkies Runner-up</span><b>${r.pinkRunner.name} — ${r.pinkRunner.nett} Nett</b>${countbackHtml("pinkies",r.pinkRunner)}</div>
  ${largeField&&r.pinkSecond?`<div class="award purple"><span>Pinkies 2nd Runner-up</span><b>${r.pinkSecond.name} — ${r.pinkSecond.nett} Nett</b>${countbackHtml("pinkies",r.pinkSecond)}</div>`:""}
+ <div class="award purple"><span>Pinkies Runner-up</span><b>${r.pinkRunner.name} — ${r.pinkRunner.nett} Nett</b>${countbackHtml("pinkies",r.pinkRunner)}</div>
  <div class="award pink"><span>Pinkies Winner</span><b>${r.pinkWinner.name} — ${r.pinkWinner.nett} Nett</b>${countbackHtml("pinkies",r.pinkWinner)}</div>`
 }
 function openNovelty(){
@@ -1154,7 +1154,7 @@ function showAdjustments(){
  document.getElementById("finalisePanel").classList.toggle("hidden",!round.prepared);
  const r=round.results,changes=[];
  function add(p,delta,label){if(p)changes.push({name:p.name,delta,label})}
- const largeField = Number(round.playerCount) >= 21;
+ const largeField = round.scores.length >= 21;
 
 if (largeField) {
   add(r.nettWinner,3,"Nett Winner");
@@ -1275,7 +1275,7 @@ async function importPreviousCompetition(event){
  }
 }
 function finalJsonFilename(){
- return `Clubhouse_${round.date||"Round"}_${round.competition.replace(/[^a-z0-9]+/gi,"_")}_v0.6.31.json`
+ return `Clubhouse_${round.date||"Round"}_${round.competition.replace(/[^a-z0-9]+/gi,"_")}_v0.6.32.json`
 }
 function showFinalFileReady(){
  const panel=document.getElementById("finalFilePanel");
@@ -1296,7 +1296,7 @@ if(!round.locked){["n1","n4","n6","n3","n7"].forEach(id=>{const e=document.getEl
 const d=lockedData(),r=d.results,n=d.novelties||{},v=x=>x&&x!=="—"?x:"NADA";
 document.getElementById("honourMeta").textContent=`${formatDate(d.date)} · ${d.competition} · ${d.playerCount} Players`;
 const largeField=Number(d.playerCount)>=21;
-document.getElementById("honourItems").innerHTML=`<div class="honour-item result stick"><span>Winner off the Stick</span><b>${r.stick.name}</b><div class="honour-score">${r.stick.gross} Gross</div>${countbackHtml("stick",r.stick)}</div><div class="honour-item result nett-runner"><span>Nett Runner-up</span><b>${r.nettRunner.name}</b><div class="honour-score">${r.nettRunner.nett} Nett</div>${countbackHtml("nett",r.nettRunner)}</div>${largeField&&r.nettSecond?`<div class="honour-item result nett-runner"><span>Nett 2nd Runner-up</span><b>${r.nettSecond.name}</b><div class="honour-score">${r.nettSecond.nett} Nett</div>${countbackHtml("nett",r.nettSecond)}</div>`:""}<div class="honour-item result nett-winner"><span>Nett Winner</span><b>${r.nettWinner.name}</b><div class="honour-score">${r.nettWinner.nett} Nett</div>${countbackHtml("nett",r.nettWinner)}</div><div class="honour-item result pink-runner"><span>Pinkies Runner-up</span><b>${r.pinkRunner.name}</b><div class="honour-score">${r.pinkRunner.nett} Nett</div>${countbackHtml("pinkies",r.pinkRunner)}</div>${largeField&&r.pinkSecond?`<div class="honour-item result pink-runner"><span>Pinkies 2nd Runner-up</span><b>${r.pinkSecond.name}</b><div class="honour-score">${r.pinkSecond.nett} Nett</div>${countbackHtml("pinkies",r.pinkSecond)}</div>`:""}<div class="honour-item result pink-winner"><span>Pinkies Winner</span><b>${r.pinkWinner.name}</b><div class="honour-score">${r.pinkWinner.nett} Nett</div>${countbackHtml("pinkies",r.pinkWinner)}</div><div class="honour-item novelty"><span>🚩 1st NTP</span><b>${v(n.n1)}</b></div><div class="honour-item novelty"><span>🏌 3rd D&amp;P</span><b>${v(n.n3)}</b></div><div class="honour-item novelty"><span>🚩 4th NTP</span><b>${v(n.n4)}</b></div><div class="honour-item novelty"><span>🚩 6th NTP</span><b>${v(n.n6)}</b></div><div class="honour-item novelty" style="grid-column:1/-1"><span>🏌 7th L/D</span><b>${v(n.n7)}</b></div>`;
+document.getElementById("honourItems").innerHTML=`<div class="honour-item result stick"><span>Winner off the Stick</span><b>${r.stick.name}</b><div class="honour-score">${r.stick.gross} Gross</div>${countbackHtml("stick",r.stick)}</div>${largeField&&r.nettSecond?`<div class="honour-item result nett-runner"><span>Nett 2nd Runner-up</span><b>${r.nettSecond.name}</b><div class="honour-score">${r.nettSecond.nett} Nett</div>${countbackHtml("nett",r.nettSecond)}</div>`:""}<div class="honour-item result nett-runner"><span>Nett Runner-up</span><b>${r.nettRunner.name}</b><div class="honour-score">${r.nettRunner.nett} Nett</div>${countbackHtml("nett",r.nettRunner)}</div><div class="honour-item result nett-winner"><span>Nett Winner</span><b>${r.nettWinner.name}</b><div class="honour-score">${r.nettWinner.nett} Nett</div>${countbackHtml("nett",r.nettWinner)}</div>${largeField&&r.pinkSecond?`<div class="honour-item result pink-runner"><span>Pinkies 2nd Runner-up</span><b>${r.pinkSecond.name}</b><div class="honour-score">${r.pinkSecond.nett} Nett</div>${countbackHtml("pinkies",r.pinkSecond)}</div>`:""}<div class="honour-item result pink-runner"><span>Pinkies Runner-up</span><b>${r.pinkRunner.name}</b><div class="honour-score">${r.pinkRunner.nett} Nett</div>${countbackHtml("pinkies",r.pinkRunner)}</div><div class="honour-item result pink-winner"><span>Pinkies Winner</span><b>${r.pinkWinner.name}</b><div class="honour-score">${r.pinkWinner.nett} Nett</div>${countbackHtml("pinkies",r.pinkWinner)}</div><div class="honour-item novelty"><span>🚩 1st NTP</span><b>${v(n.n1)}</b></div><div class="honour-item novelty"><span>🏌 3rd D&amp;P</span><b>${v(n.n3)}</b></div><div class="honour-item novelty"><span>🚩 4th NTP</span><b>${v(n.n4)}</b></div><div class="honour-item novelty"><span>🚩 6th NTP</span><b>${v(n.n6)}</b></div><div class="honour-item novelty" style="grid-column:1/-1"><span>🏌 7th L/D</span><b>${v(n.n7)}</b></div>`;
 document.getElementById("honourTotal").textContent=`TOTAL PLAYERS: ${d.playerCount}`;
 const historical=!!historicalBoardData;
 document.getElementById("honourContinueBtn").classList.toggle("hidden",historical);
@@ -1369,11 +1369,11 @@ function honourText(){
 ${formatDate(round.date)} — ${round.competition}
 
 Winner off the Stick: ${r.stick.name} (Gross ${r.stick.gross})${countbackDetail("stick",r.stick)?" — "+countbackDetail("stick",r.stick):""}
-Nett Runner-up: ${r.nettRunner.name} (Nett ${r.nettRunner.nett})${countbackDetail("nett",r.nettRunner)?" — "+countbackDetail("nett",r.nettRunner):""}${Number(round.playerCount)>=21&&r.nettSecond?`
-Nett 2nd Runner-up: ${r.nettSecond.name} (Nett ${r.nettSecond.nett})${countbackDetail("nett",r.nettSecond)?" — "+countbackDetail("nett",r.nettSecond):""}`:""}
+${round.scores.length>=21&&r.nettSecond?`Nett 2nd Runner-up: ${r.nettSecond.name} (Nett ${r.nettSecond.nett})${countbackDetail("nett",r.nettSecond)?" — "+countbackDetail("nett",r.nettSecond):""}
+`:""}Nett Runner-up: ${r.nettRunner.name} (Nett ${r.nettRunner.nett})${countbackDetail("nett",r.nettRunner)?" — "+countbackDetail("nett",r.nettRunner):""}
 Nett Winner: ${r.nettWinner.name} (Nett ${r.nettWinner.nett})${countbackDetail("nett",r.nettWinner)?" — "+countbackDetail("nett",r.nettWinner):""}
-Pinkies Runner-up: ${r.pinkRunner.name} (Nett ${r.pinkRunner.nett})${countbackDetail("pinkies",r.pinkRunner)?" — "+countbackDetail("pinkies",r.pinkRunner):""}${Number(round.playerCount)>=21&&r.pinkSecond?`
-Pinkies 2nd Runner-up: ${r.pinkSecond.name} (Nett ${r.pinkSecond.nett})${countbackDetail("pinkies",r.pinkSecond)?" — "+countbackDetail("pinkies",r.pinkSecond):""}`:""}
+${round.scores.length>=21&&r.pinkSecond?`Pinkies 2nd Runner-up: ${r.pinkSecond.name} (Nett ${r.pinkSecond.nett})${countbackDetail("pinkies",r.pinkSecond)?" — "+countbackDetail("pinkies",r.pinkSecond):""}
+`:""}Pinkies Runner-up: ${r.pinkRunner.name} (Nett ${r.pinkRunner.nett})${countbackDetail("pinkies",r.pinkRunner)?" — "+countbackDetail("pinkies",r.pinkRunner):""}
 Pinkies Winner: ${r.pinkWinner.name} (Nett ${r.pinkWinner.nett})${countbackDetail("pinkies",r.pinkWinner)?" — "+countbackDetail("pinkies",r.pinkWinner):""}
 
 Hole 1 NTP: ${round.novelties.n1&&round.novelties.n1!=="—"?round.novelties.n1:"NADA"}
@@ -1384,13 +1384,16 @@ Hole 7 Longest Drive: ${round.novelties.n7&&round.novelties.n7!=="—"?round.nov
 }
 async function shareHonour(){
  const d=lockedData(),r=d.results,n=d.novelties||{},v=x=>x&&x!=="—"?x:"NADA";
- const c=document.createElement("canvas");c.width=1000;c.height=1320;const x=c.getContext("2d");
+ const c=document.createElement("canvas");c.width=1000;c.height=1600;const x=c.getContext("2d");
  x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);
  x.fillStyle="#0f2f55";x.fillRect(8,8,984,106);x.fillStyle="#fff";x.textAlign="center";x.font="bold 32px Arial";x.fillText("OLD FARTS – RESULTS BOARD",500,49);x.font="bold 20px Arial";x.fillText(`${formatDate(d.date)} · ${d.competition} · ${d.playerCount} PLAYERS`,500,84);
+ const largeField=Number(d.playerCount)>=21;
  const rows=[
   ["WINNER OFF THE STICK",r.stick,`${r.stick.gross} GROSS`,"#fff0a8","stick"],
+  ...(largeField&&r.nettSecond?[["NETT 2ND RUNNER-UP",r.nettSecond,`${r.nettSecond.nett} NETT`,"#dff1b8","nett"]]:[]),
   ["NETT RUNNER-UP",r.nettRunner,`${r.nettRunner.nett} NETT`,"#dff1b8","nett"],
   ["NETT WINNER",r.nettWinner,`${r.nettWinner.nett} NETT`,"#bfe5f5","nett"],
+  ...(largeField&&r.pinkSecond?[["PINKIES 2ND RUNNER-UP",r.pinkSecond,`${r.pinkSecond.nett} NETT`,"#e1cff5","pinkies"]]:[]),
   ["PINKIES RUNNER-UP",r.pinkRunner,`${r.pinkRunner.nett} NETT`,"#e1cff5","pinkies"],
   ["PINKIES WINNER",r.pinkWinner,`${r.pinkWinner.nett} NETT`,"#f7bfd0","pinkies"]
  ];
@@ -1413,7 +1416,7 @@ async function shareHonour(){
 async function emailJSON(){
  if(!round.applied){alert("Please review and save the handicaps before emailing the JSON file.");return;}if(!confirm("Prepare the final results for Robbie at robbiem2@live.com.au?"))return;
  const locked=lockedData();
- const payload={schemaVersion:"1.0",appVersion:"0.6.31",exportSource:"CURRENT_LOCKED_ROUND",club:"Royal Park Golf — Old Farts",exportedAt:new Date().toISOString(),emailTo:"robbiem2@live.com.au",round:{date:locked.date,competition:locked.competition,playerCount:locked.playerCount,greenJacketUsed:locked.competition==="Green Jacket Day",freezeDate:locked.freezeDate||null,frozenHandicapsUsed:locked.competition==="Green Jacket Day"?locked.scores.map(s=>({playerId:s.playerId,name:s.name,handicap:s.handicapUsed})):[],scores:locked.scores,results:locked.results,novelties:locked.novelties,handicapAdjustments:locked.adjustments,currentHandicapsAfterRound:players.map(p=>({playerId:p.id,name:p.name,current:p.current,greenJacketFrozen:p.green})),honourBoardText:honourText(),handicapsReviewedAndSaved:true}};
+ const payload={schemaVersion:"1.0",appVersion:"0.6.32",exportSource:"CURRENT_LOCKED_ROUND",club:"Royal Park Golf — Old Farts",exportedAt:new Date().toISOString(),emailTo:"robbiem2@live.com.au",round:{date:locked.date,competition:locked.competition,playerCount:locked.playerCount,greenJacketUsed:locked.competition==="Green Jacket Day",freezeDate:locked.freezeDate||null,frozenHandicapsUsed:locked.competition==="Green Jacket Day"?locked.scores.map(s=>({playerId:s.playerId,name:s.name,handicap:s.handicapUsed})):[],scores:locked.scores,results:locked.results,novelties:locked.novelties,handicapAdjustments:locked.adjustments,currentHandicapsAfterRound:players.map(p=>({playerId:p.id,name:p.name,current:p.current,greenJacketFrozen:p.green})),honourBoardText:honourText(),handicapsReviewedAndSaved:true}};
  const json=JSON.stringify(payload,null,2);
  const filename=finalJsonFilename();
  const file=new File([json],filename,{type:"application/json"});
