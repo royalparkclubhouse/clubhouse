@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- saved from url=(0071)file:///C:/Users/robbi/Downloads/Clubhouse_v0.6.32_21plus_complete.html -->
+<!-- saved from url=(0086)file:///C:/Users/robbi/Downloads/Clubhouse_v0.6.33_COUNTBACK_21plus_fix_CORRECTED.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#184c37">
-<title>Clubhouse v0.6.32 — 21+ Player Complete</title>
+<title>Clubhouse v0.6.33 — 21+ Countback Fix</title>
 <style>
 :root{
   --green:#184c37;--green2:#24684c;--gold:#c8a44d;--ink:#18211c;--muted:#66736b;
@@ -745,7 +745,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
   <div id="reviewContent" class="review-grid"></div>
 </section>
 </main>
-<footer>Clubhouse v0.6.32 — 21+ Player Complete</footer>
+<footer>Clubhouse v0.6.33 — 21+ Countback Fix</footer>
 </div>
 
 <div id="editModal" class="modal"><div class="modal-sheet">
@@ -982,7 +982,7 @@ function finishRound(){
  showScreen("recap")
 }
 function awardSlots(){
- return 2
+ return round.scores.length>=21 ? 3 : 2
 }
 function tiedAwardGroups(){
  const groups=[];
@@ -998,7 +998,7 @@ function tiedAwardGroups(){
    if(tied.length>1){
      const positions=[];
      const before=nettSorted.filter(s=>s.nett<v).length;
-     for(let i=before;i<Math.min(before+tied.length,slots);i++)positions.push(i===0?"Nett Winner":"Nett Runner-up");
+     for(let i=before;i<Math.min(before+tied.length,slots);i++)positions.push(i===0?"Nett Winner":i===1?"Nett Runner-up":"Nett 2nd Runner-up");
      groups.push({key:"nett-"+v,type:"nett",label:positions.join(" / "),players:tied})
    }
  });
@@ -1008,7 +1008,7 @@ function tiedAwardGroups(){
    if(tied.length>1){
      const positions=[];
      const before=highSorted.filter(s=>s.nett>v).length;
-     for(let i=before;i<Math.min(before+tied.length,slots);i++)positions.push(i===0?"Pinkies Winner":"Pinkies Runner-up");
+     for(let i=before;i<Math.min(before+tied.length,slots);i++)positions.push(i===0?"Pinkies Winner":i===1?"Pinkies Runner-up":"Pinkies 2nd Runner-up");
      groups.push({key:"pink-"+v,type:"pinkies",label:positions.join(" / "),players:tied})
    }
  });
