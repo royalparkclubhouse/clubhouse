@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- saved from url=(0086)file:///C:/Users/robbi/Downloads/Clubhouse_v0.6.33_COUNTBACK_21plus_fix_CORRECTED.html -->
+<!-- saved from url=(0077)file:///C:/Users/robbi/Downloads/Clubhouse_v0.6.34_RESULTS_BOARD_UPGRADE.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#184c37">
-<title>Clubhouse v0.6.33 — 21+ Countback Fix</title>
+<title>Clubhouse v0.6.34 — Results Board Upgrade</title>
 <style>
 :root{
   --green:#184c37;--green2:#24684c;--gold:#c8a44d;--ink:#18211c;--muted:#66736b;
@@ -745,7 +745,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
   <div id="reviewContent" class="review-grid"></div>
 </section>
 </main>
-<footer>Clubhouse v0.6.33 — 21+ Countback Fix</footer>
+<footer>Clubhouse v0.6.34 — Results Board Upgrade</footer>
 </div>
 
 <div id="editModal" class="modal"><div class="modal-sheet">
@@ -1275,7 +1275,7 @@ async function importPreviousCompetition(event){
  }
 }
 function finalJsonFilename(){
- return `Clubhouse_${round.date||"Round"}_${round.competition.replace(/[^a-z0-9]+/gi,"_")}_v0.6.32.json`
+ return `Clubhouse_${round.date||"Round"}_${round.competition.replace(/[^a-z0-9]+/gi,"_")}_v0.6.34.json`
 }
 function showFinalFileReady(){
  const panel=document.getElementById("finalFilePanel");
@@ -1384,39 +1384,77 @@ Hole 7 Longest Drive: ${round.novelties.n7&&round.novelties.n7!=="—"?round.nov
 }
 async function shareHonour(){
  const d=lockedData(),r=d.results,n=d.novelties||{},v=x=>x&&x!=="—"?x:"NADA";
- const c=document.createElement("canvas");c.width=1000;c.height=1600;const x=c.getContext("2d");
- x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);
- x.fillStyle="#0f2f55";x.fillRect(8,8,984,106);x.fillStyle="#fff";x.textAlign="center";x.font="bold 32px Arial";x.fillText("OLD FARTS – RESULTS BOARD",500,49);x.font="bold 20px Arial";x.fillText(`${formatDate(d.date)} · ${d.competition} · ${d.playerCount} PLAYERS`,500,84);
  const largeField=Number(d.playerCount)>=21;
  const rows=[
-  ["WINNER OFF THE STICK",r.stick,`${r.stick.gross} GROSS`,"#fff0a8","stick"],
-  ...(largeField&&r.nettSecond?[["NETT 2ND RUNNER-UP",r.nettSecond,`${r.nettSecond.nett} NETT`,"#dff1b8","nett"]]:[]),
-  ["NETT RUNNER-UP",r.nettRunner,`${r.nettRunner.nett} NETT`,"#dff1b8","nett"],
-  ["NETT WINNER",r.nettWinner,`${r.nettWinner.nett} NETT`,"#bfe5f5","nett"],
-  ...(largeField&&r.pinkSecond?[["PINKIES 2ND RUNNER-UP",r.pinkSecond,`${r.pinkSecond.nett} NETT`,"#e1cff5","pinkies"]]:[]),
-  ["PINKIES RUNNER-UP",r.pinkRunner,`${r.pinkRunner.nett} NETT`,"#e1cff5","pinkies"],
-  ["PINKIES WINNER",r.pinkWinner,`${r.pinkWinner.nett} NETT`,"#f7bfd0","pinkies"]
+  ["WINNER OFF\nTHE STICK",r.stick,`${r.stick.gross}\nGROSS`,"#fff0a8","stick"],
+  ...(largeField&&r.nettSecond?[["NETT 2ND\nRUNNER-UP",r.nettSecond,`${r.nettSecond.nett}\nNETT`,"#dff1b8","nett"]]:[]),
+  ["NETT\nRUNNER-UP",r.nettRunner,`${r.nettRunner.nett}\nNETT`,"#dff1b8","nett"],
+  ["NETT\nWINNER",r.nettWinner,`${r.nettWinner.nett}\nNETT`,"#bfe5f5","nett"],
+  ...(largeField&&r.pinkSecond?[["PINKIES 2ND\nRUNNER-UP",r.pinkSecond,`${r.pinkSecond.nett}\nNETT`,"#e1cff5","pinkies"]]:[]),
+  ["PINKIES\nRUNNER-UP",r.pinkRunner,`${r.pinkRunner.nett}\nNETT`,"#e1cff5","pinkies"],
+  ["PINKIES\nWINNER",r.pinkWinner,`${r.pinkWinner.nett}\nNETT`,"#f7bfd0","pinkies"]
  ];
- let y=122;
- rows.forEach(q=>{const note=countbackDetail(q[4],q[1]);const h=note?142:116;x.fillStyle=q[3];x.fillRect(8,y,984,h);x.fillStyle="#18211c";x.textAlign="left";x.font="bold 24px Arial";x.fillText(q[0],28,y+35);x.font="bold 34px Arial";x.fillText(q[1].name,28,y+79);x.textAlign="right";x.font="bold 32px Arial";x.fillText(q[2],972,y+79);if(note){x.textAlign="left";x.font="italic bold 20px Arial";x.fillText(note,28,y+112)}y+=h+7});
- x.fillStyle="#12662f";x.fillRect(8,y,984,54);x.fillStyle="#fff";x.textAlign="center";x.font="bold 24px Arial";x.fillText("NOVELTY PRIZES",500,y+36);y+=54;
+ const W=1600, headerH=124, rowH=largeField?112:138, gap=4, noveltyHeadH=58, noveltyH=176, footerH=62;
+ const H=headerH + rows.length*(rowH+gap) + noveltyHeadH + noveltyH + footerH + 20;
+ const c=document.createElement("canvas");c.width=W;c.height=H;const x=c.getContext("2d");
+ const splitLines=t=>String(t).split("\n");
+ const fitText=(text,maxWidth,startSize,minSize=22,weight="bold",style="")=>{let size=startSize;while(size>minSize){x.font=`${style}${weight} ${size}px Arial`;if(x.measureText(text).width<=maxWidth)break;size-=2}return size};
+ const drawLines=(text,cx,cy,lineGap,align="center")=>{x.textAlign=align;splitLines(text).forEach((line,i)=>x.fillText(line,cx,cy+i*lineGap))};
+ const wrapText=(text,maxWidth)=>{const words=String(text).split(/\s+/),lines=[];let line="";for(const w of words){const test=line?line+" "+w:w;if(x.measureText(test).width>maxWidth&&line){lines.push(line);line=w}else line=test}if(line)lines.push(line);return lines};
+ const drawFlag=(cx,cy)=>{x.save();x.strokeStyle="#177a39";x.lineWidth=5;x.beginPath();x.moveTo(cx-15,cy+23);x.lineTo(cx-15,cy-24);x.stroke();x.fillStyle="#e04f5f";x.beginPath();x.moveTo(cx-13,cy-22);x.lineTo(cx+24,cy-10);x.lineTo(cx-13,cy+2);x.closePath();x.fill();x.restore()};
+ const drawGolf=(cx,cy)=>{x.save();x.strokeStyle="#2e5d44";x.lineWidth=5;x.beginPath();x.moveTo(cx+15,cy-24);x.lineTo(cx-4,cy+13);x.lineTo(cx+16,cy+19);x.stroke();x.fillStyle="#fff";x.strokeStyle="#777";x.lineWidth=2;x.beginPath();x.arc(cx-17,cy+22,8,0,Math.PI*2);x.fill();x.stroke();x.restore()};
+ // Background and top banner
+ x.fillStyle="#f5f3eb";x.fillRect(0,0,W,H);
+ x.fillStyle="#071b43";x.fillRect(8,8,W-16,headerH-12);
+ x.fillStyle="#fff";x.textAlign="center";x.font="bold 48px Arial";x.fillText("OLD FARTS – RESULTS BOARD",W/2,58);
+ x.fillStyle="#f5d62f";x.font="bold 28px Arial";x.fillText(`${formatDate(d.date)}  •  ${d.competition}  •  ${d.playerCount} Players`,W/2,99);
+ let y=headerH;
+ // Results rows: label / winner / score, matching the established landscape board
+ rows.forEach(q=>{
+   const note=countbackDetail(q[4],q[1]);
+   x.fillStyle=q[3];x.fillRect(8,y,W-16,rowH);
+   x.strokeStyle="rgba(0,0,0,.10)";x.lineWidth=1;x.strokeRect(8,y,W-16,rowH);
+   x.fillStyle="#111";
+   x.textAlign="center";x.font=`bold ${largeField?28:33}px Arial`;drawLines(q[0],245,y+(largeField?38:44),largeField?30:34);
+   const nameSize=fitText(q[1].name,760,largeField?40:46,26);
+   x.font=`bold ${nameSize}px Arial`;x.textAlign="center";x.fillText(q[1].name,830,y+(note?50:rowH/2+14));
+   x.font=`bold ${largeField?35:42}px Arial`;drawLines(q[2],1450,y+(largeField?41:48),largeField?34:40);
+   if(note){
+     x.font=`italic bold ${largeField?21:24}px Arial`;x.textAlign="center";
+     const lines=wrapText(note,820).slice(0,2);lines.forEach((line,i)=>x.fillText(line,830,y+82+i*25));
+   }
+   y+=rowH+gap;
+ });
+ // Novelty banner
+ x.fillStyle="#12662f";x.fillRect(8,y,W-16,noveltyHeadH);x.fillStyle="#fff";x.textAlign="center";x.font="bold 32px Arial";x.fillText("NOVELTY PRIZES",W/2,y+40);y+=noveltyHeadH;
  const nov=[
-  ["1st NTP",v(n.n1)],["3rd D&P",v(n.n3)],
-  ["4th NTP",v(n.n4)],["6th NTP",v(n.n6)],
-  ["7th L/D",v(n.n7)]
+  ["1st NTP",v(n.n1),"flag","Hole 1"],
+  ["3rd D&P",v(n.n3),"golf","Hole 3"],
+  ["4th NTP",v(n.n4),"flag","Hole 4"],
+  ["6th NTP",v(n.n6),"flag","Hole 6"],
+  ["7th L/D",v(n.n7),"golf","Hole 7"]
  ];
- const boxW=488,boxH=112;
- nov.forEach((q,i)=>{const full=i===4;const col=i%2,row=Math.floor(i/2);const a=full?8:8+col*(boxW+8),b=y+row*(boxH+8),w=full?984:boxW;x.fillStyle="#fffaf0";x.fillRect(a,b,w,boxH);x.strokeStyle="#9fb0a6";x.strokeRect(a,b,w,boxH);x.fillStyle="#18211c";x.textAlign="center";x.font="bold 23px Arial";x.fillText(q[0],a+w/2,b+38);x.font="bold 25px Arial";x.fillText(q[1].slice(0,28),a+w/2,b+80)});y+=3*(boxH+8);
- x.fillStyle="#0f2f55";x.fillRect(8,y,984,54);x.fillStyle="#fff";x.textAlign="center";x.font="bold 22px Arial";x.fillText(`TOTAL PLAYERS: ${d.playerCount}`,500,y+36);
- const usedHeight=Math.min(c.height,y+62),trim=document.createElement("canvas");trim.width=1000;trim.height=usedHeight;trim.getContext("2d").drawImage(c,0,0,1000,usedHeight,0,0,1000,usedHeight);
- const blob=await new Promise(res=>trim.toBlob(res,"image/png",1));const file=new File([blob],`OLD_FARTS_RESULTS_${d.date}.png`,{type:"image/png"});
+ const boxW=(W-16)/5;
+ nov.forEach((q,i)=>{
+   const a=8+i*boxW;
+   x.fillStyle="#fffdf7";x.fillRect(a,y,boxW,noveltyH);x.strokeStyle="#a9afa8";x.strokeRect(a,y,boxW,noveltyH);
+   q[2]==="flag"?drawFlag(a+46,y+38):drawGolf(a+46,y+38);
+   x.fillStyle="#111";x.textAlign="center";x.font="bold 27px Arial";x.fillText(q[0],a+boxW/2,y+39);
+   x.strokeStyle="#555";x.lineWidth=2;x.beginPath();x.moveTo(a+44,y+60);x.lineTo(a+boxW-44,y+60);x.stroke();
+   const nmSize=fitText(q[1],boxW-40,29,19);x.font=`bold ${nmSize}px Arial`;
+   const nm=wrapText(q[1],boxW-36).slice(0,2);nm.forEach((line,j)=>x.fillText(line,a+boxW/2,y+105+j*28));
+   x.font="italic 21px Arial";x.fillStyle="#505a54";x.fillText(q[3],a+boxW/2,y+162);
+ });
+ y+=noveltyH;
+ x.fillStyle="#071b43";x.fillRect(8,y,W-16,footerH);x.fillStyle="#fff";x.textAlign="center";x.font="bold 30px Arial";x.fillText(`TOTAL PLAYERS: ${d.playerCount}`,W/2,y+41);
+ const blob=await new Promise(res=>c.toBlob(res,"image/png",1));const file=new File([blob],`OLD_FARTS_RESULTS_${d.date}.png`,{type:"image/png"});
  if(navigator.canShare&&navigator.canShare({files:[file]})&&navigator.share){try{await navigator.share({title:"OLD FARTS – RESULTS BOARD",files:[file]});return}catch(e){if(e.name==="AbortError")return}}
  const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=file.name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);alert("Results Board image saved. Attach it in WhatsApp.")
 }
 async function emailJSON(){
  if(!round.applied){alert("Please review and save the handicaps before emailing the JSON file.");return;}if(!confirm("Prepare the final results for Robbie at robbiem2@live.com.au?"))return;
  const locked=lockedData();
- const payload={schemaVersion:"1.0",appVersion:"0.6.32",exportSource:"CURRENT_LOCKED_ROUND",club:"Royal Park Golf — Old Farts",exportedAt:new Date().toISOString(),emailTo:"robbiem2@live.com.au",round:{date:locked.date,competition:locked.competition,playerCount:locked.playerCount,greenJacketUsed:locked.competition==="Green Jacket Day",freezeDate:locked.freezeDate||null,frozenHandicapsUsed:locked.competition==="Green Jacket Day"?locked.scores.map(s=>({playerId:s.playerId,name:s.name,handicap:s.handicapUsed})):[],scores:locked.scores,results:locked.results,novelties:locked.novelties,handicapAdjustments:locked.adjustments,currentHandicapsAfterRound:players.map(p=>({playerId:p.id,name:p.name,current:p.current,greenJacketFrozen:p.green})),honourBoardText:honourText(),handicapsReviewedAndSaved:true}};
+ const payload={schemaVersion:"1.0",appVersion:"0.6.34",exportSource:"CURRENT_LOCKED_ROUND",club:"Royal Park Golf — Old Farts",exportedAt:new Date().toISOString(),emailTo:"robbiem2@live.com.au",round:{date:locked.date,competition:locked.competition,playerCount:locked.playerCount,greenJacketUsed:locked.competition==="Green Jacket Day",freezeDate:locked.freezeDate||null,frozenHandicapsUsed:locked.competition==="Green Jacket Day"?locked.scores.map(s=>({playerId:s.playerId,name:s.name,handicap:s.handicapUsed})):[],scores:locked.scores,results:locked.results,novelties:locked.novelties,handicapAdjustments:locked.adjustments,currentHandicapsAfterRound:players.map(p=>({playerId:p.id,name:p.name,current:p.current,greenJacketFrozen:p.green})),honourBoardText:honourText(),handicapsReviewedAndSaved:true}};
  const json=JSON.stringify(payload,null,2);
  const filename=finalJsonFilename();
  const file=new File([json],filename,{type:"application/json"});
