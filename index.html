@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- saved from url=(0077)file:///C:/Users/robbi/Downloads/Clubhouse_v0.6.34_RESULTS_BOARD_UPGRADE.html -->
+<!-- saved from url=(0077)file:///C:/Users/robbi/Downloads/Clubhouse_v0.6.35_RESULTS_BOARD_DISPLAY.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#184c37">
-<title>Clubhouse v0.6.34 — Results Board Upgrade</title>
+<title>Clubhouse v0.6.35 — Results Board Display</title>
 <style>
 :root{
   --green:#184c37;--green2:#24684c;--gold:#c8a44d;--ink:#18211c;--muted:#66736b;
@@ -98,6 +98,23 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
   #reviewPack{display:block!important}main{padding:0}.review-screen{box-shadow:none}
   @page{size:A4 portrait;margin:12mm}
 }
+
+/* v0.6.35 Results Board display-only upgrade */
+#honourItems{display:block;gap:0}
+.honour-landscape{border:2px solid #243044;background:#f5f3eb;border-radius:12px;overflow:hidden}
+.honour-row{display:grid;grid-template-columns:31% 1fr 20%;align-items:center;min-height:86px;border-bottom:4px solid #f5f3eb;color:#111}
+.honour-row .hr-label{font-weight:950;text-transform:uppercase;font-size:1.02rem;line-height:1.05;text-align:center;padding:10px 7px}
+.honour-row .hr-person{text-align:center;padding:9px 7px}
+.honour-row .hr-person b{font-size:1.38rem;line-height:1.08;margin:0;color:#111}
+.honour-row .hr-score{font-size:1.18rem;font-weight:950;text-transform:uppercase;text-align:center;line-height:1.02;padding:8px 5px}
+.honour-row.stick{background:#fff0a8}.honour-row.nett-runner{background:#dff1b8}.honour-row.nett-winner{background:#bfe5f5}.honour-row.pink-runner{background:#e1cff5}.honour-row.pink-winner{background:#f7bfd0}
+.honour-row .countback-note{margin-top:5px;font-size:.87rem;line-height:1.12;color:#4d4d4d;font-weight:800}
+.novelty-title{background:#12662f;color:#fff;text-align:center;font-weight:950;font-size:1.08rem;padding:9px;text-transform:uppercase;letter-spacing:.4px}
+.novelty-grid{display:grid;grid-template-columns:repeat(5,1fr);background:#fffdf7}
+.novelty-cell{min-width:0;text-align:center;padding:9px 4px 10px;border-right:1px solid #a9afa8}.novelty-cell:last-child{border-right:0}
+.novelty-icon{height:44px;display:flex;align-items:center;justify-content:center;margin-bottom:3px}.novelty-icon svg{width:42px;height:42px}
+.novelty-label{font-size:.72rem;font-weight:950;text-transform:uppercase;line-height:1.05}.novelty-name{font-size:.83rem;font-weight:900;line-height:1.08;margin-top:7px;overflow-wrap:anywhere}.novelty-hole{font-size:.68rem;font-style:italic;color:#59625c;margin-top:5px}
+@media(max-width:430px){.honour-row{grid-template-columns:32% 1fr 20%;min-height:80px}.honour-row .hr-label{font-size:.83rem}.honour-row .hr-person b{font-size:1.08rem}.honour-row .hr-score{font-size:.94rem}.honour-row .countback-note{font-size:.73rem}.novelty-cell{padding:7px 2px}.novelty-icon{height:38px}.novelty-icon svg{width:36px;height:36px}.novelty-label{font-size:.59rem}.novelty-name{font-size:.68rem}.novelty-hole{font-size:.58rem}}
 </style>
 </head>
 <body>
@@ -745,7 +762,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
   <div id="reviewContent" class="review-grid"></div>
 </section>
 </main>
-<footer>Clubhouse v0.6.34 — Results Board Upgrade</footer>
+<footer>Clubhouse v0.6.35 — Results Board Display</footer>
 </div>
 
 <div id="editModal" class="modal"><div class="modal-sheet">
@@ -1275,7 +1292,7 @@ async function importPreviousCompetition(event){
  }
 }
 function finalJsonFilename(){
- return `Clubhouse_${round.date||"Round"}_${round.competition.replace(/[^a-z0-9]+/gi,"_")}_v0.6.34.json`
+ return `Clubhouse_${round.date||"Round"}_${round.competition.replace(/[^a-z0-9]+/gi,"_")}_v0.6.35.json`
 }
 function showFinalFileReady(){
  const panel=document.getElementById("finalFilePanel");
@@ -1296,13 +1313,28 @@ if(!round.locked){["n1","n4","n6","n3","n7"].forEach(id=>{const e=document.getEl
 const d=lockedData(),r=d.results,n=d.novelties||{},v=x=>x&&x!=="—"?x:"NADA";
 document.getElementById("honourMeta").textContent=`${formatDate(d.date)} · ${d.competition} · ${d.playerCount} Players`;
 const largeField=Number(d.playerCount)>=21;
-document.getElementById("honourItems").innerHTML=`<div class="honour-item result stick"><span>Winner off the Stick</span><b>${r.stick.name}</b><div class="honour-score">${r.stick.gross} Gross</div>${countbackHtml("stick",r.stick)}</div>${largeField&&r.nettSecond?`<div class="honour-item result nett-runner"><span>Nett 2nd Runner-up</span><b>${r.nettSecond.name}</b><div class="honour-score">${r.nettSecond.nett} Nett</div>${countbackHtml("nett",r.nettSecond)}</div>`:""}<div class="honour-item result nett-runner"><span>Nett Runner-up</span><b>${r.nettRunner.name}</b><div class="honour-score">${r.nettRunner.nett} Nett</div>${countbackHtml("nett",r.nettRunner)}</div><div class="honour-item result nett-winner"><span>Nett Winner</span><b>${r.nettWinner.name}</b><div class="honour-score">${r.nettWinner.nett} Nett</div>${countbackHtml("nett",r.nettWinner)}</div>${largeField&&r.pinkSecond?`<div class="honour-item result pink-runner"><span>Pinkies 2nd Runner-up</span><b>${r.pinkSecond.name}</b><div class="honour-score">${r.pinkSecond.nett} Nett</div>${countbackHtml("pinkies",r.pinkSecond)}</div>`:""}<div class="honour-item result pink-runner"><span>Pinkies Runner-up</span><b>${r.pinkRunner.name}</b><div class="honour-score">${r.pinkRunner.nett} Nett</div>${countbackHtml("pinkies",r.pinkRunner)}</div><div class="honour-item result pink-winner"><span>Pinkies Winner</span><b>${r.pinkWinner.name}</b><div class="honour-score">${r.pinkWinner.nett} Nett</div>${countbackHtml("pinkies",r.pinkWinner)}</div><div class="honour-item novelty"><span>🚩 1st NTP</span><b>${v(n.n1)}</b></div><div class="honour-item novelty"><span>🏌 3rd D&amp;P</span><b>${v(n.n3)}</b></div><div class="honour-item novelty"><span>🚩 4th NTP</span><b>${v(n.n4)}</b></div><div class="honour-item novelty"><span>🚩 6th NTP</span><b>${v(n.n6)}</b></div><div class="honour-item novelty" style="grid-column:1/-1"><span>🏌 7th L/D</span><b>${v(n.n7)}</b></div>`;
+const flagIcon=`<svg viewBox="0 0 64 64" aria-hidden="true"><ellipse cx="32" cy="54" rx="25" ry="6" fill="#77b85a"/><path d="M27 51V10" stroke="#177a39" stroke-width="4"/><path d="M29 11l25 8-25 9z" fill="#e04f5f"/><ellipse cx="31" cy="51" rx="7" ry="3" fill="#e9f1e5" stroke="#467b3b"/></svg>`;
+const golfIcon=`<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="25" cy="10" r="6" fill="#c68b5c"/><path d="M25 17l8 15-10 13M31 27l15-9M24 29l-12 8M23 44l-9 12M24 44l14 10" fill="none" stroke="#244d3a" stroke-width="5" stroke-linecap="round"/><path d="M46 18l10 29" stroke="#555" stroke-width="3"/><circle cx="57" cy="52" r="3" fill="#fff" stroke="#777"/></svg>`;
+const row=(cls,label,p,score,kind)=>p?`<div class="honour-row ${cls}"><div class="hr-label">${label}</div><div class="hr-person"><b>${p.name}</b>${countbackHtml(kind,p)}</div><div class="hr-score">${score}</div></div>`:"";
+const novelty=(label,name,icon,hole)=>`<div class="novelty-cell"><div class="novelty-icon">${icon}</div><div class="novelty-label">${label}</div><div class="novelty-name">${v(name)}</div><div class="novelty-hole">${hole}</div></div>`;
+document.getElementById("honourItems").innerHTML=`<div class="honour-landscape">
+${row("stick","Winner off<br>the Stick",r.stick,`${r.stick.gross}<br>Gross`,"stick")}
+${largeField?row("nett-runner","Nett 2nd<br>Runner-up",r.nettSecond,`${r.nettSecond.nett}<br>Nett`,"nett"):""}
+${row("nett-runner","Nett<br>Runner-up",r.nettRunner,`${r.nettRunner.nett}<br>Nett`,"nett")}
+${row("nett-winner","Nett<br>Winner",r.nettWinner,`${r.nettWinner.nett}<br>Nett`,"nett")}
+${largeField?row("pink-runner","Pinkies 2nd<br>Runner-up",r.pinkSecond,`${r.pinkSecond.nett}<br>Nett`,"pinkies"):""}
+${row("pink-runner","Pinkies<br>Runner-up",r.pinkRunner,`${r.pinkRunner.nett}<br>Nett`,"pinkies")}
+${row("pink-winner","Pinkies<br>Winner",r.pinkWinner,`${r.pinkWinner.nett}<br>Nett`,"pinkies")}
+<div class="novelty-title">Novelty Prizes</div><div class="novelty-grid">
+${novelty("1st NTP",n.n1,flagIcon,"Hole 1")}${novelty("3rd D&P",n.n3,golfIcon,"Hole 3")}${novelty("4th NTP",n.n4,flagIcon,"Hole 4")}${novelty("6th NTP",n.n6,flagIcon,"Hole 6")}${novelty("7th L/D",n.n7,golfIcon,"Hole 7")}
+</div></div>`;
 document.getElementById("honourTotal").textContent=`TOTAL PLAYERS: ${d.playerCount}`;
 const historical=!!historicalBoardData;
 document.getElementById("honourContinueBtn").classList.toggle("hidden",historical);
 document.getElementById("honourBackResultsBtn").classList.toggle("hidden",historical);
 document.getElementById("honourBackHistoryBtn").classList.toggle("hidden",!historical);
 showScreen("honour")}
+
 function openHistoricalResultsBoard(index){
  const reports=JSON.parse(localStorage.getItem("clubhouseReports")||"[]");
  const r=reports[index];
@@ -1454,7 +1486,7 @@ async function shareHonour(){
 async function emailJSON(){
  if(!round.applied){alert("Please review and save the handicaps before emailing the JSON file.");return;}if(!confirm("Prepare the final results for Robbie at robbiem2@live.com.au?"))return;
  const locked=lockedData();
- const payload={schemaVersion:"1.0",appVersion:"0.6.34",exportSource:"CURRENT_LOCKED_ROUND",club:"Royal Park Golf — Old Farts",exportedAt:new Date().toISOString(),emailTo:"robbiem2@live.com.au",round:{date:locked.date,competition:locked.competition,playerCount:locked.playerCount,greenJacketUsed:locked.competition==="Green Jacket Day",freezeDate:locked.freezeDate||null,frozenHandicapsUsed:locked.competition==="Green Jacket Day"?locked.scores.map(s=>({playerId:s.playerId,name:s.name,handicap:s.handicapUsed})):[],scores:locked.scores,results:locked.results,novelties:locked.novelties,handicapAdjustments:locked.adjustments,currentHandicapsAfterRound:players.map(p=>({playerId:p.id,name:p.name,current:p.current,greenJacketFrozen:p.green})),honourBoardText:honourText(),handicapsReviewedAndSaved:true}};
+ const payload={schemaVersion:"1.0",appVersion:"0.6.35",exportSource:"CURRENT_LOCKED_ROUND",club:"Royal Park Golf — Old Farts",exportedAt:new Date().toISOString(),emailTo:"robbiem2@live.com.au",round:{date:locked.date,competition:locked.competition,playerCount:locked.playerCount,greenJacketUsed:locked.competition==="Green Jacket Day",freezeDate:locked.freezeDate||null,frozenHandicapsUsed:locked.competition==="Green Jacket Day"?locked.scores.map(s=>({playerId:s.playerId,name:s.name,handicap:s.handicapUsed})):[],scores:locked.scores,results:locked.results,novelties:locked.novelties,handicapAdjustments:locked.adjustments,currentHandicapsAfterRound:players.map(p=>({playerId:p.id,name:p.name,current:p.current,greenJacketFrozen:p.green})),honourBoardText:honourText(),handicapsReviewedAndSaved:true}};
  const json=JSON.stringify(payload,null,2);
  const filename=finalJsonFilename();
  const file=new File([json],filename,{type:"application/json"});
