@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- saved from url=(0130)file:///C:/Users/robbi/OneDrive/Desktop/CLUBHOUSE%20-%20Handicap%20Software/CLUBHOUSE%20v0.6.37%20-%20DRAFT%20PROTECTED/index.html -->
+<!-- saved from url=(0084)file:///C:/Users/robbi/Downloads/index_v0.6.38_PORTRAIT_RESULTS_BOARD_CORRECTED.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#184c37">
-<title>Clubhouse v0.6.37 — Draft Protected</title>
+<title>Clubhouse v0.6.38 — Portrait Results Board</title>
 <style>
 :root{
   --green:#184c37;--green2:#24684c;--gold:#c8a44d;--ink:#18211c;--muted:#66736b;
@@ -106,22 +106,111 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
   @page{size:A4 portrait;margin:12mm}
 }
 
-/* v0.6.35 Results Board display-only upgrade */
+/* v0.6.38 Results Board — ONE portrait design for live, history and WhatsApp share */
 #honourItems{display:block;gap:0}
-.honour-landscape{border:2px solid #243044;background:#f5f3eb;border-radius:12px;overflow:hidden}
-.honour-row{display:grid;grid-template-columns:31% 1fr 20%;align-items:center;min-height:86px;border-bottom:4px solid #f5f3eb;color:#111}
-.honour-row .hr-label{font-weight:950;text-transform:uppercase;font-size:1.02rem;line-height:1.05;text-align:center;padding:10px 7px}
-.honour-row .hr-person{text-align:center;padding:9px 7px}
-.honour-row .hr-person b{font-size:1.38rem;line-height:1.08;margin:0;color:#111}
-.honour-row .hr-score{font-size:1.18rem;font-weight:950;text-transform:uppercase;text-align:center;line-height:1.02;padding:8px 5px}
-.honour-row.stick{background:#fff0a8}.honour-row.nett-runner{background:#dff1b8}.honour-row.nett-winner{background:#bfe5f5}.honour-row.pink-runner{background:#e1cff5}.honour-row.pink-winner{background:#f7bfd0}
-.honour-row .countback-note{margin-top:5px;font-size:.87rem;line-height:1.12;color:#4d4d4d;font-weight:800}
-.novelty-title{background:#12662f;color:#fff;text-align:center;font-weight:950;font-size:1.08rem;padding:9px;text-transform:uppercase;letter-spacing:.4px}
-.novelty-grid{display:grid;grid-template-columns:repeat(5,1fr);background:#fffdf7}
-.novelty-cell{min-width:0;text-align:center;padding:9px 4px 10px;border-right:1px solid #a9afa8}.novelty-cell:last-child{border-right:0}
-.novelty-icon{height:44px;display:flex;align-items:center;justify-content:center;margin-bottom:3px}.novelty-icon svg{width:42px;height:42px}
-.novelty-label{font-size:.72rem;font-weight:950;text-transform:uppercase;line-height:1.05}.novelty-name{font-size:.83rem;font-weight:900;line-height:1.08;margin-top:7px;overflow-wrap:anywhere}.novelty-hole{font-size:.68rem;font-style:italic;color:#59625c;margin-top:5px}
-@media(max-width:430px){.honour-row{grid-template-columns:32% 1fr 20%;min-height:80px}.honour-row .hr-label{font-size:.83rem}.honour-row .hr-person b{font-size:1.08rem}.honour-row .hr-score{font-size:.94rem}.honour-row .countback-note{font-size:.73rem}.novelty-cell{padding:7px 2px}.novelty-icon{height:38px}.novelty-icon svg{width:36px;height:36px}.novelty-label{font-size:.59rem}.novelty-name{font-size:.68rem}.novelty-hole{font-size:.58rem}}
+.honour-portrait{
+  width:100%;
+  max-width:560px;
+  margin:0 auto;
+  border:2px solid #243044;
+  background:#f5f3eb;
+  border-radius:14px;
+  overflow:hidden
+}
+.honour-row{
+  display:grid;
+  grid-template-columns:31% 1fr 20%;
+  align-items:center;
+  min-height:74px;
+  border-bottom:3px solid #f5f3eb;
+  color:#111
+}
+.honour-row .hr-label{
+  font-weight:950;
+  text-transform:uppercase;
+  font-size:.86rem;
+  line-height:1.05;
+  text-align:center;
+  padding:8px 5px
+}
+.honour-row .hr-person{text-align:center;padding:7px 5px}
+.honour-row .hr-person b{font-size:1.13rem;line-height:1.06;margin:0;color:#111}
+.honour-row .hr-score{
+  font-size:.98rem;
+  font-weight:950;
+  text-transform:uppercase;
+  text-align:center;
+  line-height:1.02;
+  padding:7px 4px
+}
+.honour-row.stick{background:#fff0a8}
+.honour-row.nett-runner{background:#dff1b8}
+.honour-row.nett-winner{background:#bfe5f5}
+.honour-row.pink-runner{background:#e1cff5}
+.honour-row.pink-winner{background:#f7bfd0}
+.honour-row .countback-note{
+  margin-top:4px;
+  font-size:.70rem;
+  line-height:1.1;
+  color:#4d4d4d;
+  font-weight:800
+}
+.novelty-title{
+  background:#12662f;
+  color:#fff;
+  text-align:center;
+  font-weight:950;
+  font-size:1rem;
+  padding:8px;
+  text-transform:uppercase;
+  letter-spacing:.4px
+}
+.novelty-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  background:#fffdf7
+}
+.novelty-cell{
+  min-width:0;
+  text-align:center;
+  padding:8px 5px 9px;
+  border-right:1px solid #a9afa8;
+  border-bottom:1px solid #a9afa8
+}
+.novelty-cell:nth-child(even){border-right:0}
+.novelty-cell:last-child{
+  grid-column:1/-1;
+  border-right:0;
+  border-bottom:0
+}
+.novelty-icon{
+  height:32px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-bottom:2px
+}
+.novelty-icon svg{width:31px;height:31px}
+.novelty-label{font-size:.70rem;font-weight:950;text-transform:uppercase;line-height:1.03}
+.novelty-name{font-size:.90rem;font-weight:900;line-height:1.06;margin-top:4px;overflow-wrap:anywhere}
+.novelty-hole{font-size:.63rem;font-style:italic;color:#59625c;margin-top:3px}
+@media(max-width:430px){
+  .honour{padding:8px}
+  .honour-head{padding-bottom:7px;margin-bottom:7px}
+  .honour-head img{width:48px;height:48px}
+  .honour-head h2{font-size:1.35rem;margin:4px 0 2px}
+  .honour-head .small{font-size:.77rem}
+  .honour-row{min-height:66px}
+  .honour-row .hr-label{font-size:.72rem;padding:6px 3px}
+  .honour-row .hr-person b{font-size:.96rem}
+  .honour-row .hr-score{font-size:.82rem}
+  .honour-row .countback-note{font-size:.61rem}
+  .novelty-title{font-size:.86rem;padding:6px}
+  .novelty-cell{padding:6px 3px}
+  .novelty-icon{height:26px}.novelty-icon svg{width:25px;height:25px}
+  .novelty-label{font-size:.61rem}.novelty-name{font-size:.78rem}.novelty-hole{font-size:.56rem}
+  .honour-total{margin-top:7px;padding:9px;font-size:.94rem}
+}
 </style>
 </head>
 <body>
@@ -788,7 +877,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
   <div id="reviewContent" class="review-grid"></div>
 </section>
 </main>
-<footer>Clubhouse v0.6.37 — Draft Protected</footer>
+<footer>Clubhouse v0.6.38 — Portrait Results Board · Draft Protected</footer>
 </div>
 
 <div id="editModal" class="modal"><div class="modal-sheet">
@@ -934,7 +1023,7 @@ function saveRoundDraft(silent=true){
  try{
    if(!hasRoundProgress()){updateDraftBar();return false}
    const payload={
-     version:"0.6.37",
+     version:"0.6.38",
      savedAt:new Date().toISOString(),
      screen:activeScreenId(),
      round:deepCopy(round),
@@ -1473,7 +1562,7 @@ async function importPreviousCompetition(event){
  }
 }
 function finalJsonFilename(){
- return `Clubhouse_${round.date||"Round"}_${round.competition.replace(/[^a-z0-9]+/gi,"_")}_v0.6.37.json`
+ return `Clubhouse_${round.date||"Round"}_${round.competition.replace(/[^a-z0-9]+/gi,"_")}_v0.6.38.json`
 }
 function showFinalFileReady(){
  const panel=document.getElementById("finalFilePanel");
@@ -1498,7 +1587,7 @@ const flagIcon=`<svg viewBox="0 0 64 64" aria-hidden="true"><ellipse cx="32" cy=
 const golfIcon=`<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="25" cy="10" r="6" fill="#c68b5c"/><path d="M25 17l8 15-10 13M31 27l15-9M24 29l-12 8M23 44l-9 12M24 44l14 10" fill="none" stroke="#244d3a" stroke-width="5" stroke-linecap="round"/><path d="M46 18l10 29" stroke="#555" stroke-width="3"/><circle cx="57" cy="52" r="3" fill="#fff" stroke="#777"/></svg>`;
 const row=(cls,label,p,score,kind)=>p?`<div class="honour-row ${cls}"><div class="hr-label">${label}</div><div class="hr-person"><b>${p.name}</b>${countbackHtml(kind,p)}</div><div class="hr-score">${score}</div></div>`:"";
 const novelty=(label,name,icon,hole)=>`<div class="novelty-cell"><div class="novelty-icon">${icon}</div><div class="novelty-label">${label}</div><div class="novelty-name">${v(name)}</div><div class="novelty-hole">${hole}</div></div>`;
-document.getElementById("honourItems").innerHTML=`<div class="honour-landscape">
+document.getElementById("honourItems").innerHTML=`<div class="honour-portrait">
 ${row("stick","Winner off<br>the Stick",r.stick,`${r.stick.gross}<br>Gross`,"stick")}
 ${largeField?row("nett-runner","Nett 2nd<br>Runner-up",r.nettSecond,`${r.nettSecond.nett}<br>Nett`,"nett"):""}
 ${row("nett-runner","Nett<br>Runner-up",r.nettRunner,`${r.nettRunner.nett}<br>Nett`,"nett")}
@@ -1596,51 +1685,112 @@ Hole 6 NTP: ${round.novelties.n6&&round.novelties.n6!=="—"?round.novelties.n6:
 Hole 7 Longest Drive: ${round.novelties.n7&&round.novelties.n7!=="—"?round.novelties.n7:"NADA"}`
 }
 async function shareHonour(){
- saveRoundDraft(true); // Protect the round before Android/WhatsApp can suspend CLUBHOUSE.
+ saveRoundDraft(true); // Keep the existing Android protection before opening WhatsApp/share sheet.
  const d=lockedData(),r=d.results,n=d.novelties||{},v=x=>x&&x!=="—"?x:"NADA";
  const largeField=Number(d.playerCount)>=21;
  const rows=[
-  ["WINNER OFF\nTHE STICK",r.stick,`${r.stick.gross}\nGROSS`,"#fff0a8","stick"],
-  ...(largeField&&r.nettSecond?[["NETT 2ND\nRUNNER-UP",r.nettSecond,`${r.nettSecond.nett}\nNETT`,"#dff1b8","nett"]]:[]),
-  ["NETT\nRUNNER-UP",r.nettRunner,`${r.nettRunner.nett}\nNETT`,"#dff1b8","nett"],
-  ["NETT\nWINNER",r.nettWinner,`${r.nettWinner.nett}\nNETT`,"#bfe5f5","nett"],
-  ...(largeField&&r.pinkSecond?[["PINKIES 2ND\nRUNNER-UP",r.pinkSecond,`${r.pinkSecond.nett}\nNETT`,"#e1cff5","pinkies"]]:[]),
-  ["PINKIES\nRUNNER-UP",r.pinkRunner,`${r.pinkRunner.nett}\nNETT`,"#e1cff5","pinkies"],
-  ["PINKIES\nWINNER",r.pinkWinner,`${r.pinkWinner.nett}\nNETT`,"#f7bfd0","pinkies"]
+  ["WINNER OFF THE STICK",r.stick,`${r.stick.gross} GROSS`,"#fff0a8","stick"],
+  ...(largeField&&r.nettSecond?[["NETT 2ND RUNNER-UP",r.nettSecond,`${r.nettSecond.nett} NETT`,"#dff1b8","nett"]]:[]),
+  ["NETT RUNNER-UP",r.nettRunner,`${r.nettRunner.nett} NETT`,"#dff1b8","nett"],
+  ["NETT WINNER",r.nettWinner,`${r.nettWinner.nett} NETT`,"#bfe5f5","nett"],
+  ...(largeField&&r.pinkSecond?[["PINKIES 2ND RUNNER-UP",r.pinkSecond,`${r.pinkSecond.nett} NETT`,"#e1cff5","pinkies"]]:[]),
+  ["PINKIES RUNNER-UP",r.pinkRunner,`${r.pinkRunner.nett} NETT`,"#e1cff5","pinkies"],
+  ["PINKIES WINNER",r.pinkWinner,`${r.pinkWinner.nett} NETT`,"#f7bfd0","pinkies"]
  ];
- const W=1600, headerH=124, rowH=largeField?112:138, gap=4, noveltyHeadH=58, noveltyH=176, footerH=62;
- const H=headerH + rows.length*(rowH+gap) + noveltyHeadH + noveltyH + footerH + 20;
+
+ // Portrait WhatsApp image: 9:16 so the complete board is visible at once on a phone.
+ const W=1080,H=1920;
  const c=document.createElement("canvas");c.width=W;c.height=H;const x=c.getContext("2d");
+ const margin=34, innerW=W-margin*2;
  const splitLines=t=>String(t).split("\n");
- const fitText=(text,maxWidth,startSize,minSize=22,weight="bold",style="")=>{let size=startSize;while(size>minSize){x.font=`${style}${weight} ${size}px Arial`;if(x.measureText(text).width<=maxWidth)break;size-=2}return size};
- const drawLines=(text,cx,cy,lineGap,align="center")=>{x.textAlign=align;splitLines(text).forEach((line,i)=>x.fillText(line,cx,cy+i*lineGap))};
- const wrapText=(text,maxWidth)=>{const words=String(text).split(/\s+/),lines=[];let line="";for(const w of words){const test=line?line+" "+w:w;if(x.measureText(test).width>maxWidth&&line){lines.push(line);line=w}else line=test}if(line)lines.push(line);return lines};
- const drawFlag=(cx,cy)=>{x.save();x.strokeStyle="#177a39";x.lineWidth=5;x.beginPath();x.moveTo(cx-15,cy+23);x.lineTo(cx-15,cy-24);x.stroke();x.fillStyle="#e04f5f";x.beginPath();x.moveTo(cx-13,cy-22);x.lineTo(cx+24,cy-10);x.lineTo(cx-13,cy+2);x.closePath();x.fill();x.restore()};
- const drawGolf=(cx,cy)=>{x.save();x.strokeStyle="#2e5d44";x.lineWidth=5;x.beginPath();x.moveTo(cx+15,cy-24);x.lineTo(cx-4,cy+13);x.lineTo(cx+16,cy+19);x.stroke();x.fillStyle="#fff";x.strokeStyle="#777";x.lineWidth=2;x.beginPath();x.arc(cx-17,cy+22,8,0,Math.PI*2);x.fill();x.stroke();x.restore()};
- // Background and top banner
- x.fillStyle="#f5f3eb";x.fillRect(0,0,W,H);
- x.fillStyle="#071b43";x.fillRect(8,8,W-16,headerH-12);
- x.fillStyle="#fff";x.textAlign="center";x.font="bold 48px Arial";x.fillText("OLD FARTS – RESULTS BOARD",W/2,58);
- x.fillStyle="#f5d62f";x.font="bold 28px Arial";x.fillText(`${formatDate(d.date)}  •  ${d.competition}  •  ${d.playerCount} Players`,W/2,99);
- let y=headerH;
- // Results rows: label / winner / score, matching the established landscape board
- rows.forEach(q=>{
-   const note=countbackDetail(q[4],q[1]);
-   x.fillStyle=q[3];x.fillRect(8,y,W-16,rowH);
-   x.strokeStyle="rgba(0,0,0,.10)";x.lineWidth=1;x.strokeRect(8,y,W-16,rowH);
-   x.fillStyle="#111";
-   x.textAlign="center";x.font=`bold ${largeField?28:33}px Arial`;drawLines(q[0],245,y+(largeField?38:44),largeField?30:34);
-   const nameSize=fitText(q[1].name,760,largeField?40:46,26);
-   x.font=`bold ${nameSize}px Arial`;x.textAlign="center";x.fillText(q[1].name,830,y+(note?50:rowH/2+14));
-   x.font=`bold ${largeField?35:42}px Arial`;drawLines(q[2],1450,y+(largeField?41:48),largeField?34:40);
-   if(note){
-     x.font=`italic bold ${largeField?21:24}px Arial`;x.textAlign="center";
-     const lines=wrapText(note,820).slice(0,2);lines.forEach((line,i)=>x.fillText(line,830,y+82+i*25));
+ const fitText=(text,maxWidth,startSize,minSize=22,weight="bold",style="")=>{
+   let size=startSize;
+   while(size>minSize){
+     x.font=`${style}${weight} ${size}px Arial`;
+     if(x.measureText(String(text)).width<=maxWidth)break;
+     size-=2
    }
-   y+=rowH+gap;
+   return size
+ };
+ const wrapText=(text,maxWidth)=>{
+   const words=String(text).split(/\s+/),lines=[];let line="";
+   for(const w of words){
+     const test=line?line+" "+w:w;
+     if(x.measureText(test).width>maxWidth&&line){lines.push(line);line=w}else line=test
+   }
+   if(line)lines.push(line);
+   return lines
+ };
+ const roundRect=(a,b,w,h,r,fill,stroke)=>{
+   x.beginPath();x.roundRect(a,b,w,h,r);
+   if(fill){x.fillStyle=fill;x.fill()}
+   if(stroke){x.strokeStyle=stroke;x.lineWidth=2;x.stroke()}
+ };
+ const drawFlag=(cx,cy)=>{
+   x.save();x.strokeStyle="#177a39";x.lineWidth=5;
+   x.beginPath();x.moveTo(cx-12,cy+22);x.lineTo(cx-12,cy-23);x.stroke();
+   x.fillStyle="#e04f5f";x.beginPath();x.moveTo(cx-10,cy-21);x.lineTo(cx+23,cy-10);x.lineTo(cx-10,cy+1);x.closePath();x.fill();x.restore()
+ };
+ const drawGolf=(cx,cy)=>{
+   x.save();x.strokeStyle="#2e5d44";x.lineWidth=5;
+   x.beginPath();x.moveTo(cx+13,cy-23);x.lineTo(cx-3,cy+10);x.lineTo(cx+15,cy+17);x.stroke();
+   x.fillStyle="#fff";x.strokeStyle="#777";x.lineWidth=2;x.beginPath();x.arc(cx-16,cy+20,7,0,Math.PI*2);x.fill();x.stroke();x.restore()
+ };
+
+ x.fillStyle="#f3efe4";x.fillRect(0,0,W,H);
+
+ // Header
+ let y=34;
+ roundRect(margin,y,innerW,188,24,"#071b43","#071b43");
+ x.textAlign="center";x.fillStyle="#fff";
+ x.font="bold 48px Georgia";x.fillText("OLD FARTS",W/2,y+55);
+ x.font="bold 39px Georgia";x.fillText("RESULTS BOARD",W/2,y+105);
+ x.fillStyle="#f5d62f";x.font="bold 23px Arial";
+ x.fillText(`${formatDate(d.date)}  •  ${d.competition}`,W/2,y+145);
+ x.fillStyle="#fff";x.font="bold 21px Arial";x.fillText(`${d.playerCount} Players`,W/2,y+174);
+ y+=210;
+
+ // Main placings
+ const rowGap=8;
+ const mainBottom=1120;
+ const available=mainBottom-y;
+ const rowH=Math.floor((available-rowGap*(rows.length-1))/rows.length);
+ rows.forEach(q=>{
+   roundRect(margin,y,innerW,rowH,14,q[3],"rgba(0,0,0,.18)");
+   const labelW=270,scoreW=190;
+   x.fillStyle="#111";x.textAlign="center";
+   let labelSize=fitText(q[0],labelW-24,26,18);
+   x.font=`bold ${labelSize}px Arial`;
+   const labelLines=wrapText(q[0],labelW-24).slice(0,2);
+   const labelStart=y+rowH/2-(labelLines.length-1)*14;
+   labelLines.forEach((line,i)=>x.fillText(line,margin+labelW/2,labelStart+i*28));
+
+   const note=countbackDetail(q[4],q[1]);
+   const centerX=margin+labelW+(innerW-labelW-scoreW)/2;
+   const centerW=innerW-labelW-scoreW-24;
+   const nameSize=fitText(q[1].name,centerW,35,22);
+   x.font=`bold ${nameSize}px Arial`;
+   x.fillText(q[1].name,centerX,y+(note?rowH*.40:rowH*.55));
+   if(note){
+     x.font="italic bold 18px Arial";x.fillStyle="#424b45";
+     const notes=wrapText(note,centerW).slice(0,2);
+     notes.forEach((line,i)=>x.fillText(line,centerX,y+rowH*.66+i*21));
+     x.fillStyle="#111"
+   }
+
+   x.font="bold 27px Arial";
+   const scoreLines=wrapText(q[2],scoreW-18).slice(0,2);
+   const scoreStart=y+rowH/2-(scoreLines.length-1)*13;
+   scoreLines.forEach((line,i)=>x.fillText(line,W-margin-scoreW/2,scoreStart+i*27));
+   y+=rowH+rowGap;
  });
- // Novelty banner
- x.fillStyle="#12662f";x.fillRect(8,y,W-16,noveltyHeadH);x.fillStyle="#fff";x.textAlign="center";x.font="bold 32px Arial";x.fillText("NOVELTY PRIZES",W/2,y+40);y+=noveltyHeadH;
+
+ // Novelty section
+ y=1140;
+ roundRect(margin,y,innerW,56,12,"#12662f","#12662f");
+ x.fillStyle="#fff";x.font="bold 29px Arial";x.textAlign="center";x.fillText("NOVELTY PRIZES",W/2,y+37);
+ y+=68;
+
  const nov=[
   ["1st NTP",v(n.n1),"flag","Hole 1"],
   ["3rd D&P",v(n.n3),"golf","Hole 3"],
@@ -1648,27 +1798,52 @@ async function shareHonour(){
   ["6th NTP",v(n.n6),"flag","Hole 6"],
   ["7th L/D",v(n.n7),"golf","Hole 7"]
  ];
- const boxW=(W-16)/5;
+ const colGap=12,cellW=(innerW-colGap)/2,cellH=188;
  nov.forEach((q,i)=>{
-   const a=8+i*boxW;
-   x.fillStyle="#fffdf7";x.fillRect(a,y,boxW,noveltyH);x.strokeStyle="#a9afa8";x.strokeRect(a,y,boxW,noveltyH);
-   q[2]==="flag"?drawFlag(a+46,y+38):drawGolf(a+46,y+38);
-   x.fillStyle="#111";x.textAlign="center";x.font="bold 27px Arial";x.fillText(q[0],a+boxW/2,y+39);
-   x.strokeStyle="#555";x.lineWidth=2;x.beginPath();x.moveTo(a+44,y+60);x.lineTo(a+boxW-44,y+60);x.stroke();
-   const nmSize=fitText(q[1],boxW-40,29,19);x.font=`bold ${nmSize}px Arial`;
-   const nm=wrapText(q[1],boxW-36).slice(0,2);nm.forEach((line,j)=>x.fillText(line,a+boxW/2,y+105+j*28));
-   x.font="italic 21px Arial";x.fillStyle="#505a54";x.fillText(q[3],a+boxW/2,y+162);
+   const last=i===4;
+   const col=i%2,row=Math.floor(i/2);
+   const a= last ? margin : margin+col*(cellW+colGap);
+   const w= last ? innerW : cellW;
+   const b=y+row*(cellH+10);
+   roundRect(a,b,w,cellH,12,"#fffdf7","#a9afa8");
+   const iconX=a+54, iconY=b+50;
+   q[2]==="flag"?drawFlag(iconX,iconY):drawGolf(iconX,iconY);
+   x.fillStyle="#111";x.textAlign="center";
+   x.font="bold 23px Arial";x.fillText(q[0],a+w/2,b+42);
+   x.strokeStyle="#b2b6b0";x.lineWidth=2;x.beginPath();x.moveTo(a+32,b+70);x.lineTo(a+w-32,b+70);x.stroke();
+   const nmSize=fitText(q[1],w-60,31,19);
+   x.font=`bold ${nmSize}px Arial`;
+   const nmLines=wrapText(q[1],w-55).slice(0,2);
+   const nmStart=b+113-(nmLines.length-1)*14;
+   nmLines.forEach((line,j)=>x.fillText(line,a+w/2,nmStart+j*29));
+   x.font="italic 19px Arial";x.fillStyle="#56605a";x.fillText(q[3],a+w/2,b+169);
  });
- y+=noveltyH;
- x.fillStyle="#071b43";x.fillRect(8,y,W-16,footerH);x.fillStyle="#fff";x.textAlign="center";x.font="bold 30px Arial";x.fillText(`TOTAL PLAYERS: ${d.playerCount}`,W/2,y+41);
- const blob=await new Promise(res=>c.toBlob(res,"image/png",1));const file=new File([blob],`OLD_FARTS_RESULTS_${d.date}.png`,{type:"image/png"});
- if(navigator.canShare&&navigator.canShare({files:[file]})&&navigator.share){try{await navigator.share({title:"OLD FARTS – RESULTS BOARD",files:[file]});return}catch(e){if(e.name==="AbortError")return}}
- const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=file.name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);alert("Results Board image saved. Attach it in WhatsApp.")
+
+ // Footer
+ y=1807;
+ roundRect(margin,y,innerW,78,12,"#071b43","#071b43");
+ x.fillStyle="#fff";x.textAlign="center";x.font="bold 27px Arial";
+ x.fillText(`TOTAL PLAYERS: ${d.playerCount}`,W/2,y+49);
+
+ const blob=await new Promise(res=>c.toBlob(res,"image/png",1));
+ const file=new File([blob],`OLD_FARTS_RESULTS_${d.date}.png`,{type:"image/png"});
+ if(navigator.canShare&&navigator.canShare({files:[file]})&&navigator.share){
+   try{
+     await navigator.share({title:"OLD FARTS – RESULTS BOARD",files:[file]});
+     return
+   }catch(e){
+     if(e.name==="AbortError")return
+   }
+ }
+ const url=URL.createObjectURL(blob),a=document.createElement("a");
+ a.href=url;a.download=file.name;document.body.appendChild(a);a.click();a.remove();
+ setTimeout(()=>URL.revokeObjectURL(url),1000);
+ alert("Portrait Results Board image saved. Attach it in WhatsApp.")
 }
 async function emailJSON(){
  if(!round.applied){alert("Please review and save the handicaps before emailing the JSON file.");return;}if(!confirm("Prepare the final results for Robbie at robbiem2@live.com.au?"))return;
  const locked=lockedData();
- const payload={schemaVersion:"1.0",appVersion:"0.6.37",exportSource:"CURRENT_LOCKED_ROUND",club:"Royal Park Golf — Old Farts",exportedAt:new Date().toISOString(),emailTo:"robbiem2@live.com.au",round:{date:locked.date,competition:locked.competition,playerCount:locked.playerCount,greenJacketUsed:locked.competition==="Green Jacket Day",freezeDate:locked.freezeDate||null,frozenHandicapsUsed:locked.competition==="Green Jacket Day"?players.map(p=>({playerId:p.id,name:p.name,handicap:(locked.frozenHandicaps&&locked.frozenHandicaps[p.id]!=null)?locked.frozenHandicaps[p.id]:p.current})):[],scores:locked.scores,results:locked.results,novelties:locked.novelties,handicapAdjustments:locked.adjustments,currentHandicapsAfterRound:players.map(p=>({playerId:p.id,name:p.name,current:p.current,greenJacketFrozen:p.green})),honourBoardText:honourText(),handicapsReviewedAndSaved:true}};
+ const payload={schemaVersion:"1.0",appVersion:"0.6.38",exportSource:"CURRENT_LOCKED_ROUND",club:"Royal Park Golf — Old Farts",exportedAt:new Date().toISOString(),emailTo:"robbiem2@live.com.au",round:{date:locked.date,competition:locked.competition,playerCount:locked.playerCount,greenJacketUsed:locked.competition==="Green Jacket Day",freezeDate:locked.freezeDate||null,frozenHandicapsUsed:locked.competition==="Green Jacket Day"?players.map(p=>({playerId:p.id,name:p.name,handicap:(locked.frozenHandicaps&&locked.frozenHandicaps[p.id]!=null)?locked.frozenHandicaps[p.id]:p.current})):[],scores:locked.scores,results:locked.results,novelties:locked.novelties,handicapAdjustments:locked.adjustments,currentHandicapsAfterRound:players.map(p=>({playerId:p.id,name:p.name,current:p.current,greenJacketFrozen:p.green})),honourBoardText:honourText(),handicapsReviewedAndSaved:true}};
  const json=JSON.stringify(payload,null,2);
  const filename=finalJsonFilename();
  const file=new File([json],filename,{type:"application/json"});
@@ -1718,7 +1893,7 @@ function buildReviewPack(){const samplePlayers=players.slice(0,4);document.getEl
 <div class="review-screen"><h2>2. Today’s Round</h2><p>Competition date</p><p>Competition: Stroke / Green Jacket Day / Other</p><p>For Green Jacket Day, select the handicap freeze date and use the saved handicaps from that date.</p><p>Continue to Scorecards</p></div>
 <div class="review-screen"><h2>3. Enter Scorecards</h2><p>Type a first name or surname, select the full player name, see the signed handicap, enter gross score, and add the completed card.</p>${samplePlayers.map((p,i)=>`<p><b>${p.name}</b> — Handicap ${signed(p.current)} — Gross ${40+i}</p>`).join("")}</div>
 <div class="review-screen"><h2>4. Results and Novelty Prizes</h2><p>Winner off the Stick</p><p>Nett Runner-up</p><p>Nett Winner</p><p>Pinkies Runner-up</p><p>Pinkies Winner</p><p>Novelty prize selections</p></div>
-<div class="review-screen"><h2>5. Honour Board</h2><p>Results plus novelty winners form the Honour Board.</p><p>Share the Honour Board with the Reporter through the phone’s Share menu.</p></div>
+<div class="review-screen"><h2>5. Honour Board</h2><p>Results plus novelty winners form the portrait Results Board.</p><p>The same portrait Results Board is used for the Reporter share and Previous Results.</p></div>
 <div class="review-screen"><h2>6. Handicap Adjustments and JSON</h2><p>0–20 players: +2/+1 and −2/−1.</p><p>All rounds: Nett +2/+1 and Pinkies −2/−1, capped from −8 to +3.</p><p>Mick may alter the suggested changes before saving.</p><p>After saving, email the complete JSON round record to Robbie.</p></div>
 <div class="review-screen"><h2>7. Finalise Round</h2><p>Updated handicaps remain saved. Active score-entry information is cleared for the next round only after confirmation.</p></div><div class="review-screen"><h2>8. Current Handicaps</h2><p>Full names, reference numbers and editable current handicaps. Save changes before the next round.</p></div>`}
 function formatDate(s){if(!s)return"";return new Date(s+"T12:00:00").toLocaleDateString("en-AU",{weekday:"long",day:"numeric",month:"long",year:"numeric"})}
