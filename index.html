@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- saved from url=(0081)file:///C:/Users/robbi/Downloads/CLUBHOUSE_v0.6.41_RELEASE_CANDIDATE_1_FINAL.html -->
+<!-- saved from url=(0075)file:///C:/Users/robbi/Downloads/CLUBHOUSE_v0.6.42_RELEASE_CANDIDATE_1.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#184c37">
-<title>CLUBHOUSE v0.6.41 – Release Candidate 1</title>
+<title>CLUBHOUSE v0.6.42 – Release Candidate 1</title>
 <style>
 :root{
   --green:#184c37;--green2:#24684c;--gold:#c8a44d;--ink:#18211c;--muted:#66736b;
@@ -968,10 +968,10 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
   <p class="sub">Saved competition results are kept here, separate from Current Handicaps.</p>
   <div id="reportsList"><button type="button" class="report-card history-card history-button" onclick="openHistoricalResultsBoard(0)">
          <div class="history-title">Wednesday 12 August 2026 — Stroke</div>
-         <div class="history-count">8 Players</div>
+         <div class="history-count">14 Players</div>
          <div class="history-stick">Winner off the Stick: <b>Robbie Menezes</b></div>
          <div class="history-nett">Nett Winner: <b>Dave Matthews</b></div>
-         <div class="history-pink">Pinkies Winner: <b>Barry Ogston</b></div>
+         <div class="history-pink">Pinkies Winner: <b>Glen (SHARKY) Fisher</b></div>
          <div class="history-open">Tap to open the exact Results Board</div>
        </button><button type="button" class="report-card history-card history-button" onclick="openHistoricalResultsBoard(1)">
          <div class="history-title">Tuesday 11 August 2026 — Stroke</div>
@@ -1043,7 +1043,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
 </section>
 
 </main>
-<footer>CLUBHOUSE v0.6.41 – Release Candidate 1 · Training Demo · Draft Protected</footer>
+<footer>CLUBHOUSE v0.6.42 – Release Candidate 1 · Training Demo · Draft Protected</footer>
 </div>
 
 <div id="editModal" class="modal"><div class="modal-sheet">
@@ -1334,7 +1334,7 @@ function saveRoundDraft(silent=true){
  try{
    if(!hasRoundProgress()){updateDraftBar();return false}
    const payload={
-     version:"0.6.38",
+     version:"0.6.42",
      savedAt:new Date().toISOString(),
      screen:activeScreenId(),
      round:deepCopy(round),
@@ -1351,12 +1351,42 @@ function saveRoundDraft(silent=true){
 }
 function queueDraftSave(){
  clearTimeout(draftSaveTimer);
- draftSaveTimer=setTimeout(()=>saveRoundDraft(true),80);
+ draftSaveTimer=setTimeout(()=>{
+   draftSaveTimer=null;
+   saveRoundDraft(true)
+ },80);
 }
 function manualSaveProgress(){saveRoundDraft(false)}
 function clearRoundDraft(){
+ clearTimeout(draftSaveTimer);
+ draftSaveTimer=null;
  localStorage.removeItem(ACTIVE_DRAFT_KEY);
  updateDraftBar();
+}
+
+function discardSavedRound(){
+ // Remove the current and any legacy CLUBHOUSE active-round draft keys.
+ clearTimeout(draftSaveTimer);
+ draftSaveTimer=null;
+ const keys=[];
+ for(let i=0;i<localStorage.length;i++){
+   const k=localStorage.key(i)||"";
+   if(k.startsWith("clubhouseActiveRoundDraft"))keys.push(k);
+ }
+ keys.forEach(k=>localStorage.removeItem(k));
+
+ // Reset only the unfinished in-memory round. Historical reports, handicaps,
+ // completed JSON imports and Green Jacket data remain untouched.
+ round={
+   competition:"",date:"",freezeDate:"",frozenHandicaps:{},scores:[],results:null,novelties:{},
+   adjustments:[],applied:false,prepared:false,locked:false,lockedSnapshot:null,reportSaved:false
+ };
+ const ids=["competition","otherComp","roundDate","freezeDate"];
+ ids.forEach(id=>{const e=document.getElementById(id);if(e)e.value=""});
+ const fs=document.getElementById("freezeStatus");if(fs)fs.textContent="";
+ const ec=document.getElementById("enteredCards");if(ec)ec.innerHTML="";
+ updateDraftBar();
+ goHome();
 }
 function restoreSetupFields(){
  document.getElementById("roundDate").value=round.date||"";
@@ -1427,7 +1457,7 @@ function offerDraftResume(){
  if(confirm(`UNFINISHED ROUND FOUND\\n\\n${desc}\\n\\nPress OK to RESUME this round.\\nPress Cancel to discard the saved draft.`)){
    resumeSavedRound(payload);
  }else if(confirm("Discard this unfinished saved round? This cannot be undone.")){
-   clearRoundDraft();
+   discardSavedRound();
  }
 }
 
@@ -1957,7 +1987,7 @@ async function importPreviousCompetition(event){
  }
 }
 function finalJsonFilename(){
- return `Clubhouse_${round.date||"Round"}_${round.competition.replace(/[^a-z0-9]+/gi,"_")}_v0.6.41.json`
+ return `Clubhouse_${round.date||"Round"}_${round.competition.replace(/[^a-z0-9]+/gi,"_")}_v0.6.42.json`
 }
 function showFinalFileReady(){
  const panel=document.getElementById("finalFilePanel");
@@ -2298,7 +2328,7 @@ async function emailJSON(){
   });
   if(round.lockedSnapshot)round.lockedSnapshot.novelties=deepCopy(round.novelties||{});
   const locked=lockedData();
- const payload={schemaVersion:"1.0",appVersion:"0.6.41",exportSource:"CURRENT_LOCKED_ROUND",club:"Royal Park Golf — Old Farts",exportedAt:new Date().toISOString(),emailTo:"robbiem2@live.com.au",round:{date:locked.date,competition:locked.competition,playerCount:locked.playerCount,greenJacketUsed:locked.competition==="Green Jacket Day",freezeDate:locked.freezeDate||null,greenJacketFreeze:getActiveGreenJacketFreeze(),frozenHandicapsUsed:locked.competition==="Green Jacket Day"?players.map(p=>({playerId:p.id,name:p.name,handicap:(locked.frozenHandicaps&&locked.frozenHandicaps[p.id]!=null)?locked.frozenHandicaps[p.id]:p.current})):[],scores:locked.scores,results:locked.results,novelties:locked.novelties,handicapAdjustments:locked.adjustments,currentHandicapsAfterRound:players.map(p=>({playerId:p.id,name:p.name,current:p.current,greenJacketFrozen:p.green})),honourBoardText:honourText(),handicapsReviewedAndSaved:true}};
+ const payload={schemaVersion:"1.0",appVersion:"0.6.42",exportSource:"CURRENT_LOCKED_ROUND",club:"Royal Park Golf — Old Farts",exportedAt:new Date().toISOString(),emailTo:"robbiem2@live.com.au",round:{date:locked.date,competition:locked.competition,playerCount:locked.playerCount,greenJacketUsed:locked.competition==="Green Jacket Day",freezeDate:locked.freezeDate||null,greenJacketFreeze:getActiveGreenJacketFreeze(),frozenHandicapsUsed:locked.competition==="Green Jacket Day"?players.map(p=>({playerId:p.id,name:p.name,handicap:(locked.frozenHandicaps&&locked.frozenHandicaps[p.id]!=null)?locked.frozenHandicaps[p.id]:p.current})):[],scores:locked.scores,results:locked.results,novelties:locked.novelties,handicapAdjustments:locked.adjustments,currentHandicapsAfterRound:players.map(p=>({playerId:p.id,name:p.name,current:p.current,greenJacketFrozen:p.green})),honourBoardText:honourText(),handicapsReviewedAndSaved:true}};
  const json=JSON.stringify(payload,null,2);
  const filename=finalJsonFilename();
  const file=new File([json],filename,{type:"application/json"});
