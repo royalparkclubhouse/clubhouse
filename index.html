@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- saved from url=(0075)file:///C:/Users/robbi/Downloads/CLUBHOUSE_v0.6.42_RELEASE_CANDIDATE_1.html -->
+<!-- saved from url=(0076)file:///C:/Users/robbi/Downloads/CLUBHOUSE_v0.6.42a_RELEASE_CANDIDATE_1.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#184c37">
-<title>CLUBHOUSE v0.6.42 – Release Candidate 1</title>
+<title>CLUBHOUSE v0.6.42a – Release Candidate 1</title>
 <style>
 :root{
   --green:#184c37;--green2:#24684c;--gold:#c8a44d;--ink:#18211c;--muted:#66736b;
@@ -1043,7 +1043,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
 </section>
 
 </main>
-<footer>CLUBHOUSE v0.6.42 – Release Candidate 1 · Training Demo · Draft Protected</footer>
+<footer>CLUBHOUSE v0.6.42a – Release Candidate 1 · Training Demo · Draft Protected</footer>
 </div>
 
 <div id="editModal" class="modal"><div class="modal-sheet">
@@ -1334,7 +1334,7 @@ function saveRoundDraft(silent=true){
  try{
    if(!hasRoundProgress()){updateDraftBar();return false}
    const payload={
-     version:"0.6.42",
+     version:"0.6.42a",
      savedAt:new Date().toISOString(),
      screen:activeScreenId(),
      round:deepCopy(round),
@@ -1448,7 +1448,48 @@ function resumeSavedRound(payload){
  }
  updateDraftBar(payload.savedAt);
 }
+
+function removeObsoleteDraftIfCompletedCompetitionExists(){
+ let payload=null;
+ try{payload=JSON.parse(localStorage.getItem(ACTIVE_DRAFT_KEY)||"null")}catch(e){
+   localStorage.removeItem(ACTIVE_DRAFT_KEY);
+   return true
+ }
+ if(!payload||!payload.round||!payload.round.date)return false;
+
+ let latestCompletedDate="";
+ try{
+   const info=JSON.parse(localStorage.getItem("clubhouseLastImportedCompetition")||"null");
+   if(info&&info.date)latestCompletedDate=String(info.date)
+ }catch(e){}
+
+ try{
+   const reports=JSON.parse(localStorage.getItem("clubhouseReports")||"[]");
+   if(Array.isArray(reports)){
+     reports.forEach(r=>{
+       if(r&&r.date&&String(r.date)>latestCompletedDate)latestCompletedDate=String(r.date)
+     })
+   }
+ }catch(e){}
+
+ const draftDate=String(payload.round.date||"");
+ if(latestCompletedDate && draftDate && draftDate<=latestCompletedDate){
+   clearTimeout(draftSaveTimer);
+   draftSaveTimer=null;
+   const keys=[];
+   for(let i=0;i<localStorage.length;i++){
+     const k=localStorage.key(i)||"";
+     if(k.startsWith("clubhouseActiveRoundDraft"))keys.push(k)
+   }
+   keys.forEach(k=>localStorage.removeItem(k));
+   updateDraftBar();
+   return true
+ }
+ return false
+}
+
 function offerDraftResume(){
+ if(removeObsoleteDraftIfCompletedCompetitionExists())return;
  let payload=null;
  try{payload=JSON.parse(localStorage.getItem(ACTIVE_DRAFT_KEY)||"null")}catch(e){localStorage.removeItem(ACTIVE_DRAFT_KEY)}
  if(!payload||!payload.round)return;
@@ -1981,13 +2022,14 @@ async function importPreviousCompetition(event){
   localStorage.setItem("clubhouseReports",JSON.stringify(reports));
   localStorage.setItem("clubhouseLastImportedCompetition",JSON.stringify({date:r.date,competition:r.competition,playerCount,filename:file.name,importedAt:new Date().toISOString()}));
   updateLastImportStatus();updateGreenJacketHomeStatus();
+  removeObsoleteDraftIfCompletedCompetitionExists();
   alert(`Competition imported successfully.\n\n${matched} player handicaps updated.\nCLUBHOUSE is now up to date.`);
  }catch(err){
   alert("Import could not be completed.\n\n"+err.message);
  }
 }
 function finalJsonFilename(){
- return `Clubhouse_${round.date||"Round"}_${round.competition.replace(/[^a-z0-9]+/gi,"_")}_v0.6.42.json`
+ return `Clubhouse_${round.date||"Round"}_${round.competition.replace(/[^a-z0-9]+/gi,"_")}_v0.6.42a.json`
 }
 function showFinalFileReady(){
  const panel=document.getElementById("finalFilePanel");
@@ -2328,7 +2370,7 @@ async function emailJSON(){
   });
   if(round.lockedSnapshot)round.lockedSnapshot.novelties=deepCopy(round.novelties||{});
   const locked=lockedData();
- const payload={schemaVersion:"1.0",appVersion:"0.6.42",exportSource:"CURRENT_LOCKED_ROUND",club:"Royal Park Golf — Old Farts",exportedAt:new Date().toISOString(),emailTo:"robbiem2@live.com.au",round:{date:locked.date,competition:locked.competition,playerCount:locked.playerCount,greenJacketUsed:locked.competition==="Green Jacket Day",freezeDate:locked.freezeDate||null,greenJacketFreeze:getActiveGreenJacketFreeze(),frozenHandicapsUsed:locked.competition==="Green Jacket Day"?players.map(p=>({playerId:p.id,name:p.name,handicap:(locked.frozenHandicaps&&locked.frozenHandicaps[p.id]!=null)?locked.frozenHandicaps[p.id]:p.current})):[],scores:locked.scores,results:locked.results,novelties:locked.novelties,handicapAdjustments:locked.adjustments,currentHandicapsAfterRound:players.map(p=>({playerId:p.id,name:p.name,current:p.current,greenJacketFrozen:p.green})),honourBoardText:honourText(),handicapsReviewedAndSaved:true}};
+ const payload={schemaVersion:"1.0",appVersion:"0.6.42a",exportSource:"CURRENT_LOCKED_ROUND",club:"Royal Park Golf — Old Farts",exportedAt:new Date().toISOString(),emailTo:"robbiem2@live.com.au",round:{date:locked.date,competition:locked.competition,playerCount:locked.playerCount,greenJacketUsed:locked.competition==="Green Jacket Day",freezeDate:locked.freezeDate||null,greenJacketFreeze:getActiveGreenJacketFreeze(),frozenHandicapsUsed:locked.competition==="Green Jacket Day"?players.map(p=>({playerId:p.id,name:p.name,handicap:(locked.frozenHandicaps&&locked.frozenHandicaps[p.id]!=null)?locked.frozenHandicaps[p.id]:p.current})):[],scores:locked.scores,results:locked.results,novelties:locked.novelties,handicapAdjustments:locked.adjustments,currentHandicapsAfterRound:players.map(p=>({playerId:p.id,name:p.name,current:p.current,greenJacketFrozen:p.green})),honourBoardText:honourText(),handicapsReviewedAndSaved:true}};
  const json=JSON.stringify(payload,null,2);
  const filename=finalJsonFilename();
  const file=new File([json],filename,{type:"application/json"});
