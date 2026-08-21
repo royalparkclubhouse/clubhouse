@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- saved from url=(0076)file:///C:/Users/robbi/Downloads/CLUBHOUSE_v0.6.42a_RELEASE_CANDIDATE_1.html -->
+<!-- saved from url=(0076)file:///C:/Users/robbi/Downloads/CLUBHOUSE_v0.6.42b_RELEASE_CANDIDATE_1.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#184c37">
-<title>CLUBHOUSE v0.6.42a – Release Candidate 1</title>
+<title>CLUBHOUSE v0.6.42b – Release Candidate 1</title>
 <style>
 :root{
   --green:#184c37;--green2:#24684c;--gold:#c8a44d;--ink:#18211c;--muted:#66736b;
@@ -483,11 +483,11 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
 
 
 <section id="complete" class="screen">
-<h2>Competition Complete</h2><p class="sub">The round is locked. Complete these final steps in order. Presentation starts only after FINISH ROUND.</p>
+<h2>Competition Complete</h2><p class="sub">The round is locked. The Results Board has already been shared. Complete these final steps in order. Presentation starts only after FINISH ROUND.</p>
 <div class="notice"><b>✓ Results and handicaps are locked.</b><br>Nothing on this page can recalculate the round.</div>
-<button class="btn btn-orange" onclick="buildHonour()">1. View / Share Results Board Image</button>
-<button class="btn btn-secondary" onclick="emailJSON()">2. Prepare Final Results for Robbie</button>
-<div id="completeJsonStatus" class="notice" style="margin-top:12px">Final results have not yet been prepared.</div>
+<button class="btn btn-secondary" onclick="manualSaveProgress()">1. SAVE PROGRESS</button>
+<button class="btn btn-secondary" onclick="emailJSON()">2. SHARE JSON TO ROBBIE</button>
+<div id="completeJsonStatus" class="notice" style="margin-top:12px">Final results have not yet been shared.</div>
 <button id="finishRoundBtn" class="btn btn-dark" onclick="finaliseRound()" disabled="">3. FINISH ROUND</button>
 </section>
 
@@ -1043,7 +1043,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
 </section>
 
 </main>
-<footer>CLUBHOUSE v0.6.42a – Release Candidate 1 · Training Demo · Draft Protected</footer>
+<footer>CLUBHOUSE v0.6.42b – Release Candidate 1 · Training Demo · Draft Protected</footer>
 </div>
 
 <div id="editModal" class="modal"><div class="modal-sheet">
@@ -1252,17 +1252,18 @@ function buildClubhouseTrainingSlides(){
        <p class="muted">Check every adjustment. This is the last chance to catch an error before saving.</p>
        <div class="training-btn">Confirm & Save Handicaps</div>`),
 
-    trainingShell("11. Prepare Final Results for Robbie",
-      "After handicaps are saved, prepare the final JSON results file for Robbie. This preserves the completed round and lets other CLUBHOUSE devices be updated.",
+    trainingShell("11. Save Progress & Share JSON",
+      "After handicaps are saved, tap <b>SAVE PROGRESS</b>, then share the final JSON results file to Robbie. If Android closes CLUBHOUSE while WhatsApp or email is open, reopen CLUBHOUSE and resume the unfinished round.",
       `<h3>Final Results</h3>
        <p class="muted">Results and handicap updates are now locked.</p>
-       <div class="training-btn">Prepare Final Results for Robbie</div>`),
+       <div class="training-btn secondary">SAVE PROGRESS</div>
+       <div class="training-btn">SHARE JSON TO ROBBIE</div>`),
 
     trainingShell("12. Finish Round",
-      "Only after the Results Board is shared, handicaps are saved and the JSON is prepared should you tap <b>FINISH ROUND</b>. The competition is then closed.",
+      "The Results Board was shared earlier. After the JSON has been shared to Robbie, tap <b>FINISH ROUND</b>. If CLUBHOUSE was closed while sharing, reopen it, resume the unfinished round, then finish here.",
       `<h3>Competition Complete</h3>
-       <div class="training-btn secondary">View / Share Results Board Image</div>
-       <div class="training-btn secondary">Prepare Final Results for Robbie ✓</div>
+       <div class="training-btn secondary">SAVE PROGRESS ✓</div>
+       <div class="training-btn secondary">SHARE JSON TO ROBBIE ✓</div>
        <div class="training-btn">FINISH ROUND</div>`),
 
     trainingShell("13. Presentation",
@@ -1334,7 +1335,7 @@ function saveRoundDraft(silent=true){
  try{
    if(!hasRoundProgress()){updateDraftBar();return false}
    const payload={
-     version:"0.6.42a",
+     version:"0.6.42b",
      savedAt:new Date().toISOString(),
      screen:activeScreenId(),
      round:deepCopy(round),
@@ -2029,7 +2030,7 @@ async function importPreviousCompetition(event){
  }
 }
 function finalJsonFilename(){
- return `Clubhouse_${round.date||"Round"}_${round.competition.replace(/[^a-z0-9]+/gi,"_")}_v0.6.42a.json`
+ return `Clubhouse_${round.date||"Round"}_${round.competition.replace(/[^a-z0-9]+/gi,"_")}_v0.6.42b.json`
 }
 function showFinalFileReady(){
  const panel=document.getElementById("finalFilePanel");
@@ -2362,40 +2363,71 @@ async function shareHonour(){
  alert("Portrait Results Board image saved. Attach it in WhatsApp.")
 }
 async function emailJSON(){
- if(!round.applied){alert("Please review and save the handicaps before emailing the JSON file.");return;}if(!confirm("Prepare the final results for Robbie at robbiem2@live.com.au?"))return;
- // Always capture the latest novelty winners before preparing the final JSON.
-  ["n1","n4","n6","n3","n7"].forEach(id=>{
-    const e=document.getElementById(id);
-    if(e && e.value)round.novelties[id]=e.value;
-  });
-  if(round.lockedSnapshot)round.lockedSnapshot.novelties=deepCopy(round.novelties||{});
-  const locked=lockedData();
- const payload={schemaVersion:"1.0",appVersion:"0.6.42a",exportSource:"CURRENT_LOCKED_ROUND",club:"Royal Park Golf — Old Farts",exportedAt:new Date().toISOString(),emailTo:"robbiem2@live.com.au",round:{date:locked.date,competition:locked.competition,playerCount:locked.playerCount,greenJacketUsed:locked.competition==="Green Jacket Day",freezeDate:locked.freezeDate||null,greenJacketFreeze:getActiveGreenJacketFreeze(),frozenHandicapsUsed:locked.competition==="Green Jacket Day"?players.map(p=>({playerId:p.id,name:p.name,handicap:(locked.frozenHandicaps&&locked.frozenHandicaps[p.id]!=null)?locked.frozenHandicaps[p.id]:p.current})):[],scores:locked.scores,results:locked.results,novelties:locked.novelties,handicapAdjustments:locked.adjustments,currentHandicapsAfterRound:players.map(p=>({playerId:p.id,name:p.name,current:p.current,greenJacketFrozen:p.green})),honourBoardText:honourText(),handicapsReviewedAndSaved:true}};
+ if(!round.applied){alert("Please review and save the handicaps before sharing the JSON file.");return}
+ if(!confirm("Share the final results JSON to Robbie at robbiem2@live.com.au?"))return;
+
+ // Capture the latest novelty winners before preparing the final JSON.
+ ["n1","n4","n6","n3","n7"].forEach(id=>{
+   const e=document.getElementById(id);
+   if(e && e.value)round.novelties[id]=e.value;
+ });
+ if(round.lockedSnapshot)round.lockedSnapshot.novelties=deepCopy(round.novelties||{});
+
+ const locked=lockedData();
+ const payload={schemaVersion:"1.0",appVersion:"0.6.42b",exportSource:"CURRENT_LOCKED_ROUND",club:"Royal Park Golf — Old Farts",exportedAt:new Date().toISOString(),emailTo:"robbiem2@live.com.au",round:{date:locked.date,competition:locked.competition,playerCount:locked.playerCount,greenJacketUsed:locked.competition==="Green Jacket Day",freezeDate:locked.freezeDate||null,greenJacketFreeze:getActiveGreenJacketFreeze(),frozenHandicapsUsed:locked.competition==="Green Jacket Day"?players.map(p=>({playerId:p.id,name:p.name,handicap:(locked.frozenHandicaps&&locked.frozenHandicaps[p.id]!=null)?locked.frozenHandicaps[p.id]:p.current})):[],scores:locked.scores,results:locked.results,novelties:locked.novelties,handicapAdjustments:locked.adjustments,currentHandicapsAfterRound:players.map(p=>({playerId:p.id,name:p.name,current:p.current,greenJacketFrozen:p.green})),honourBoardText:honourText(),handicapsReviewedAndSaved:true}};
  const json=JSON.stringify(payload,null,2);
  const filename=finalJsonFilename();
  const file=new File([json],filename,{type:"application/json"});
+
+ // IMPORTANT ANDROID PROTECTION:
+ // Mark the round prepared and save BEFORE opening WhatsApp/email.
+ // If Android closes CLUBHOUSE while the share sheet is open, reopening the app
+ // will restore this locked round at the final FINISH ROUND step.
+ round.prepared=true;
+ setFinishEnabled();
+ const finalPanel=document.getElementById("finalisePanel");
+ if(finalPanel)finalPanel.classList.remove("hidden");
+ const status=document.getElementById("completeJsonStatus");
+ if(status)status.innerHTML="<b>✓ Progress saved.</b><br>JSON is ready to share. If CLUBHOUSE closes, reopen it and resume the unfinished round.";
+ saveRoundDraft(true);
+
  if(navigator.canShare&&navigator.canShare({files:[file]})&&navigator.share){
    try{
      await navigator.share({
        title:"Clubhouse Final Results",
-       text:"Please email this Clubhouse final results file to Robbie at robbiem2@live.com.au",
+       text:"Please send this Clubhouse final results file to Robbie at robbiem2@live.com.au",
        files:[file]
      });
-     round.prepared=true;setFinishEnabled();document.getElementById("finalisePanel").classList.remove("hidden");saveRoundDraft(true);
-     const status=document.getElementById("completeJsonStatus");
-     if(status)status.innerHTML="<b>✓ Final results prepared successfully.</b><br>Please email the attached file to robbiem2@live.com.au.";
+     if(status)status.innerHTML="<b>✓ JSON share completed.</b><br>You can now press FINISH ROUND.";
+     saveRoundDraft(true);
      return;
    }catch(e){
-     if(e.name==="AbortError")return;
+     if(e.name==="AbortError"){
+       // User deliberately cancelled the share: require them to share again.
+       // If Android killed CLUBHOUSE instead, this code will never run and the
+       // pre-share saved draft remains safely resumable.
+       round.prepared=false;
+       setFinishEnabled();
+       if(status)status.innerHTML="<b>Share cancelled.</b><br>Your round is still saved. Tap SHARE JSON TO ROBBIE when ready.";
+       saveRoundDraft(true);
+       return;
+     }
+     // For a share-sheet failure, fall through to file download.
    }
  }
+
  const blob=new Blob([json],{type:"application/json"});
  const a=document.createElement("a");
- const url=URL.createObjectURL(blob);a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);
- round.prepared=true;setFinishEnabled();document.getElementById("finalisePanel").classList.remove("hidden");saveRoundDraft(true);
- const status=document.getElementById("completeJsonStatus");
- if(status)status.innerHTML="<b>✓ Final results downloaded successfully.</b><br>Open your email app and attach the file to robbiem2@live.com.au.";
- alert("The final results file has been downloaded. Open your email app, address it to robbiem2@live.com.au, and attach the downloaded file.")
+ const url=URL.createObjectURL(blob);
+ a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();
+ setTimeout(()=>URL.revokeObjectURL(url),1500);
+
+ round.prepared=true;
+ setFinishEnabled();
+ if(finalPanel)finalPanel.classList.remove("hidden");
+ if(status)status.innerHTML="<b>✓ JSON downloaded and progress saved.</b><br>Send the file to Robbie, then return to CLUBHOUSE and press FINISH ROUND.";
+ saveRoundDraft(true);
+ alert("The final results JSON has been downloaded and your round is safely saved. Send the file to Robbie, then return to CLUBHOUSE and press FINISH ROUND.")
 }
 
 function presentationEsc(v){
@@ -2582,7 +2614,7 @@ function finishPresentation(){goHome()}
 
 function finaliseRound(){
  if(!round.applied){alert("Please save the handicap changes first.");return}
- if(!round.prepared){alert("Please prepare the final results for Robbie first.");return}
+ if(!round.prepared){alert("Please share the final JSON to Robbie first.");return}
  if(!confirm("Finalise this round? Updated handicaps will remain saved. The competition will close and Presentation will begin."))return;
  const completed=deepCopy(round.lockedSnapshot||lockedData());
  clearRoundDraft();
