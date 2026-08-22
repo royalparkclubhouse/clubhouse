@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- saved from url=(0076)file:///C:/Users/robbi/Downloads/CLUBHOUSE_v0.6.42b_RELEASE_CANDIDATE_1.html -->
+<!-- saved from url=(0076)file:///C:/Users/robbi/Downloads/CLUBHOUSE_v0.6.42c_RELEASE_CANDIDATE_1.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#184c37">
-<title>CLUBHOUSE v0.6.42b – Release Candidate 1</title>
+<title>CLUBHOUSE v0.6.42c – Release Candidate 1</title>
 <style>
 :root{
   --green:#184c37;--green2:#24684c;--gold:#c8a44d;--ink:#18211c;--muted:#66736b;
@@ -1043,7 +1043,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
 </section>
 
 </main>
-<footer>CLUBHOUSE v0.6.42b – Release Candidate 1 · Training Demo · Draft Protected</footer>
+<footer>CLUBHOUSE v0.6.42c – Release Candidate 1 · Training Demo · Draft Protected</footer>
 </div>
 
 <div id="editModal" class="modal"><div class="modal-sheet">
@@ -1331,11 +1331,47 @@ function updateDraftBar(savedAt){
    st.innerHTML="<b>Round protected.</b><br>Changes save automatically on this phone.";
  }
 }
+
+const NOVELTY_IDS=["n1","n4","n6","n3","n7"];
+
+function meaningfulNovelty(v){
+  return typeof v==="string" && v.trim()!=="" && v!=="—";
+}
+
+function authoritativeNovelties(){
+  const out={};
+  const snap=(round&&round.lockedSnapshot&&round.lockedSnapshot.novelties)||{};
+  const live=(round&&round.novelties)||{};
+  NOVELTY_IDS.forEach(id=>{
+    const e=document.getElementById(id);
+    const dom=e?String(e.value||""):"";
+    // Never allow a blank/re-created Android control to wipe a winner already
+    // captured in the round or locked snapshot.
+    if(meaningfulNovelty(dom))out[id]=dom;
+    else if(meaningfulNovelty(live[id]))out[id]=live[id];
+    else if(meaningfulNovelty(snap[id]))out[id]=snap[id];
+    else if(dom==="—" || live[id]==="—" || snap[id]==="—")out[id]="—";
+    else out[id]="";
+  });
+  return out;
+}
+
+function syncNoveltyState(saveNow=false){
+  if(!round) return {};
+  const merged=authoritativeNovelties();
+  round.novelties={...(round.novelties||{}),...merged};
+  if(round.lockedSnapshot){
+    round.lockedSnapshot.novelties=deepCopy(round.novelties);
+  }
+  if(saveNow)saveRoundDraft(true);
+  return deepCopy(round.novelties);
+}
+
 function saveRoundDraft(silent=true){
  try{
    if(!hasRoundProgress()){updateDraftBar();return false}
    const payload={
-     version:"0.6.42b",
+     version:"0.6.42c",
      savedAt:new Date().toISOString(),
      screen:activeScreenId(),
      round:deepCopy(round),
@@ -1411,6 +1447,18 @@ function resumeSavedRound(payload){
    adjustments:[],applied:false,prepared:false,locked:false,lockedSnapshot:null,reportSaved:false,
    ...(payload.round||{})
  };
+ // v0.6.42c: reconcile novelty winners from either copy before rendering.
+ if(round.lockedSnapshot && round.lockedSnapshot.novelties){
+   const live=round.novelties||{};
+   const snap=round.lockedSnapshot.novelties||{};
+   NOVELTY_IDS.forEach(id=>{
+     if(!meaningfulNovelty(live[id]) && meaningfulNovelty(snap[id]))live[id]=snap[id];
+     if(!meaningfulNovelty(snap[id]) && meaningfulNovelty(live[id]))snap[id]=live[id];
+   });
+   round.novelties=live;
+   round.lockedSnapshot.novelties=snap;
+ }
+
  if(round.applied && Array.isArray(payload.playerHandicaps)){
    payload.playerHandicaps.forEach(saved=>{
      const p=players.find(x=>x.id===saved.id);
@@ -1890,15 +1938,21 @@ function renderResults(){
  <div class="award pink"><span>Pinkies Winner</span><b>${r.pinkWinner.name} — ${r.pinkWinner.nett} Nett</b>${countbackHtml("pinkies",r.pinkWinner)}</div>`
 }
 function openNovelty(){
- ["n1","n4","n6","n3","n7"].forEach(id=>{
+ NOVELTY_IDS.forEach(id=>{
    const e=document.getElementById(id);
    e.innerHTML='<option>—</option>'+round.scores.map(s=>`<option>${s.name}</option>`).join("");
-   if(round.novelties[id])e.value=round.novelties[id];
-   e.onchange=()=>{round.novelties[id]=e.value;saveRoundDraft(true)}
+   const existing=authoritativeNovelties()[id];
+   if(existing)e.value=existing;
+   e.onchange=()=>{
+     round.novelties[id]=e.value;
+     syncNoveltyState(true);
+   }
  });
- showScreen("novelty")
+ showScreen("novelty");
+ syncNoveltyState(true)
 }
 function showAdjustments(){
+ syncNoveltyState(true);
  document.getElementById("emailJsonBtn").classList.toggle("hidden",!round.applied);
  document.getElementById("finalFilePanel").classList.toggle("hidden",!round.applied);
  if(round.applied)document.getElementById("finalFileName").textContent=finalJsonFilename();
@@ -2030,7 +2084,7 @@ async function importPreviousCompetition(event){
  }
 }
 function finalJsonFilename(){
- return `Clubhouse_${round.date||"Round"}_${round.competition.replace(/[^a-z0-9]+/gi,"_")}_v0.6.42b.json`
+ return `Clubhouse_${round.date||"Round"}_${round.competition.replace(/[^a-z0-9]+/gi,"_")}_v0.6.42c.json`
 }
 function showFinalFileReady(){
  const panel=document.getElementById("finalFilePanel");
@@ -2042,6 +2096,9 @@ function showFinalFileReady(){
 function applyAdjustments(){
  if(round.applied){alert("These handicap changes have already been applied.");showScreen("complete");return}
  if(!confirm("Confirm and lock these handicaps? You will not be able to return to scores or results."))return;
+
+ // v0.6.42c: preserve novelty winners before the locked snapshot is created.
+ syncNoveltyState(true);
 
  if(round.competition==="Green Jacket Day"){
    players=players.map(p=>{
@@ -2078,8 +2135,9 @@ function applyAdjustments(){
  showScreen("complete")
 }
 function buildHonour(){
-if(!round.locked){["n1","n4","n6","n3","n7"].forEach(id=>{const e=document.getElementById(id);if(e)round.novelties[id]=e.value})}
-const d=lockedData(),r=d.results,n=d.novelties||{},v=x=>x&&x!=="—"?x:"NADA";
+if(!round.locked)syncNoveltyState(true);
+else syncNoveltyState(false);
+const d=lockedData(),r=d.results,n=authoritativeNovelties(),v=x=>x&&x!=="—"?x:"NADA";
 document.getElementById("honourMeta").textContent=`${formatDate(d.date)} · ${d.competition} · ${d.playerCount} Players`;
 const largeField=Number(d.playerCount)>=21;
 const flagIcon=`<svg viewBox="0 0 64 64" aria-hidden="true"><ellipse cx="32" cy="54" rx="25" ry="6" fill="#77b85a"/><path d="M27 51V10" stroke="#177a39" stroke-width="4"/><path d="M29 11l25 8-25 9z" fill="#e04f5f"/><ellipse cx="31" cy="51" rx="7" ry="3" fill="#e9f1e5" stroke="#467b3b"/></svg>`;
@@ -2112,7 +2170,7 @@ function openHistoricalResultsBoard(index){
  buildHonour();
 }
 function closeHistoricalResultsBoard(){historicalBoardData=null;showScreen("reports")}
-function saveReport(){const reports=JSON.parse(localStorage.getItem("clubhouseReports")||"[]"),record={id:Date.now(),date:round.date,competition:round.competition,playerCount:round.scores.length,scores:round.scores,results:round.results,novelties:round.novelties,adjustments:round.adjustments,greenJacketUsed:round.competition==="Green Jacket Day",freezeDate:round.freezeDate||null};reports.unshift(record);localStorage.setItem("clubhouseReports",JSON.stringify(reports))}
+function saveReport(){syncNoveltyState(false);const reports=JSON.parse(localStorage.getItem("clubhouseReports")||"[]"),record={id:Date.now(),date:round.date,competition:round.competition,playerCount:round.scores.length,scores:round.scores,results:round.results,novelties:deepCopy(round.novelties),adjustments:round.adjustments,greenJacketUsed:round.competition==="Green Jacket Day",freezeDate:round.freezeDate||null};reports.unshift(record);localStorage.setItem("clubhouseReports",JSON.stringify(reports))}
 function renderHandicaps(){
  document.getElementById("handicapList").innerHTML=players.map((p,i)=>`
    <div class="player-card">
@@ -2166,6 +2224,7 @@ function saveCurrentHandicaps(){
 }
 function honourText(){
  const r=round.results;
+ const n=authoritativeNovelties();
  return `OLD FARTS – RESULTS BOARD
 ${formatDate(round.date)} — ${round.competition}
 
@@ -2177,15 +2236,15 @@ ${round.scores.length>=21&&r.pinkSecond?`Pinkies 2nd Runner-up: ${r.pinkSecond.n
 `:""}Pinkies Runner-up: ${r.pinkRunner.name} (Nett ${r.pinkRunner.nett})${countbackDetail("pinkies",r.pinkRunner)?" — "+countbackDetail("pinkies",r.pinkRunner):""}
 Pinkies Winner: ${r.pinkWinner.name} (Nett ${r.pinkWinner.nett})${countbackDetail("pinkies",r.pinkWinner)?" — "+countbackDetail("pinkies",r.pinkWinner):""}
 
-Hole 1 NTP: ${round.novelties.n1&&round.novelties.n1!=="—"?round.novelties.n1:"NADA"}
-Hole 3 Drive and Pitch: ${round.novelties.n3&&round.novelties.n3!=="—"?round.novelties.n3:"NADA"}
-Hole 4 NTP: ${round.novelties.n4&&round.novelties.n4!=="—"?round.novelties.n4:"NADA"}
-Hole 6 NTP: ${round.novelties.n6&&round.novelties.n6!=="—"?round.novelties.n6:"NADA"}
-Hole 7 Longest Drive: ${round.novelties.n7&&round.novelties.n7!=="—"?round.novelties.n7:"NADA"}`
+Hole 1 NTP: ${n.n1&&n.n1!=="—"?n.n1:"NADA"}
+Hole 3 Drive and Pitch: ${n.n3&&n.n3!=="—"?n.n3:"NADA"}
+Hole 4 NTP: ${n.n4&&n.n4!=="—"?n.n4:"NADA"}
+Hole 6 NTP: ${n.n6&&n.n6!=="—"?n.n6:"NADA"}
+Hole 7 Longest Drive: ${n.n7&&n.n7!=="—"?n.n7:"NADA"}`
 }
 async function shareHonour(){
- saveRoundDraft(true); // Existing Android protection retained.
- const d=lockedData(),r=d.results,n=d.novelties||{},v=x=>x&&x!=="—"?x:"NADA";
+ syncNoveltyState(true); // v0.6.42c: preserve novelties before Android share sheet.
+ const d=lockedData(),r=d.results,n=authoritativeNovelties(),v=x=>x&&x!=="—"?x:"NADA";
  const largeField=Number(d.playerCount)>=21;
  const rows=[
   ["WINNER OFF THE STICK",r.stick,`${r.stick.gross} GROSS`,"#fff0a8","stick"],
@@ -2366,15 +2425,14 @@ async function emailJSON(){
  if(!round.applied){alert("Please review and save the handicaps before sharing the JSON file.");return}
  if(!confirm("Share the final results JSON to Robbie at robbiem2@live.com.au?"))return;
 
- // Capture the latest novelty winners before preparing the final JSON.
- ["n1","n4","n6","n3","n7"].forEach(id=>{
-   const e=document.getElementById(id);
-   if(e && e.value)round.novelties[id]=e.value;
- });
- if(round.lockedSnapshot)round.lockedSnapshot.novelties=deepCopy(round.novelties||{});
+ // v0.6.42c: final novelty integrity check. This merges the live controls,
+ // active round and locked snapshot without allowing blank Android controls
+ // to erase already-captured winners.
+ const finalNovelties=syncNoveltyState(true);
 
  const locked=lockedData();
- const payload={schemaVersion:"1.0",appVersion:"0.6.42b",exportSource:"CURRENT_LOCKED_ROUND",club:"Royal Park Golf — Old Farts",exportedAt:new Date().toISOString(),emailTo:"robbiem2@live.com.au",round:{date:locked.date,competition:locked.competition,playerCount:locked.playerCount,greenJacketUsed:locked.competition==="Green Jacket Day",freezeDate:locked.freezeDate||null,greenJacketFreeze:getActiveGreenJacketFreeze(),frozenHandicapsUsed:locked.competition==="Green Jacket Day"?players.map(p=>({playerId:p.id,name:p.name,handicap:(locked.frozenHandicaps&&locked.frozenHandicaps[p.id]!=null)?locked.frozenHandicaps[p.id]:p.current})):[],scores:locked.scores,results:locked.results,novelties:locked.novelties,handicapAdjustments:locked.adjustments,currentHandicapsAfterRound:players.map(p=>({playerId:p.id,name:p.name,current:p.current,greenJacketFrozen:p.green})),honourBoardText:honourText(),handicapsReviewedAndSaved:true}};
+ if(round.lockedSnapshot)round.lockedSnapshot.novelties=deepCopy(finalNovelties);
+ const payload={schemaVersion:"1.0",appVersion:"0.6.42c",exportSource:"CURRENT_LOCKED_ROUND",club:"Royal Park Golf — Old Farts",exportedAt:new Date().toISOString(),emailTo:"robbiem2@live.com.au",round:{date:locked.date,competition:locked.competition,playerCount:locked.playerCount,greenJacketUsed:locked.competition==="Green Jacket Day",freezeDate:locked.freezeDate||null,greenJacketFreeze:getActiveGreenJacketFreeze(),frozenHandicapsUsed:locked.competition==="Green Jacket Day"?players.map(p=>({playerId:p.id,name:p.name,handicap:(locked.frozenHandicaps&&locked.frozenHandicaps[p.id]!=null)?locked.frozenHandicaps[p.id]:p.current})):[],scores:locked.scores,results:locked.results,novelties:deepCopy(finalNovelties),handicapAdjustments:locked.adjustments,currentHandicapsAfterRound:players.map(p=>({playerId:p.id,name:p.name,current:p.current,greenJacketFrozen:p.green})),honourBoardText:honourText(),handicapsReviewedAndSaved:true}};
  const json=JSON.stringify(payload,null,2);
  const filename=finalJsonFilename();
  const file=new File([json],filename,{type:"application/json"});
