@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- saved from url=(0076)file:///C:/Users/robbi/Downloads/CLUBHOUSE_v0.6.42d_RELEASE_CANDIDATE_1.html -->
+<!-- saved from url=(0086)file:///C:/Users/robbi/OneDrive/Desktop/CLUBHOUSE%20-%20Handicap%20Software/index.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#184c37">
-<title>CLUBHOUSE v0.6.42d – Release Candidate 1</title>
+<title>CLUBHOUSE v0.6.43 – Release Candidate 1</title>
 <style>
 :root{
   --green:#184c37;--green2:#24684c;--gold:#c8a44d;--ink:#18211c;--muted:#66736b;
@@ -244,6 +244,11 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
 .presentation-player{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;border:1px solid #d8e2dc;
   border-radius:14px;background:#fbfdfb;padding:16px 14px}
 .presentation-player b{font-size:1.32rem;line-height:1.05}
+.presentation-gross-card{flex:1;border:2px solid #184c37;border-radius:22px;background:#fff;padding:14px;display:flex;flex-direction:column;min-height:0}
+.presentation-gross-title{text-align:center;color:#184c37;font-size:1.8rem;font-weight:950;margin:0 0 10px}
+.presentation-gross-list{display:grid;grid-template-columns:1fr 1fr;gap:6px 12px;align-content:start}
+.presentation-gross-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;border-bottom:1px solid #e1e8e3;padding:5px 7px;font-size:.98rem}
+.presentation-gross-row b{line-height:1.05}.presentation-gross-row strong{font-size:1.12rem;color:#184c37;white-space:nowrap}
 .presentation-player strong{font-size:1.55rem;color:#184c37;white-space:nowrap}
 .presentation-status{text-align:center;margin-top:18px;font-size:1.5rem;font-weight:950}
 .presentation-tie{color:#765515}.presentation-determined{color:#184c37}
@@ -1018,32 +1023,38 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
 
 <section id="clubhouseTrainingDemo" class="screen">
   <div class="training-wrap">
-    <div id="trainingStage" class="training-stage"><div class="training-slide"><div class="training-done">
-       <h1>DEMO COMPLETE</h1>
-       <p>A new operator has now seen the complete CLUBHOUSE workflow from Home through to Presentation.</p>
-       <button class="presentation-home" onclick="goHome()">Return Home</button>
-     </div></div></div>
+    <div id="trainingStage" class="training-stage"><div class="training-slide">
+    <div class="training-banner"><h2>13. Presentation</h2><p>CLUBHOUSE training demo — read only</p></div>
+    <div class="training-instruction">After FINISH ROUND, CLUBHOUSE enters Presentation Mode. This is read-only: Mick first reads every player’s Gross score in scorecard-entry order, then uses Previous / Next to announce WOTS, Nett and Pinkies results.</div>
+    <div class="training-screen"><h3>PRESENTATION</h3>
+       <p class="muted">Competition Closed — no scores or handicaps can now be changed.</p>
+       <div class="training-btn">START PRESENTATION</div></div>
+  </div></div>
     <div class="training-nav">
       <button id="trainingPrev" class="training-prev" onclick="trainingPrevious()">← Previous</button>
-      <div id="trainingStep" class="training-step">14 of 14</div>
-      <button id="trainingNext" class="training-next" onclick="trainingNext()" disabled="">Next →</button>
+      <div id="trainingStep" class="training-step">13 of 14</div>
+      <button id="trainingNext" class="training-next" onclick="trainingNext()">Next →</button>
     </div>
   </div>
 </section>
 
 <section id="presentation" class="screen">
   <div class="presentation-wrap">
-    <div id="presentationStage" class="presentation-stage"></div>
+    <div id="presentationStage" class="presentation-stage"><div class="presentation-slide"><div class="presentation-complete">
+   <div class="presentation-tick">✓</div><h1>PRESENTATION COMPLETE</h1>
+   <p>All competition results have been announced.</p>
+   <button class="presentation-home" onclick="finishPresentation()">Return Home</button>
+ </div></div></div>
     <div class="presentation-nav">
       <button id="presentationPrev" class="presentation-prev" onclick="presentationPrevious()">← Previous</button>
-      <div id="presentationStep" class="presentation-step">1 of 1</div>
-      <button id="presentationNext" class="presentation-next" onclick="presentationNext()">Next →</button>
+      <div id="presentationStep" class="presentation-step">13 of 13</div>
+      <button id="presentationNext" class="presentation-next" onclick="presentationNext()" disabled="">Next →</button>
     </div>
   </div>
 </section>
 
 </main>
-<footer>CLUBHOUSE v0.6.42d – Release Candidate 1 · Training Demo · Draft Protected</footer>
+<footer>CLUBHOUSE v0.6.43 – Release Candidate 1 · Training Demo · Draft Protected</footer>
 </div>
 
 <div id="editModal" class="modal"><div class="modal-sheet">
@@ -1239,11 +1250,11 @@ function buildClubhouseTrainingSlides(){
        <div class="training-btn">Share Results Board as Image</div>`),
 
     trainingShell("9. Handicap Review",
-      "CLUBHOUSE now shows the handicap adjustments caused by the result. Review them carefully before saving.",
+      "CLUBHOUSE now applies the attendance handicap block automatically: <b>1–9 players</b> = Winner +1 / Pinkies Winner −1; <b>10–19</b> = +2,+1 / −2,−1; <b>20+</b> = +3,+2,+1 / −3,−2,−1. Review the changes carefully before saving.",
       `<h3>Handicap Review</h3>
-       <div class="training-row"><b>Glen (SHARKY) Fisher</b><strong>+1 → +3</strong></div>
-       <div class="training-row"><b>Gary Bull</b><strong>+2 → +3</strong></div>
-       <div class="training-row"><b>Chris Koo</b><strong>−5 → −7</strong></div>
+       <div class="training-row"><b>1–9 players</b><strong>±1</strong></div>
+       <div class="training-row"><b>10–19 players</b><strong>±2 / ±1</strong></div>
+       <div class="training-row"><b>20+ players</b><strong>±3 / ±2 / ±1</strong></div>
        <div class="training-btn">Review Updated Handicaps</div>`),
 
     trainingShell("10. Review Updated Handicaps",
@@ -1267,7 +1278,7 @@ function buildClubhouseTrainingSlides(){
        <div class="training-btn">FINISH ROUND</div>`),
 
     trainingShell("13. Presentation",
-      "After FINISH ROUND, CLUBHOUSE enters Presentation Mode. This is read-only: Mick simply uses Previous / Next to announce WOTS, Nett and Pinkies results.",
+      "After FINISH ROUND, CLUBHOUSE enters Presentation Mode. This is read-only: Mick first reads every player’s Gross score in scorecard-entry order, then uses Previous / Next to announce WOTS, Nett and Pinkies results.",
       `<h3>PRESENTATION</h3>
        <p class="muted">Competition Closed — no scores or handicaps can now be changed.</p>
        <div class="training-btn">START PRESENTATION</div>`),
@@ -1371,7 +1382,7 @@ function saveRoundDraft(silent=true){
  try{
    if(!hasRoundProgress()){updateDraftBar();return false}
    const payload={
-     version:"0.6.42d",
+     version:"0.6.43",
      savedAt:new Date().toISOString(),
      screen:activeScreenId(),
      round:deepCopy(round),
@@ -1775,7 +1786,7 @@ function finishRound(){
  showScreen("recap")
 }
 function awardSlots(){
- return round.scores.length>=21 ? 3 : 2
+ return round.scores.length>=20 ? 3 : 2
 }
 function tiedAwardGroups(){
  const groups=[];
@@ -1912,7 +1923,7 @@ function calculateResults(){
  const nett=[...round.scores].sort((a,b)=>a.nett-b.nett||compareLatest(a,b,"low"));
  const lowGross=[...round.scores].sort((a,b)=>a.gross-b.gross||compareLatest(a,b,"low"));
  const highNett=[...round.scores].sort((a,b)=>b.nett-a.nett||compareLatest(a,b,"high"));
- const largeField=round.scores.length>=21;
+ const largeField=round.scores.length>=20;
  round.results={
    stick:lowGross[0],
    nettWinner:nett[0],
@@ -1927,7 +1938,7 @@ function calculateResults(){
 }
 function renderResults(){
  const r=round.results;
- const largeField=round.scores.length>=21;
+ const largeField=round.scores.length>=20;
  document.getElementById("awards").innerHTML=`
  <div class="award stick"><span>Winner off the Stick</span><b>${r.stick.name} — ${r.stick.gross} Gross</b>${countbackHtml("stick",r.stick)}</div>
  ${largeField&&r.nettSecond?`<div class="award runner"><span>Nett 2nd Runner-up</span><b>${r.nettSecond.name} — ${r.nettSecond.nett} Nett</b>${countbackHtml("nett",r.nettSecond)}</div>`:""}
@@ -1959,9 +1970,9 @@ function showAdjustments(){
  document.getElementById("finalisePanel").classList.toggle("hidden",!round.prepared);
  const r=round.results,changes=[];
  function add(p,delta,label){if(p)changes.push({name:p.name,delta,label})}
- const largeField = round.scores.length >= 21;
+ const playerCount = round.scores.length;
 
-if (largeField) {
+if (playerCount >= 20) {
   add(r.nettWinner,3,"Nett Winner");
   add(r.nettRunner,2,"Nett Runner-up");
   add(r.nettSecond,1,"Nett 2nd Runner-up");
@@ -1969,12 +1980,15 @@ if (largeField) {
   add(r.pinkWinner,-3,"Pinkies Winner");
   add(r.pinkRunner,-2,"Pinkies Runner-up");
   add(r.pinkSecond,-1,"Pinkies 2nd Runner-up");
-} else {
+} else if (playerCount >= 10) {
   add(r.nettWinner,2,"Nett Winner");
   add(r.nettRunner,1,"Nett Runner-up");
 
   add(r.pinkWinner,-2,"Pinkies Winner");
   add(r.pinkRunner,-1,"Pinkies Runner-up");
+} else {
+  add(r.nettWinner,1,"Nett Winner");
+  add(r.pinkWinner,-1,"Pinkies Winner");
 }
  const grouped={};
  changes.forEach(c=>{grouped[c.name]??={name:c.name,delta:0,reasons:[]};grouped[c.name].delta+=c.delta;grouped[c.name].reasons.push(c.label)});
@@ -2084,7 +2098,7 @@ async function importPreviousCompetition(event){
  }
 }
 function finalJsonFilename(){
- return `Clubhouse_${round.date||"Round"}_${round.competition.replace(/[^a-z0-9]+/gi,"_")}_v0.6.42d.json`
+ return `Clubhouse_${round.date||"Round"}_${round.competition.replace(/[^a-z0-9]+/gi,"_")}_v0.6.43.json`
 }
 function showFinalFileReady(){
  const panel=document.getElementById("finalFilePanel");
@@ -2143,7 +2157,7 @@ const d=lockedData(),r=d.results,
       n=historicalBoardData?(d.novelties||{}):authoritativeNovelties(),
       v=x=>x&&x!=="—"?x:"NADA";
 document.getElementById("honourMeta").textContent=`${formatDate(d.date)} · ${d.competition} · ${d.playerCount} Players`;
-const largeField=Number(d.playerCount)>=21;
+const largeField=Number(d.playerCount)>=20;
 const flagIcon=`<svg viewBox="0 0 64 64" aria-hidden="true"><ellipse cx="32" cy="54" rx="25" ry="6" fill="#77b85a"/><path d="M27 51V10" stroke="#177a39" stroke-width="4"/><path d="M29 11l25 8-25 9z" fill="#e04f5f"/><ellipse cx="31" cy="51" rx="7" ry="3" fill="#e9f1e5" stroke="#467b3b"/></svg>`;
 const golfIcon=`<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="25" cy="10" r="6" fill="#c68b5c"/><path d="M25 17l8 15-10 13M31 27l15-9M24 29l-12 8M23 44l-9 12M24 44l14 10" fill="none" stroke="#244d3a" stroke-width="5" stroke-linecap="round"/><path d="M46 18l10 29" stroke="#555" stroke-width="3"/><circle cx="57" cy="52" r="3" fill="#fff" stroke="#777"/></svg>`;
 const row=(cls,label,p,score,kind)=>p?`<div class="honour-row ${cls}"><div class="hr-label">${label}</div><div class="hr-person"><b>${p.name}</b>${countbackHtml(kind,p)}</div><div class="hr-score">${score}</div></div>`:"";
@@ -2233,10 +2247,10 @@ function honourText(){
 ${formatDate(round.date)} — ${round.competition}
 
 Winner off the Stick: ${r.stick.name} (Gross ${r.stick.gross})${countbackDetail("stick",r.stick)?" — "+countbackDetail("stick",r.stick):""}
-${round.scores.length>=21&&r.nettSecond?`Nett 2nd Runner-up: ${r.nettSecond.name} (Nett ${r.nettSecond.nett})${countbackDetail("nett",r.nettSecond)?" — "+countbackDetail("nett",r.nettSecond):""}
+${round.scores.length>=20&&r.nettSecond?`Nett 2nd Runner-up: ${r.nettSecond.name} (Nett ${r.nettSecond.nett})${countbackDetail("nett",r.nettSecond)?" — "+countbackDetail("nett",r.nettSecond):""}
 `:""}Nett Runner-up: ${r.nettRunner.name} (Nett ${r.nettRunner.nett})${countbackDetail("nett",r.nettRunner)?" — "+countbackDetail("nett",r.nettRunner):""}
 Nett Winner: ${r.nettWinner.name} (Nett ${r.nettWinner.nett})${countbackDetail("nett",r.nettWinner)?" — "+countbackDetail("nett",r.nettWinner):""}
-${round.scores.length>=21&&r.pinkSecond?`Pinkies 2nd Runner-up: ${r.pinkSecond.name} (Nett ${r.pinkSecond.nett})${countbackDetail("pinkies",r.pinkSecond)?" — "+countbackDetail("pinkies",r.pinkSecond):""}
+${round.scores.length>=20&&r.pinkSecond?`Pinkies 2nd Runner-up: ${r.pinkSecond.name} (Nett ${r.pinkSecond.nett})${countbackDetail("pinkies",r.pinkSecond)?" — "+countbackDetail("pinkies",r.pinkSecond):""}
 `:""}Pinkies Runner-up: ${r.pinkRunner.name} (Nett ${r.pinkRunner.nett})${countbackDetail("pinkies",r.pinkRunner)?" — "+countbackDetail("pinkies",r.pinkRunner):""}
 Pinkies Winner: ${r.pinkWinner.name} (Nett ${r.pinkWinner.nett})${countbackDetail("pinkies",r.pinkWinner)?" — "+countbackDetail("pinkies",r.pinkWinner):""}
 
@@ -2251,7 +2265,7 @@ async function shareHonour(){
  const d=lockedData(),r=d.results,
        n=historicalBoardData?(d.novelties||{}):authoritativeNovelties(),
        v=x=>x&&x!=="—"?x:"NADA";
- const largeField=Number(d.playerCount)>=21;
+ const largeField=Number(d.playerCount)>=20;
  const rows=[
   ["WINNER OFF THE STICK",r.stick,`${r.stick.gross} GROSS`,"#fff0a8","stick"],
   ...(largeField&&r.nettSecond?[["NETT 2ND RUNNER-UP",r.nettSecond,`${r.nettSecond.nett} NETT`,"#dff1b8","nett"]]:[]),
@@ -2438,7 +2452,7 @@ async function emailJSON(){
 
  const locked=lockedData();
  if(round.lockedSnapshot)round.lockedSnapshot.novelties=deepCopy(finalNovelties);
- const payload={schemaVersion:"1.0",appVersion:"0.6.42d",exportSource:"CURRENT_LOCKED_ROUND",club:"Royal Park Golf — Old Farts",exportedAt:new Date().toISOString(),emailTo:"robbiem2@live.com.au",round:{date:locked.date,competition:locked.competition,playerCount:locked.playerCount,greenJacketUsed:locked.competition==="Green Jacket Day",freezeDate:locked.freezeDate||null,greenJacketFreeze:getActiveGreenJacketFreeze(),frozenHandicapsUsed:locked.competition==="Green Jacket Day"?players.map(p=>({playerId:p.id,name:p.name,handicap:(locked.frozenHandicaps&&locked.frozenHandicaps[p.id]!=null)?locked.frozenHandicaps[p.id]:p.current})):[],scores:locked.scores,results:locked.results,novelties:deepCopy(finalNovelties),handicapAdjustments:locked.adjustments,currentHandicapsAfterRound:players.map(p=>({playerId:p.id,name:p.name,current:p.current,greenJacketFrozen:p.green})),honourBoardText:honourText(),handicapsReviewedAndSaved:true}};
+ const payload={schemaVersion:"1.0",appVersion:"0.6.43",exportSource:"CURRENT_LOCKED_ROUND",club:"Royal Park Golf — Old Farts",exportedAt:new Date().toISOString(),emailTo:"robbiem2@live.com.au",round:{date:locked.date,competition:locked.competition,playerCount:locked.playerCount,greenJacketUsed:locked.competition==="Green Jacket Day",freezeDate:locked.freezeDate||null,greenJacketFreeze:getActiveGreenJacketFreeze(),frozenHandicapsUsed:locked.competition==="Green Jacket Day"?players.map(p=>({playerId:p.id,name:p.name,handicap:(locked.frozenHandicaps&&locked.frozenHandicaps[p.id]!=null)?locked.frozenHandicaps[p.id]:p.current})):[],scores:locked.scores,results:locked.results,novelties:deepCopy(finalNovelties),handicapAdjustments:locked.adjustments,currentHandicapsAfterRound:players.map(p=>({playerId:p.id,name:p.name,current:p.current,greenJacketFrozen:p.green})),honourBoardText:honourText(),handicapsReviewedAndSaved:true}};
  const json=JSON.stringify(payload,null,2);
  const filename=finalJsonFilename();
  const file=new File([json],filename,{type:"application/json"});
@@ -2538,6 +2552,13 @@ function presentationStartSlide(data){
    <button class="presentation-start-btn" onclick="presentationNext()">START PRESENTATION</button>
  </div></div>`
 }
+function presentationGrossScoresSlide(data){
+ const scores=data.scores||[];
+ return `<div class="presentation-slide"><div class="presentation-gross-card">
+   <div class="presentation-gross-title">PLAYER GROSS SCORES</div>
+   <div class="presentation-gross-list">${scores.map(p=>`<div class="presentation-gross-row"><b>${presentationEsc(p.name)}</b><strong>${presentationEsc(p.gross)} Gross</strong></div>`).join("")}</div>
+ </div></div>`
+}
 function presentationAwardSlide(label,p,score,kind){
  let cls="presentation-gold",hero="",style="";
  if(kind==="stick")hero=presentationGolferSvg();
@@ -2601,7 +2622,8 @@ function presentationTieSlides(label,tied,scoreText){
 }
 function buildPresentationSlides(data){
  const slides=[presentationStartSlide(data)];
- const scores=data.scores||[],r=data.results||{},large=Number(data.playerCount||scores.length)>=21;
+ const scores=data.scores||[],r=data.results||{},large=Number(data.playerCount||scores.length)>=20;
+ if(scores.length)slides.push(presentationGrossScoresSlide(data));
  if(r.stick){
    const tied=scores.filter(s=>Number(s.gross)===Number(r.stick.gross));
    slides.push(...presentationTieSlides("Winner Off the Stick",tied,p=>`${p.gross} Gross`));
@@ -2700,7 +2722,7 @@ function buildReviewPack(){const samplePlayers=players.slice(0,4);document.getEl
 <div class="review-screen"><h2>3. Enter Scorecards</h2><p>Type a first name or surname, select the full player name, see the signed handicap, enter gross score, and add the completed card.</p>${samplePlayers.map((p,i)=>`<p><b>${p.name}</b> — Handicap ${signed(p.current)} — Gross ${40+i}</p>`).join("")}</div>
 <div class="review-screen"><h2>4. Results and Novelty Prizes</h2><p>Winner off the Stick</p><p>Nett Runner-up</p><p>Nett Winner</p><p>Pinkies Runner-up</p><p>Pinkies Winner</p><p>Novelty prize selections</p></div>
 <div class="review-screen"><h2>5. Honour Board</h2><p>Results plus novelty winners form the portrait Results Board.</p><p>The same portrait Results Board is used for the Reporter share and Previous Results.</p></div>
-<div class="review-screen"><h2>6. Handicap Adjustments and JSON</h2><p>0–20 players: +2/+1 and −2/−1.</p><p>All rounds: Nett +2/+1 and Pinkies −2/−1, capped from −8 to +3.</p><p>Mick may alter the suggested changes before saving.</p><p>After saving, email the complete JSON round record to Robbie.</p></div>
+<div class="review-screen"><h2>6. Handicap Adjustments and JSON</h2><p>1–9 players: Nett Winner +1; Pinkies Winner −1.</p><p>10–19 players: Nett +2/+1; Pinkies −2/−1.</p><p>20+ players: Nett +3/+2/+1; Pinkies −3/−2/−1. All handicaps remain capped from −8 to +3.</p><p>Mick may alter the suggested changes before saving.</p><p>After saving, email the complete JSON round record to Robbie.</p></div>
 <div class="review-screen"><h2>7. Finalise Round</h2><p>Updated handicaps remain saved. Active score-entry information is cleared for the next round only after confirmation.</p></div><div class="review-screen"><h2>8. Current Handicaps</h2><p>Full names, reference numbers and editable current handicaps. Save changes before the next round.</p></div>`}
 function formatDate(s){if(!s)return"";return new Date(s+"T12:00:00").toLocaleDateString("en-AU",{weekday:"long",day:"numeric",month:"long",year:"numeric"})}
 document.addEventListener("DOMContentLoaded",()=>{
