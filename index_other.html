@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>CLUBHOUSE — OTHER Competition</title>
+<style>
+:root{--green:#175c3a;--green2:#247a50;--orange:#e7862d;--gold:#d7aa33;--cream:#f7f4eb;--ink:#173223;--line:#d8e1db;--pink:#f4d5df;--purple:#e7d9f6;--blue:#dfeefa;--red:#a52727}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#eef3ef;color:var(--ink)}
+.app{max-width:780px;margin:0 auto;min-height:100vh;background:white;box-shadow:0 0 30px #0001}
+header{background:linear-gradient(135deg,var(--green),#0f462c);color:#fff;padding:20px 18px 16px;position:sticky;top:0;z-index:5}
+header h1{margin:0;font-size:1.45rem}header p{margin:4px 0 0;opacity:.9;font-size:.88rem}.version{float:right;background:#ffffff20;border:1px solid #ffffff45;border-radius:999px;padding:6px 10px;font-weight:800;font-size:.72rem}
+main{padding:18px}.screen{display:none}.screen.active{display:block}.eyebrow{color:var(--orange);font-weight:900;text-transform:uppercase;font-size:.76rem;letter-spacing:.08em}.screen h2{margin:5px 0 6px;font-size:1.55rem}.sub{color:#647268;margin:0 0 16px;line-height:1.4}
+.card{border:1px solid var(--line);border-radius:16px;padding:15px;background:#fff;margin:12px 0;box-shadow:0 4px 15px #1732230b}.team-card{border-left:6px solid var(--orange)}
+label{display:block;font-weight:800;font-size:.82rem;color:#52645a;margin:9px 0 5px}select,input{width:100%;padding:12px;border:1px solid #c6d3ca;border-radius:10px;font:inherit;background:white}.row{display:flex;gap:10px;flex-wrap:wrap}.row>*{flex:1;min-width:180px}
+.btn{border:0;border-radius:11px;padding:12px 15px;font-weight:900;cursor:pointer;background:var(--green);color:#fff;margin:4px 4px 4px 0}.btn.secondary{background:#edf4ef;color:var(--green);border:1px solid #c8d8ce}.btn.orange{background:var(--orange)}.btn.gold{background:var(--gold);color:#27351e}.btn.danger{background:#fff0f0;color:#8d2525;border:1px solid #e8bcbc}.btn:disabled{opacity:.45;cursor:not-allowed}.btn.small{padding:8px 10px;font-size:.78rem}
+.nav{display:flex;justify-content:space-between;gap:10px;margin-top:20px}.nav .btn{flex:1}.notice{background:#eff7f1;border:1px solid #c9dfd0;padding:12px;border-radius:11px;margin:10px 0}.warn{background:#fff5d7;border-color:#ead184;color:#624e18}.error{background:#ffeded;border-color:#e8b7b7;color:#7f2525}.summary{background:var(--cream);border:1px solid #eadfc8;border-radius:13px;padding:13px;font-weight:800;margin:13px 0}
+.player-line{display:grid;grid-template-columns:1fr 92px auto;gap:8px;align-items:end;padding:7px 0;border-bottom:1px solid #edf0ee}.player-line:last-child{border-bottom:0}.hc{font-weight:900;text-align:center;padding:12px 5px;background:#f3f7f4;border-radius:9px}.muted{color:#6d786f;font-size:.86rem}.team-title{display:flex;justify-content:space-between;align-items:center;gap:10px}.team-title h3{margin:0;color:var(--green)}
+.review-member{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #eef1ef}.team-hc{font-size:1.1rem;font-weight:950;color:var(--orange);margin-top:9px}.scorebox{display:grid;grid-template-columns:1.35fr .7fr .7fr .7fr;gap:8px;align-items:center}.scorebox input{text-align:center;font-weight:900}.scorebox .value{font-weight:900;text-align:center}.scorebox .head{font-size:.7rem;text-transform:uppercase;color:#758078;font-weight:900;text-align:center}
+.award{border-radius:14px;padding:13px;margin:9px 0;border-left:7px solid var(--green);background:#f8fbf9}.award.stick{border-left-color:var(--gold);background:#fffaf0}.award.nett{border-left-color:var(--green2)}.award.runner{border-left-color:#6b92b5;background:#f5f9fc}.award.pink{border-left-color:#d65d87;background:#fff7fa}.award.purple{border-left-color:#8a66ad;background:#fbf8fe}.award span{font-size:.72rem;font-weight:950;text-transform:uppercase;color:#647268}.award b{display:block;font-size:1.03rem;margin-top:4px}.countback{font-size:.78rem;color:#7a5515;font-weight:800;margin-top:4px}.novelty-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.novelty-grid .card{margin:0}.final-actions .btn{width:100%;margin:7px 0;padding:15px;font-size:1rem}.locked{background:#f2f2f2;color:#777}
+.modal{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;padding:18px;z-index:20}.modal.show{display:flex}.modal-card{max-width:620px;width:100%;max-height:90vh;overflow:auto;background:#fff;border-radius:17px;padding:17px}.modal-card h3{margin-top:0}.cb-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.cb-grid .card{margin:0}.cb-grid input{text-align:center;font-weight:900}
+
+/* v0.3 — brighter CLUBHOUSE-style results and novelty graphics */
+.award{box-shadow:0 5px 14px rgba(23,50,35,.07);border:1px solid rgba(23,50,35,.06)}
+.award.stick{background:#fff0a8;border-left-color:#d19a00}
+.award.runner{background:#d9edf8;border-left-color:#4e91bf}
+.award.nett{background:#c9ead3;border-left-color:#21834f}
+.award.purple{background:#e5d3f5;border-left-color:#8157a8}
+.award.pink{background:#f7bfd0;border-left-color:#d92f70}
+.novelty-results-title{margin-top:24px;padding:9px 12px;border-radius:11px;background:#d7aa33;color:#173223;text-align:center;text-transform:uppercase;letter-spacing:.04em;font-weight:950}
+.novelty-result-card{position:relative;overflow:hidden;min-height:126px;padding:14px 14px 13px 82px!important;border:2px solid #e2c05f!important;background:#fff8dc!important;box-shadow:0 5px 14px rgba(113,80,8,.10)}
+.novelty-result-card .novelty-art{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:55px;height:55px;display:flex;align-items:center;justify-content:center}
+.novelty-result-card .novelty-art svg{width:52px;height:52px}
+.novelty-result-card .novelty-result-label{font-size:.82rem;font-weight:950;text-transform:uppercase;color:#765610;letter-spacing:.025em}
+.novelty-result-card .novelty-result-hole{font-size:.74rem;color:#68736c;margin-top:2px}
+.novelty-result-card .novelty-result-name{font-size:1.08rem;line-height:1.08;font-weight:950;color:#173223;margin-top:9px;overflow-wrap:anywhere}
+@keyframes noveltyPop{0%{opacity:0;transform:translateY(12px) scale(.97)}70%{opacity:1;transform:translateY(-2px) scale(1.01)}100%{opacity:1;transform:translateY(0) scale(1)}}
+#noveltyResults .novelty-result-card{animation:noveltyPop .42s ease both}
+#noveltyResults .novelty-result-card:nth-child(2){animation-delay:.06s}#noveltyResults .novelty-result-card:nth-child(3){animation-delay:.12s}#noveltyResults .novelty-result-card:nth-child(4){animation-delay:.18s}#noveltyResults .novelty-result-card:nth-child(5){animation-delay:.24s}
+
+@media(max-width:560px){.scorebox{grid-template-columns:1fr 70px 70px}.scorebox .nettcol,.scorebox .netthead{display:none}.player-line{grid-template-columns:1fr 74px auto}.novelty-grid{grid-template-columns:1fr}.cb-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+<header><span class="version">OTHER v0.3</span><h1>OLD FARTS — CLUBHOUSE</h1><p>OTHER Team Competition</p></header>
+<main>
+<section id="s1" class="screen active">
+ <div class="eyebrow">Screen 1</div><h2>Today's Competition</h2><p class="sub">Use this file only for an OTHER team competition. Normal CLUBHOUSE remains untouched.</p>
+ <div class="card"><label>Competition Type</label><select id="compType"><option>OTHER</option></select><label>Competition Name</label><input id="compName" placeholder="e.g. Italian Ambrose"><label>Date</label><input id="compDate" type="date"></div>
+ <div class="notice">Existing CLUBHOUSE handicaps are used only to calculate team handicaps. No permanent player handicap changes are made.</div>
+ <div class="nav"><span></span><button class="btn orange" onclick="startOther()">BUILD TEAMS →</button></div>
+</section>
+
+<section id="s2" class="screen">
+ <div class="eyebrow">Screen 2</div><h2>Build Teams</h2><p class="sub">Each team begins with two players. Add Player allows up to five players in any team.</p>
+ <div id="teamsBuild"></div><button class="btn secondary" onclick="addTeam()">+ ADD TEAM</button>
+ <div id="allocSummary" class="summary"></div>
+ <div class="nav"><button class="btn secondary" onclick="show('s1')">← BACK</button><button class="btn orange" onclick="reviewTeams()">REVIEW TEAMS →</button></div>
+</section>
+
+<section id="s3" class="screen">
+ <div class="eyebrow">Screen 3</div><h2>Review & Confirm Teams</h2><p class="sub">Final checkpoint before scoring. Confirm every player and calculated Team Handicap.</p>
+ <div id="teamsReview"></div><div id="reviewSummary" class="summary"></div>
+ <div class="nav"><button class="btn secondary" onclick="show('s2')">← EDIT TEAMS</button><button class="btn orange" onclick="confirmTeams()">CONFIRM TEAMS →</button></div>
+</section>
+
+<section id="s4" class="screen">
+ <div class="eyebrow">Screen 4</div><h2>Enter Team Scores</h2><p class="sub">Enter one Gross score for each team. CLUBHOUSE calculates Team Nett automatically.</p>
+ <div id="scoreCards"></div><div id="scoreSummary" class="summary"></div>
+ <div class="nav"><button class="btn secondary" onclick="show('s3')">← REVIEW TEAMS</button><button class="btn orange" onclick="prepareResults()">REVIEW RESULTS →</button></div>
+</section>
+
+<section id="s5" class="screen">
+ <div class="eyebrow">Screen 5</div><h2>Enter Novelty Winners</h2><p class="sub">Enter all novelty winners before publishing the complete OTHER competition results.</p>
+ <div id="noveltyGrid" class="novelty-grid"></div>
+ <div class="nav"><button class="btn secondary" onclick="show('s4')">← SCORES</button><button class="btn orange" onclick="confirmNovelties()">REVIEW RESULTS →</button></div>
+</section>
+
+<section id="s6" class="screen">
+ <div class="eyebrow">Screen 6</div><h2>OTHER Competition Results</h2><p class="sub">Best Off the Stick, Nett placings, Pinkies and Novelty Winners. Ties use progressive countback: 9 → 8 → 7 → 6 → 5.</p>
+ <div id="resultAwards"></div>
+ <div class="novelty-results-title">Novelty Winners</div><div id="noveltyResults" class="novelty-grid" style="margin-top:10px"></div>
+ <div class="notice">Results do not change any player's permanent CLUBHOUSE handicap.</div>
+ <div class="nav"><button class="btn secondary" onclick="show('s5')">← NOVELTIES</button><button class="btn orange" onclick="confirmResults()">CONFIRM RESULTS →</button></div>
+</section>
+
+<section id="s7" class="screen">
+ <div class="eyebrow">Screen 7</div><h2>Finalise OTHER Round</h2><p class="sub">Complete these final steps in order. The OTHER JSON is an archive record only and is separate from normal CLUBHOUSE Reports 1–7.</p>
+ <div class="card final-actions"><button class="btn gold" onclick="saveProgress()">1. SAVE PROGRESS</button><button id="jsonBtn" class="btn orange" onclick="downloadJson()">2. SEND JSON TO ROBBIE</button><button id="finishBtn" class="btn" onclick="finishOther()">3. FINISH ROUND</button></div>
+ <div id="finalStatus" class="notice">Round ready to save.</div>
+</section>
+</main>
+</div>
+
+<div id="cbModal" class="modal"><div class="modal-card"><h3 id="cbTitle">Countback</h3><p id="cbHelp" class="sub"></p><div id="cbInputs" class="cb-grid"></div><div style="margin-top:12px"><button class="btn orange" onclick="saveCountbackHole()">SAVE COUNTBACK</button></div></div></div>
+
+<script>
+const officialPlayers=[
+{id:"P001",name:"Ken Anderson",current:-5},{id:"P002",name:"Stephen (Ando) Anderson",current:-3},{id:"P003",name:"Michael Barnes",current:-3},{id:"P004",name:"John Bastow",current:2},{id:"P005",name:"Greg Bennett",current:1},{id:"P006",name:"Garry Brown",current:-6},{id:"P007",name:"Gary Bull",current:2},{id:"P008",name:"Jason Cuthbertson",current:-8},{id:"P009",name:"Charles Eliot",current:-7},{id:"P010",name:"Chris Falzon",current:-6},{id:"P011",name:"John Featherston",current:-7},{id:"P012",name:"Glen (SHARKY) Fisher",current:3},{id:"P013",name:"Allan Freeman",current:-1},{id:"P014",name:"Peter Guest",current:-1},{id:"P015",name:"Philip Hayes",current:-7},{id:"P016",name:"Ross Higgins",current:0},{id:"P017",name:"Gerard Holdstock",current:-5},{id:"P018",name:"Jim Isabella",current:-6},{id:"P019",name:"Denis James",current:-2},{id:"P020",name:"Mick Keohane",current:-5},{id:"P021",name:"Chris Koo",current:-6},{id:"P022",name:"Roy Krul",current:-6},{id:"P023",name:"Sam LaRosa",current:2},{id:"P024",name:"Peter Macleod",current:2},{id:"P025",name:"Ian (NARKY) Macmillan",current:-3},{id:"P026",name:"Bernie Magennis",current:1},{id:"P027",name:"Lui Marini",current:3},{id:"P028",name:"Ian (RED) Martyn",current:-6},{id:"P029",name:"Dave Matthews",current:-4},{id:"P030",name:"Robbie Menezes",current:0},{id:"P031",name:"Eren Monza",current:-6},{id:"P032",name:"Stephen Munro",current:-1},{id:"P033",name:"Mick Murray",current:1},{id:"P034",name:"Barry Ogston",current:-8},{id:"P035",name:"Grant Pearse",current:-6},{id:"P036",name:"Tony Ring",current:-8},{id:"P037",name:"Andrew Sandilands",current:0},{id:"P038",name:"Perry Sandilands",current:-8},{id:"P039",name:"Peter Slevison",current:3},{id:"P040",name:"Peter Smith",current:-6},{id:"P041",name:"Stephen Squirrell",current:-6},{id:"P042",name:"Philip Taylor",current:1},{id:"P043",name:"John Taylor",current:0},{id:"P044",name:"Glenn Todd",current:-2},{id:"P045",name:"Rich Watkiss",current:3}
+];
+function loadPlayers(){try{const saved=JSON.parse(localStorage.getItem('clubhousePlayers')||'null');if(Array.isArray(saved)&&saved.length){return officialPlayers.map(op=>{const s=saved.find(x=>x.id===op.id||x.name===op.name);return s?{...op,current:Number(s.current)}:{...op}})}}catch(e){}return officialPlayers.map(x=>({...x}))}
+const players=loadPlayers();
+const KEY='clubhouseOtherDraftV02';
+let state={competition:'',date:'',teams:[],novelties:{n1:'',n3:'',n4:'',n6:'',n7:''},results:null,saved:false,jsonDownloaded:false};
+let cbQueue=[],cbTask=null,cbHole=9;
+function signed(v){v=Number(v);if(v>0)return '+'+trim(v);if(v===0)return '0';return trim(v)}
+function trim(v){return Number.isInteger(Number(v))?String(Number(v)):Number(v).toFixed(2).replace(/0+$/,'').replace(/\.$/,'')}
+function round2(v){return Math.round((Number(v)+Number.EPSILON)*100)/100}
+function show(id){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');scrollTo(0,0);if(id==='s2')renderBuild();if(id==='s3')renderReview();if(id==='s4')renderScores();if(id==='s5')renderNovelties();if(id==='s6')renderResults();}
+function startOther(){const name=document.getElementById('compName').value.trim(),date=document.getElementById('compDate').value;if(!name){alert('Enter the OTHER competition name.');return}if(!date){alert('Select the competition date.');return}state.competition=name;state.date=date;if(!state.teams.length)addTeam(false);show('s2')}
+function playerById(id){return players.find(p=>p.id===id)}
+function selectedIds(){return state.teams.flatMap(t=>t.playerIds).filter(Boolean)}
+function options(selected){return '<option value="">Select Player</option>'+players.slice().sort((a,b)=>a.name.localeCompare(b.name)).map(p=>`<option value="${p.id}" ${p.id===selected?'selected':''}>${p.name} (${signed(p.current)})</option>`).join('')}
+function newTeam(){return {id:'T'+(Date.now())+Math.random().toString(16).slice(2),playerIds:['',''],gross:null,holes:{},teamHandicap:0,nett:null}}
+function addTeam(render=true){state.teams.push(newTeam());if(render)renderBuild()}
+function removeTeam(i){if(state.teams.length===1){alert('At least one team is required.');return}state.teams.splice(i,1);renderBuild()}
+function addPlayerSlot(i){if(state.teams[i].playerIds.length>=5){alert('Maximum 5 players per team.');return}state.teams[i].playerIds.push('');renderBuild()}
+function removePlayerSlot(ti,pi){if(state.teams[ti].playerIds.length<=2){alert('Each team must contain at least 2 players.');return}state.teams[ti].playerIds.splice(pi,1);renderBuild()}
+function choosePlayer(ti,pi,val){if(val&&selectedIds().some((id,idx)=>id===val && !(state.teams[ti].playerIds[pi]===id))){/* handled below using count */}const before=state.teams[ti].playerIds[pi];state.teams[ti].playerIds[pi]=val;const ids=selectedIds();if(val&&ids.filter(x=>x===val).length>1){state.teams[ti].playerIds[pi]=before;alert('That player is already allocated to another team.');renderBuild();return}calcTeam(state.teams[ti]);renderBuild()}
+function calcTeam(t){const ps=t.playerIds.filter(Boolean).map(playerById).filter(Boolean);t.teamHandicap=ps.length?round2(ps.reduce((a,p)=>a+Number(p.current),0)/ps.length):0;t.nett=(t.gross!==null&&t.gross!=='')?round2(Number(t.gross)+t.teamHandicap):null;return t}
+function teamLabel(t,i){const names=t.playerIds.filter(Boolean).map(id=>playerById(id)?.name).filter(Boolean);return names.length?names.join(' / '):`Team ${i+1}`}
+function renderBuild(){const wrap=document.getElementById('teamsBuild');wrap.innerHTML=state.teams.map((t,ti)=>{calcTeam(t);return `<div class="card team-card"><div class="team-title"><h3>TEAM ${ti+1}</h3><button class="btn danger small" onclick="removeTeam(${ti})">Remove Team</button></div>${t.playerIds.map((id,pi)=>`<div class="player-line"><div><label>Player ${pi+1}</label><select onchange="choosePlayer(${ti},${pi},this.value)">${options(id)}</select></div><div><label>H/C</label><div class="hc">${id?signed(playerById(id)?.current):'—'}</div></div><div>${pi>=2?`<button class="btn danger small" onclick="removePlayerSlot(${ti},${pi})">×</button>`:''}</div></div>`).join('')}<button class="btn secondary small" onclick="addPlayerSlot(${ti})" ${t.playerIds.length>=5?'disabled':''}>+ ADD PLAYER</button><div class="team-hc">Team Handicap: ${t.playerIds.filter(Boolean).length>=2?signed(t.teamHandicap):'—'}</div></div>`}).join('');const n=selectedIds().length,counts={2:0,3:0,4:0,5:0};state.teams.forEach(t=>{const c=t.playerIds.filter(Boolean).length;if(counts[c]!=null)counts[c]++});const bits=[];if(counts[2])bits.push(`${counts[2]} Pair${counts[2]===1?'':'s'}`);if(counts[3])bits.push(`${counts[3]} Trio${counts[3]===1?'':'s'}`);if(counts[4])bits.push(`${counts[4]} Four-player Team${counts[4]===1?'':'s'}`);if(counts[5])bits.push(`${counts[5]} Five-player Team${counts[5]===1?'':'s'}`);document.getElementById('allocSummary').textContent=`${n} Players Allocated · ${state.teams.length} Teams Created${bits.length?' · '+bits.join(' · '):''}`}
+function validateTeams(){if(!state.teams.length)return 'Add at least one team.';for(let i=0;i<state.teams.length;i++){const ids=state.teams[i].playerIds.filter(Boolean);if(ids.length<2)return `Team ${i+1} needs at least 2 players.`;if(ids.length!==state.teams[i].playerIds.length)return `Team ${i+1} has an empty player slot. Select the player or remove the extra slot.`}const ids=selectedIds();if(new Set(ids).size!==ids.length)return 'A player is allocated more than once.';return ''}
+function reviewTeams(){const e=validateTeams();if(e){alert(e);return}state.teams.forEach(calcTeam);show('s3')}
+function renderReview(){document.getElementById('teamsReview').innerHTML=state.teams.map((t,i)=>`<div class="card team-card"><div class="team-title"><h3>TEAM ${i+1}</h3><b>${t.playerIds.length} players</b></div>${t.playerIds.map(id=>{const p=playerById(id);return `<div class="review-member"><span>${p.name}</span><b>${signed(p.current)}</b></div>`}).join('')}<div class="team-hc">Team Handicap: ${signed(t.teamHandicap)}</div></div>`).join('');document.getElementById('reviewSummary').textContent=`${selectedIds().length} Players · ${state.teams.length} Teams · Handicaps calculated from current CLUBHOUSE values.`}
+function confirmTeams(){const e=validateTeams();if(e){alert(e);return}if(!confirm('Confirm and lock these team selections for scoring?'))return;show('s4')}
+function setGross(i,val){const n=Number(val);state.teams[i].gross=(val===''?null:n);calcTeam(state.teams[i]);state.results=null;renderScores()}
+function renderScores(){state.teams.forEach(calcTeam);document.getElementById('scoreCards').innerHTML=state.teams.map((t,i)=>`<div class="card"><div class="team-title"><h3>TEAM ${i+1}</h3><span class="muted">${teamLabel(t,i)}</span></div><div class="scorebox"><div></div><div class="head">Gross</div><div class="head">H/C</div><div class="head netthead">Nett</div><div><b>${t.playerIds.map(id=>playerById(id).name).join(' / ')}</b></div><input type="number" min="1" step="1" inputmode="numeric" value="${t.gross??''}" onchange="setGross(${i},this.value)"><div class="value">${signed(t.teamHandicap)}</div><div class="value nettcol">${t.nett===null?'—':trim(t.nett)}</div></div></div>`).join('');const entered=state.teams.filter(t=>t.gross!==null&&Number(t.gross)>0).length;document.getElementById('scoreSummary').textContent=`${entered} of ${state.teams.length} Team Scores Entered`}
+function awardTieGroups(){
+ const valid=state.teams.filter(t=>t.gross!==null);
+ const groups=[];
+ const grossSorted=[...valid].sort((a,b)=>Number(a.gross)-Number(b.gross));
+ const nettSorted=[...valid].sort((a,b)=>Number(a.nett)-Number(b.nett));
+ const pinkSorted=[...valid].sort((a,b)=>Number(b.nett)-Number(a.nett));
+ const lowGross=Number(grossSorted[0]?.gross);
+ const stick=valid.map((t,i)=>({t,i})).filter(x=>Number(x.t.gross)===lowGross);
+ if(stick.length>1)groups.push({kind:'gross',mode:'low',label:'Best Off the Stick',score:lowGross,idxs:stick.map(x=>state.teams.indexOf(x.t))});
+ const slots=2;
+ const nettValues=[...new Set(nettSorted.slice(0,slots).map(t=>Number(t.nett)))];
+ nettValues.forEach(v=>{
+   const tied=valid.filter(t=>Number(t.nett)===v);
+   if(tied.length>1){
+     const before=nettSorted.filter(t=>Number(t.nett)<v).length;
+     const pos=[];for(let i=before;i<Math.min(before+tied.length,slots);i++)pos.push(i===0?'Nett Winner':'Nett Runner-up');
+     groups.push({kind:'nett',mode:'low',label:pos.join(' / '),score:v,idxs:tied.map(t=>state.teams.indexOf(t))});
+   }
+ });
+ const pinkValues=[...new Set(pinkSorted.slice(0,slots).map(t=>Number(t.nett)))];
+ pinkValues.forEach(v=>{
+   const tied=valid.filter(t=>Number(t.nett)===v);
+   if(tied.length>1){
+     const before=pinkSorted.filter(t=>Number(t.nett)>v).length;
+     const pos=[];for(let i=before;i<Math.min(before+tied.length,slots);i++)pos.push(i===0?'Pinkies Nett Winner':'Pinkies Nett Runner-up');
+     groups.push({kind:'pinkies',mode:'high',label:pos.join(' / '),score:v,idxs:tied.map(t=>state.teams.indexOf(t))});
+   }
+ });
+ return groups;
+}
+function compareCB(a,b,mode='low'){
+ for(let h=9;h>=5;h--){const av=a.holes?.[h],bv=b.holes?.[h];if(av==null||bv==null)continue;if(av!==bv)return mode==='high'?bv-av:av-bv}
+ return 0
+}
+function computeResults(){
+ const grossSort=state.teams.slice().sort((a,b)=>Number(a.gross)-Number(b.gross)||compareCB(a,b,'low'));
+ const nettSort=state.teams.slice().sort((a,b)=>Number(a.nett)-Number(b.nett)||compareCB(a,b,'low'));
+ const pinkSort=state.teams.slice().sort((a,b)=>Number(b.nett)-Number(a.nett)||compareCB(a,b,'high'));
+ return {stick:grossSort[0],nettWinner:nettSort[0],nettRunner:nettSort[1]||null,pinkWinner:pinkSort[0],pinkRunner:pinkSort[1]||null}
+}
+function prepareResults(){
+ if(state.teams.some(t=>t.gross===null||!Number.isFinite(Number(t.gross))||Number(t.gross)<1)){alert('Enter a valid Gross score for every team.');return}
+ state.teams.forEach(calcTeam);cbQueue=awardTieGroups();if(cbQueue.length){startNextCountback();}else{state.results=computeResults();show('s5')}
+}
+function startNextCountback(){if(!cbQueue.length){state.results=computeResults();show('s5');return}cbTask=cbQueue.shift();cbHole=9;openCB()}
+function cbSignature(t,from=9,to=cbHole){const a=[];for(let h=from;h>=to;h--)a.push(t.holes?.[h]??null);return a.join('|')}
+function openCB(){
+ const teams=cbTask.idxs.map(i=>state.teams[i]);document.getElementById('cbTitle').textContent=`${cbTask.label} — Hole ${cbHole}`;
+ document.getElementById('cbHelp').textContent=`Score ${trim(cbTask.score)} is tied. Enter Hole ${cbHole} only. ${cbTask.mode==='high'?'Higher':'Lower'} hole score wins this countback. If the tie remains, CLUBHOUSE will ask for Hole ${cbHole-1}.`;
+ document.getElementById('cbInputs').innerHTML=teams.map((t,k)=>`<div class="card"><b>${teamLabel(t,cbTask.idxs[k])}</b><label>Hole ${cbHole}</label><input type="number" min="1" step="1" inputmode="numeric" data-ti="${cbTask.idxs[k]}" value="${t.holes?.[cbHole]??''}"></div>`).join('');document.getElementById('cbModal').classList.add('show')
+}
+function saveCountbackHole(){
+ const inputs=[...document.querySelectorAll('#cbInputs input')];if(inputs.some(i=>!i.value||Number(i.value)<1)){alert('Enter the hole score for every tied team.');return}
+ inputs.forEach(i=>{const t=state.teams[Number(i.dataset.ti)];t.holes=t.holes||{};t.holes[cbHole]=Number(i.value)});
+ const buckets={};cbTask.idxs.forEach(i=>{const k=cbSignature(state.teams[i]);(buckets[k]??=[]).push(i)});const unresolved=Object.values(buckets).filter(a=>a.length>1);
+ if(!unresolved.length||cbHole===5){document.getElementById('cbModal').classList.remove('show');if(unresolved.length&&cbHole===5)alert('A tie remains after Hole 5. CLUBHOUSE will mark it unresolved for the organisers to decide manually.');startNextCountback();return}
+ // Continue only with teams still tied; already-separated teams no longer need more hole scores.
+ const next=[];unresolved.forEach(ids=>next.push({...cbTask,idxs:ids}));cbQueue=next.concat(cbQueue);document.getElementById('cbModal').classList.remove('show');startNextCountback();
+}
+function countbackNote(team,kind){
+ if(!team)return '';const mode=kind==='pinkies'?'high':'low';const value=kind==='gross'?Number(team.gross):Number(team.nett);const tied=state.teams.filter(t=>t!==team&&Number(kind==='gross'?t.gross:t.nett)===value);if(!tied.length)return '';
+ const ordered=[team,...tied].slice().sort((a,b)=>compareCB(a,b,mode));if(ordered[0]!==team)return '';if(ordered.length<2||compareCB(ordered[0],ordered[1],mode)===0)return 'Tie remains after Hole 5';
+ for(let h=9;h>=5;h--){const a=ordered[0].holes?.[h],b=ordered[1].holes?.[h];if(a!=null&&b!=null&&a!==b)return `Won on countback — Hole ${h}`}
+ return '';
+}
+function awardHtml(cls,label,t,kind,i){if(!t)return '';return `<div class="award ${cls}"><span>${label}</span><b>${teamLabel(t,i)} — ${kind==='gross'?trim(t.gross)+' Gross':trim(t.nett)+' Nett'}</b><div class="muted">Team H/C ${signed(t.teamHandicap)}${kind!=='gross'?` · Gross ${trim(t.gross)}`:''}</div>${countbackNote(t,kind)?`<div class="countback">${countbackNote(t,kind)}</div>`:''}</div>`}
+function noveltyDefs(){return [['n1','1st NTP','Hole 1'],['n3','3rd Drive & Pitch','Hole 3'],['n4','4th NTP','Hole 4'],['n6','6th NTP','Hole 6'],['n7','7th Longest Drive','Hole 7']]}
+function noveltyIcon(k){
+ const flag=`<svg viewBox="0 0 64 64" aria-hidden="true"><ellipse cx="32" cy="54" rx="25" ry="6" fill="#77b85a"></ellipse><path d="M27 51V10" stroke="#177a39" stroke-width="4"></path><path d="M29 11l25 8-25 9z" fill="#e04f5f"></path><ellipse cx="31" cy="51" rx="7" ry="3" fill="#e9f1e5" stroke="#467b3b"></ellipse></svg>`;
+ const golfer=`<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="25" cy="10" r="6" fill="#c68b5c"></circle><path d="M25 17l8 15-10 13M31 27l15-9M24 29l-12 8M23 44l-9 12M24 44l14 10" fill="none" stroke="#244d3a" stroke-width="5" stroke-linecap="round"></path><path d="M46 18l10 29" stroke="#555" stroke-width="3"></path><circle cx="57" cy="52" r="3" fill="#fff" stroke="#777"></circle></svg>`;
+ return (k==='n3'||k==='n7')?golfer:flag;
+}
+function renderNovelties(){const ns=noveltyDefs();document.getElementById('noveltyGrid').innerHTML=ns.map(([k,l,h])=>`<div class="card"><b>${l}</b><div class="muted">${h}</div><select onchange="state.novelties.${k}=this.value"><option value="NADA" ${state.novelties[k]==='NADA'?'selected':''}>NADA</option>${players.slice().sort((a,b)=>a.name.localeCompare(b.name)).map(p=>`<option ${state.novelties[k]===p.name?'selected':''}>${p.name}</option>`).join('')}</select></div>`).join('')}
+function confirmNovelties(){for(const k of ['n1','n3','n4','n6','n7'])if(!state.novelties[k])state.novelties[k]='NADA';show('s6')}
+function renderResults(){if(!state.results)state.results=computeResults();const r=state.results;document.getElementById('resultAwards').innerHTML=awardHtml('stick','Best Off the Stick',r.stick,'gross',state.teams.indexOf(r.stick))+awardHtml('runner','Nett Runner-up',r.nettRunner,'nett',state.teams.indexOf(r.nettRunner))+awardHtml('nett','Nett Winner',r.nettWinner,'nett',state.teams.indexOf(r.nettWinner))+awardHtml('purple','Pinkies Nett Runner-up',r.pinkRunner,'pinkies',state.teams.indexOf(r.pinkRunner))+awardHtml('pink','Pinkies Nett Winner',r.pinkWinner,'pinkies',state.teams.indexOf(r.pinkWinner));document.getElementById('noveltyResults').innerHTML=noveltyDefs().map(([k,l,h])=>`<div class="card novelty-result-card"><div class="novelty-art">${noveltyIcon(k)}</div><div class="novelty-result-label">${l}</div><div class="novelty-result-hole">${h}</div><div class="novelty-result-name">${state.novelties[k]||'NADA'}</div></div>`).join('')}
+function confirmResults(){if(!confirm('Confirm these OTHER competition results and novelty winners? No player handicaps will be changed.'))return;show('s7')}
+function jsonObject(){const r=state.results||computeResults();const teamObj=t=>t?{teamNumber:state.teams.indexOf(t)+1,players:t.playerIds.map(id=>{const p=playerById(id);return {playerId:p.id,name:p.name,handicap:p.current}}),teamHandicap:t.teamHandicap,gross:t.gross,nett:t.nett,holes:t.holes||{}}:null;return {schemaVersion:'OTHER-1.0',appVersion:'CLUBHOUSE OTHER v0.3',exportSource:'OTHER_ARCHIVE_ONLY',club:'Royal Park Golf — Old Farts',exportedAt:new Date().toISOString(),emailTo:'robbiem2@live.com.au',round:{date:state.date,competition:'OTHER',competitionName:state.competition,handicapAdjustmentsApplied:false,reportsIntegration:false,teamCount:state.teams.length,playerCount:selectedIds().length,teams:state.teams.map(teamObj),results:{stick:teamObj(r.stick),nettRunner:teamObj(r.nettRunner),nettWinner:teamObj(r.nettWinner),pinkRunner:teamObj(r.pinkRunner),pinkWinner:teamObj(r.pinkWinner)},novelties:{...state.novelties}}}}
+function saveProgress(){state.saved=true;localStorage.setItem(KEY,JSON.stringify(state));document.getElementById('finalStatus').textContent='Progress saved on this device. Now send the OTHER JSON to Robbie.'}
+function safeName(s){return s.replace(/[^a-z0-9]+/gi,'_').replace(/^_+|_+$/g,'')}
+function downloadJson(){if(!state.saved){if(!confirm('SAVE PROGRESS has not been pressed yet. Save now before creating the JSON?'))return;saveProgress()}const data=jsonObject(),blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a'),url=URL.createObjectURL(blob);a.href=url;a.download=`Clubhouse_OTHER_${state.date}_${safeName(state.competition)}.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);state.jsonDownloaded=true;localStorage.setItem(KEY,JSON.stringify(state));document.getElementById('finalStatus').textContent='OTHER JSON downloaded. Share that downloaded file to robbiem2@live.com.au, then return here and FINISH ROUND.'}
+function finishOther(){if(!state.saved){alert('Press SAVE PROGRESS first.');return}if(!state.jsonDownloaded){if(!confirm('The OTHER JSON has not been downloaded in this session. Finish anyway?'))return}if(!confirm('Finish this OTHER competition? Individual CLUBHOUSE handicaps will remain unchanged.'))return;localStorage.removeItem(KEY);state={competition:'',date:'',teams:[],novelties:{n1:'',n3:'',n4:'',n6:'',n7:''},results:null,saved:false,jsonDownloaded:false};document.getElementById('compName').value='';document.getElementById('compDate').value=new Date().toISOString().slice(0,10);document.getElementById('finalStatus').textContent='Round complete.';alert('OTHER competition complete. No player handicaps were changed.');show('s1')}
+document.getElementById('compDate').value=new Date().toISOString().slice(0,10);
+</script>
+</body></html>
