@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- saved from url=(0105)file:///C:/Users/robbi/OneDrive/Desktop/CLUBHOUSE%20-%20Handicap%20Software/CLUBHOUSE_v0.6.43a/index.html -->
+<!-- saved from url=(0060)file:///C:/Users/robbi/Downloads/index(20260904-114526).html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#184c37">
-<title>CLUBHOUSE v0.6.43a – Release Candidate 1</title>
+<title>CLUBHOUSE v0.6.44 – Integrated OTHER</title>
 <style>
 :root{
   --green:#184c37;--green2:#24684c;--gold:#c8a44d;--ink:#18211c;--muted:#66736b;
@@ -334,6 +334,34 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
 .pinkies-live-cheer{position:absolute;z-index:3;left:6%;bottom:10.5%;max-width:40%;color:#fff;font-size:1.15rem;font-weight:950;font-style:italic;line-height:1.05;text-shadow:0 2px 5px #9f0044,0 0 2px #9f0044}
 @media(max-height:760px){.pinkies-live-panel{margin-top:17%;padding:18px 13px}.pinkies-live-name{font-size:2.45rem}.pinkies-live-score{font-size:1.7rem}.pinkies-live-kicker{font-size:1rem}}
 
+
+/* ===== CLUBHOUSE v0.6.44 — INTEGRATED OTHER / AMBROSE ===== */
+.other-team-card{border-left:7px solid var(--orange)}
+.other-team-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.other-team-head h3{margin:0;color:var(--green)}
+.other-player-line{display:grid;grid-template-columns:1fr 92px auto;gap:8px;align-items:end;padding:7px 0;border-bottom:1px solid #edf0ee}
+.other-player-line:last-child{border-bottom:0}
+.other-hc{font-weight:900;text-align:center;padding:12px 5px;background:#f3f7f4;border-radius:9px}
+.other-team-hc{font-size:1.12rem;font-weight:950;color:var(--orange);margin-top:10px}
+.other-scorebox{display:grid;grid-template-columns:1.35fr .7fr .7fr .7fr;gap:8px;align-items:center}
+.other-scorebox input{text-align:center;font-weight:900}
+.other-scorebox .value{font-weight:900;text-align:center}
+.other-scorebox .head{font-size:.7rem;text-transform:uppercase;color:#758078;font-weight:900;text-align:center}
+.other-source{background:#edf7f0;border:1px solid #c9dfd0;color:#1d5b40}
+.other-results-title{background:#12662f;color:#fff;text-align:center;font-weight:950;font-size:1rem;padding:8px;border-radius:10px;text-transform:uppercase;letter-spacing:.4px;margin:18px 0 10px}
+.other-novelty-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.other-novelty-grid .card{margin:0}
+.other-lock{border:2px solid var(--gold);background:#fffaf0}
+.other-nochange{border:2px solid var(--green2);background:#edf7f0}
+.presentation-name.other-team-name{font-size:2.15rem;line-height:1.02;max-width:95%}
+@media(max-width:560px){
+  .other-player-line{grid-template-columns:1fr 74px auto}
+  .other-scorebox{grid-template-columns:1fr 70px 70px}
+  .other-scorebox .nettcol,.other-scorebox .netthead{display:none}
+  .other-novelty-grid{grid-template-columns:1fr}
+}
+@media(max-height:760px){.presentation-name.other-team-name{font-size:1.8rem}}
+
 </style>
 </head>
 <body>
@@ -352,26 +380,26 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
   <div class="hero"><h2>Clubhouse</h2><p>Enter completed scorecards, calculate prizes, update handicaps and prepare the Honour Board.</p></div>
   <button class="btn btn-primary" onclick="openTodayRound()">Today’s Round</button>
   <button class="btn btn-secondary" style="background:#e7f4ea;color:#184c37;border:1px solid #9bc6a6" onclick="openGreenJacketSetup()">🟢 Green Jacket Manager</button>
-  <div id="greenJacketHomeStatus" class="import-status hidden"></div>
+  <div id="greenJacketHomeStatus" class="import-status"><b>🟢 Green Jacket Freeze Active</b><br>Friday 31 July 2026 · 45 players</div>
   <button class="btn btn-secondary" onclick="showScreen(&#39;handicaps&#39;)">Current Handicaps</button>
   <button class="btn btn-secondary" onclick="showScreen(&#39;reports&#39;)">Previous Results / Round History</button>
   <button class="btn btn-import" onclick="choosePreviousCompetitionFile()">⬇️ Update CLUBHOUSE from Previous Competition</button>
   <button class="btn btn-secondary" style="border-color:#2f6fb2;background:#eef5ff;color:#214f83" onclick="startClubhouseTrainingDemo()">📖 CLUBHOUSE DEMO — How to Use</button>
   <button class="btn btn-secondary" style="border-color:#c8a44d;background:#fff8dc;color:#6a4a0d" onclick="startPresentationDemo()">🎤 Presentation Demo</button>
   <input id="previousCompetitionFile" class="hidden" type="file" accept="application/json,.json" onchange="importPreviousCompetition(event)">
-  <div id="lastImportStatus" class="import-status"><b>✓ CLUBHOUSE is up to date</b><br>Last imported: Wednesday 12 August 2026 · Stroke<br>14 Players</div>
+  <div id="lastImportStatus" class="import-status"><b>✓ CLUBHOUSE is up to date</b><br>Last imported: Wednesday 2 September 2026 · Stroke<br>19 Players</div>
 </section>
 
 <section id="greenJacketSetup" class="screen">
   <h2>Green Jacket Manager</h2>
   <p class="sub">Freeze the handicap table for the next Green Jacket Day. The frozen list stays locked until deliberately replaced or removed.</p>
   <div class="card">
-    <div class="notice">Normal rounds after the freeze continue to use and update live handicaps. Green Jacket Day always uses the locked frozen handicaps. After Green Jacket Day, the frozen handicaps plus that day’s adjustments become the new live handicaps.</div>
+    <div class="notice">Normal rounds after the freeze continue to use and update live handicaps. Green Jacket Day always uses the locked frozen handicap snapshot. Green Jacket Day itself never changes either the frozen handicaps or the live current handicaps.</div>
     <label>Freeze date</label>
     <input id="greenJacketOfficialFreezeDate" type="date">
     <button type="button" class="btn btn-dark" onclick="freezeOfficialGreenJacketHandicaps()">Freeze Current Handicaps</button>
-    <div id="greenJacketSetupStatus" class="import-status" style="margin-top:12px"><b>No active Green Jacket freeze.</b><br>Choose a date and freeze the current handicap table.</div>
-    <div id="greenJacketManagerActions" class="hidden">
+    <div id="greenJacketSetupStatus" class="import-status" style="margin-top:12px"><b>🟢 Green Jacket Freeze Active</b><br>Freeze date: Friday 31 July 2026 · 45 players<br>Status: Awaiting Green Jacket Day</div>
+    <div id="greenJacketManagerActions" class="">
       <button type="button" class="btn btn-secondary" onclick="toggleGreenJacketFrozenList()">View Frozen Handicaps</button>
       <button type="button" class="btn btn-danger" onclick="removeGreenJacketFreeze()">Remove Green Jacket Freeze</button>
     </div>
@@ -400,8 +428,81 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
       <div id="freezeStatus" class="small" style="margin-top:8px"></div>
     </div>
   </div>
-  <button class="btn btn-primary" onclick="continueRound()">Continue to Scorecards</button>
+  <button id="setupContinueBtn" class="btn btn-primary" onclick="continueRound()">Continue to Scorecards</button>
   <button class="btn btn-secondary" onclick="goHome()">Back</button>
+</section>
+
+
+<section id="otherBuild" class="screen">
+  <h2>OTHER — Build Teams</h2>
+  <p class="sub">Ambrose / team competition. Build pairs, trios, fours or five-player teams. Current handicaps come from CLUBHOUSE.</p>
+  <div id="otherSourceStatus" class="notice other-source"></div>
+  <button class="btn btn-secondary" onclick="choosePreviousCompetitionFile()">Update CLUBHOUSE from Previous Competition</button>
+  <div id="otherTeamsBuild" style="margin-top:14px"></div>
+  <button class="btn btn-secondary" onclick="otherAddTeam()">+ Add Team</button>
+  <div id="otherAllocSummary" class="notice" style="margin-top:12px"></div>
+  <button class="btn btn-primary" onclick="otherReviewTeams()">Review Teams</button>
+  <button class="btn btn-secondary" onclick="showScreen(&#39;setup&#39;)">Back</button>
+</section>
+
+<section id="otherReview" class="screen">
+  <h2>OTHER — Review &amp; Confirm Teams</h2>
+  <p class="sub">Final checkpoint before scoring. Check every team member and Team Handicap.</p>
+  <div id="otherTeamsReview"></div>
+  <div id="otherReviewSummary" class="notice"></div>
+  <button class="btn btn-primary" onclick="otherConfirmTeams()">Confirm Teams</button>
+  <button class="btn btn-secondary" onclick="showScreen(&#39;otherBuild&#39;)">Edit Teams</button>
+</section>
+
+<section id="otherScores" class="screen">
+  <h2>OTHER — Enter Team Scores</h2>
+  <p class="sub">Enter one Gross score for each team. CLUBHOUSE calculates Team Nett automatically.</p>
+  <div id="otherScoreCards"></div>
+  <div id="otherScoreSummary" class="notice"></div>
+  <button class="btn btn-primary" onclick="otherPrepareResults()">Continue to Results</button>
+  <button class="btn btn-secondary" onclick="showScreen(&#39;otherReview&#39;)">Back to Team Review</button>
+</section>
+
+<section id="otherNovelty" class="screen">
+  <h2>OTHER — Novelty Prizes</h2>
+  <p class="sub">Enter all novelty winners before the complete Results Board is created.</p>
+  <div id="otherNoveltyGrid" class="other-novelty-grid"></div>
+  <button class="btn btn-primary" onclick="otherConfirmNovelties()">Review Complete Results</button>
+  <button class="btn btn-secondary" onclick="showScreen(&#39;otherScores&#39;)">Back to Scores</button>
+</section>
+
+<section id="otherResults" class="screen">
+  <h2>OTHER Competition Results</h2>
+  <p class="sub">All Ambrose results and novelty winners are shown together before the CLUBHOUSE Results Board.</p>
+  <div id="otherResultAwards"></div>
+  <div class="other-results-title">Novelty Prizes</div>
+  <div id="otherNoveltyResults" class="other-novelty-grid"></div>
+  <div class="notice">OTHER / Ambrose results never change an individual player handicap.</div>
+  <button class="btn btn-primary" onclick="buildOtherHonour()">Create CLUBHOUSE Results Board</button>
+  <button class="btn btn-secondary" onclick="showScreen(&#39;otherNovelty&#39;)">Back to Novelties</button>
+</section>
+
+<section id="otherNoAdjust" class="screen">
+  <h2>Handicap Review — OTHER</h2>
+  <p class="sub">CLUBHOUSE asks the question, but for Ambrose the answer is NO.</p>
+  <div class="card other-nochange">
+    <h3 style="margin-top:0">No Handicap Changes</h3>
+    <p>Team handicaps were used only to calculate Ambrose Nett scores. No Winner, Runner-up, Pinkies result or countback changes any individual handicap.</p>
+    <div id="otherNoAdjustList"></div>
+  </div>
+  <button class="btn btn-primary" onclick="otherConfirmNoAdjust()">Confirm — NO Handicap Changes</button>
+  <button class="btn btn-secondary" onclick="buildOtherHonour()">Back to Results Board</button>
+</section>
+
+<section id="otherComplete" class="screen">
+  <h2>Competition Complete</h2>
+  <p class="sub">The OTHER round is closed. Save the archive JSON, then finish the round to begin the standard CLUBHOUSE presentation.</p>
+  <div class="card other-lock">
+    <button class="btn btn-secondary" onclick="otherSaveProgress()">1. Save Progress</button>
+    <button class="btn btn-primary" onclick="otherShareJson()">2. Share JSON to Robbie</button>
+    <button id="otherFinishBtn" class="btn btn-dark" onclick="otherFinaliseRound()">3. Finish Round &amp; Start Presentation</button>
+  </div>
+  <div id="otherFinalStatus" class="notice">Round ready to save.</div>
 </section>
 
 <section id="entry" class="screen">
@@ -416,7 +517,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
     <label>Gross score</label><input id="grossInput" type="number" inputmode="numeric" min="1" placeholder="Enter gross score">
     <button class="btn btn-primary" onclick="addScorecard()">Add Completed Card</button>
   </div>
-  <div id="enteredCards"><div class="notice">No completed scorecards entered yet.</div></div>
+  <div id="enteredCards"></div>
   <button class="btn btn-dark" onclick="finishRound()">Finish and Calculate Results</button>
   <button class="btn btn-secondary" onclick="showScreen(&#39;setup&#39;)">Back</button>
 </section>
@@ -541,7 +642,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
      </div>
      <div style="width:92px">
        <label style="margin:0 0 5px">H/C</label>
-       <input type="number" inputmode="numeric" id="hc-1" value="-3" style="text-align:center">
+       <input type="number" inputmode="numeric" id="hc-1" value="-5" style="text-align:center">
      </div>
    </div>
    <div class="player-card">
@@ -591,7 +692,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
      </div>
      <div style="width:92px">
        <label style="margin:0 0 5px">H/C</label>
-       <input type="number" inputmode="numeric" id="hc-6" value="2" style="text-align:center">
+       <input type="number" inputmode="numeric" id="hc-6" value="1" style="text-align:center">
      </div>
    </div>
    <div class="player-card">
@@ -611,7 +712,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
      </div>
      <div style="width:92px">
        <label style="margin:0 0 5px">H/C</label>
-       <input type="number" inputmode="numeric" id="hc-8" value="-7" style="text-align:center">
+       <input type="number" inputmode="numeric" id="hc-8" value="-4" style="text-align:center">
      </div>
    </div>
    <div class="player-card">
@@ -701,7 +802,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
      </div>
      <div style="width:92px">
        <label style="margin:0 0 5px">H/C</label>
-       <input type="number" inputmode="numeric" id="hc-17" value="-6" style="text-align:center">
+       <input type="number" inputmode="numeric" id="hc-17" value="-8" style="text-align:center">
      </div>
    </div>
    <div class="player-card">
@@ -711,7 +812,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
      </div>
      <div style="width:92px">
        <label style="margin:0 0 5px">H/C</label>
-       <input type="number" inputmode="numeric" id="hc-18" value="-1" style="text-align:center">
+       <input type="number" inputmode="numeric" id="hc-18" value="1" style="text-align:center">
      </div>
    </div>
    <div class="player-card">
@@ -731,7 +832,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
      </div>
      <div style="width:92px">
        <label style="margin:0 0 5px">H/C</label>
-       <input type="number" inputmode="numeric" id="hc-20" value="-6" style="text-align:center">
+       <input type="number" inputmode="numeric" id="hc-20" value="-4" style="text-align:center">
      </div>
    </div>
    <div class="player-card">
@@ -751,7 +852,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
      </div>
      <div style="width:92px">
        <label style="margin:0 0 5px">H/C</label>
-       <input type="number" inputmode="numeric" id="hc-22" value="2" style="text-align:center">
+       <input type="number" inputmode="numeric" id="hc-22" value="0" style="text-align:center">
      </div>
    </div>
    <div class="player-card">
@@ -761,7 +862,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
      </div>
      <div style="width:92px">
        <label style="margin:0 0 5px">H/C</label>
-       <input type="number" inputmode="numeric" id="hc-23" value="2" style="text-align:center">
+       <input type="number" inputmode="numeric" id="hc-23" value="1" style="text-align:center">
      </div>
    </div>
    <div class="player-card">
@@ -801,7 +902,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
      </div>
      <div style="width:92px">
        <label style="margin:0 0 5px">H/C</label>
-       <input type="number" inputmode="numeric" id="hc-27" value="-6" style="text-align:center">
+       <input type="number" inputmode="numeric" id="hc-27" value="-5" style="text-align:center">
      </div>
    </div>
    <div class="player-card">
@@ -811,7 +912,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
      </div>
      <div style="width:92px">
        <label style="margin:0 0 5px">H/C</label>
-       <input type="number" inputmode="numeric" id="hc-28" value="-2" style="text-align:center">
+       <input type="number" inputmode="numeric" id="hc-28" value="-3" style="text-align:center">
      </div>
    </div>
    <div class="player-card">
@@ -821,7 +922,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
      </div>
      <div style="width:92px">
        <label style="margin:0 0 5px">H/C</label>
-       <input type="number" inputmode="numeric" id="hc-29" value="0" style="text-align:center">
+       <input type="number" inputmode="numeric" id="hc-29" value="1" style="text-align:center">
      </div>
    </div>
    <div class="player-card">
@@ -841,7 +942,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
      </div>
      <div style="width:92px">
        <label style="margin:0 0 5px">H/C</label>
-       <input type="number" inputmode="numeric" id="hc-31" value="-1" style="text-align:center">
+       <input type="number" inputmode="numeric" id="hc-31" value="-3" style="text-align:center">
      </div>
    </div>
    <div class="player-card">
@@ -851,7 +952,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
      </div>
      <div style="width:92px">
        <label style="margin:0 0 5px">H/C</label>
-       <input type="number" inputmode="numeric" id="hc-32" value="1" style="text-align:center">
+       <input type="number" inputmode="numeric" id="hc-32" value="0" style="text-align:center">
      </div>
    </div>
    <div class="player-card">
@@ -881,7 +982,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
      </div>
      <div style="width:92px">
        <label style="margin:0 0 5px">H/C</label>
-       <input type="number" inputmode="numeric" id="hc-35" value="-8" style="text-align:center">
+       <input type="number" inputmode="numeric" id="hc-35" value="-7" style="text-align:center">
      </div>
    </div>
    <div class="player-card">
@@ -911,7 +1012,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
      </div>
      <div style="width:92px">
        <label style="margin:0 0 5px">H/C</label>
-       <input type="number" inputmode="numeric" id="hc-38" value="3" style="text-align:center">
+       <input type="number" inputmode="numeric" id="hc-38" value="2" style="text-align:center">
      </div>
    </div>
    <div class="player-card">
@@ -921,7 +1022,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
      </div>
      <div style="width:92px">
        <label style="margin:0 0 5px">H/C</label>
-       <input type="number" inputmode="numeric" id="hc-39" value="-6" style="text-align:center">
+       <input type="number" inputmode="numeric" id="hc-39" value="-4" style="text-align:center">
      </div>
    </div>
    <div class="player-card">
@@ -951,7 +1052,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
      </div>
      <div style="width:92px">
        <label style="margin:0 0 5px">H/C</label>
-       <input type="number" inputmode="numeric" id="hc-42" value="0" style="text-align:center">
+       <input type="number" inputmode="numeric" id="hc-42" value="-1" style="text-align:center">
      </div>
    </div>
    <div class="player-card">
@@ -982,34 +1083,41 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
   <h2>Previous Results / Round History</h2>
   <p class="sub">Saved competition results are kept here, separate from Current Handicaps.</p>
   <div id="reportsList"><button type="button" class="report-card history-card history-button" onclick="openHistoricalResultsBoard(0)">
+         <div class="history-title">Wednesday 2 September 2026 — Stroke</div>
+         <div class="history-count">19 Players</div>
+         <div class="history-stick">Winner off the Stick: <b>Denis James</b></div>
+         <div class="history-nett">Nett Winner: <b>Denis James</b></div>
+         <div class="history-pink">Pinkies Winner: <b>Stephen Munro</b></div>
+         <div class="history-open">Tap to open the exact Results Board</div>
+       </button><button type="button" class="report-card history-card history-button" onclick="openHistoricalResultsBoard(1)">
          <div class="history-title">Wednesday 12 August 2026 — Stroke</div>
          <div class="history-count">14 Players</div>
          <div class="history-stick">Winner off the Stick: <b>Robbie Menezes</b></div>
          <div class="history-nett">Nett Winner: <b>Dave Matthews</b></div>
          <div class="history-pink">Pinkies Winner: <b>Glen (SHARKY) Fisher</b></div>
          <div class="history-open">Tap to open the exact Results Board</div>
-       </button><button type="button" class="report-card history-card history-button" onclick="openHistoricalResultsBoard(1)">
+       </button><button type="button" class="report-card history-card history-button" onclick="openHistoricalResultsBoard(2)">
          <div class="history-title">Tuesday 11 August 2026 — Stroke</div>
          <div class="history-count">8 Players</div>
          <div class="history-stick">Winner off the Stick: <b>Glen (SHARKY) Fisher</b></div>
          <div class="history-nett">Nett Winner: <b>Glen (SHARKY) Fisher</b></div>
          <div class="history-pink">Pinkies Winner: <b>Chris Koo</b></div>
          <div class="history-open">Tap to open the exact Results Board</div>
-       </button><button type="button" class="report-card history-card history-button" onclick="openHistoricalResultsBoard(2)">
+       </button><button type="button" class="report-card history-card history-button" onclick="openHistoricalResultsBoard(3)">
          <div class="history-title">Wednesday 22 July 2026 — Stroke</div>
          <div class="history-count">17 Players</div>
          <div class="history-stick">Winner off the Stick: <b>Sam LaRosa</b></div>
          <div class="history-nett">Nett Winner: <b>Dave Matthews</b></div>
          <div class="history-pink">Pinkies Winner: <b>Philip Hayes</b></div>
          <div class="history-open">Tap to open the exact Results Board</div>
-       </button><button type="button" class="report-card history-card history-button" onclick="openHistoricalResultsBoard(3)">
+       </button><button type="button" class="report-card history-card history-button" onclick="openHistoricalResultsBoard(4)">
          <div class="history-title">Friday 17 July 2026 — Stroke</div>
          <div class="history-count">13 Players</div>
          <div class="history-stick">Winner off the Stick: <b>Peter Macleod</b></div>
          <div class="history-nett">Nett Winner: <b>Peter Macleod</b></div>
          <div class="history-pink">Pinkies Winner: <b>Charles Eliot</b></div>
          <div class="history-open">Tap to open the exact Results Board</div>
-       </button><button type="button" class="report-card history-card history-button" onclick="openHistoricalResultsBoard(4)">
+       </button><button type="button" class="report-card history-card history-button" onclick="openHistoricalResultsBoard(5)">
          <div class="history-title">Wednesday 15 July 2026 — Stroke</div>
          <div class="history-count">12 Players</div>
          <div class="history-stick">Winner off the Stick: <b>Gary Bull</b></div>
@@ -1064,7 +1172,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
 </section>
 
 </main>
-<footer>CLUBHOUSE v0.6.43a – Release Candidate 1 · Training Demo · Draft Protected</footer>
+<footer>CLUBHOUSE v0.6.44 – Integrated OTHER · Draft Protected</footer>
 </div>
 
 <div id="editModal" class="modal"><div class="modal-sheet">
@@ -1072,6 +1180,14 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
   <label>Gross score</label><input id="editGross" type="number" inputmode="numeric" min="1">
   <button class="btn btn-primary" onclick="saveEditedScore()">Save Changes</button>
   <button class="btn btn-secondary" onclick="closeEdit()">Cancel</button>
+</div></div>
+
+
+<div id="otherCountbackModal" class="modal"><div class="modal-sheet">
+  <h3 id="otherCountbackTitle">OTHER Countback Required</h3>
+  <p id="otherCountbackHelp" class="sub"></p>
+  <div id="otherCountbackInputs"></div>
+  <button class="btn btn-primary" onclick="otherSaveCountbackHole()">Save Countback</button>
 </div></div>
 
 <div id="countbackModal" class="modal"><div class="modal-sheet">
@@ -1712,6 +1828,8 @@ function competitionChanged(){
   const c=document.getElementById("competition").value;
   document.getElementById("greenNotice").classList.toggle("hidden",c!=="Green Jacket Day");
   document.getElementById("otherCompWrap").classList.toggle("hidden",c!=="Other / Special Competition");
+  const go=document.getElementById("setupContinueBtn");
+  if(go)go.textContent=c==="Other / Special Competition"?"Continue to Teams":"Continue to Scorecards";
   if(c==="Green Jacket Day")updateFreezeStatus()
 }
 
@@ -1722,6 +1840,12 @@ function continueRound(){
  const other=document.getElementById("otherComp").value.trim();
  const name=c==="Other / Special Competition"&&other?other:c;
  const date=document.getElementById("roundDate").value;
+ if(c==="Other / Special Competition"){
+   if(!other){alert("Please enter the OTHER / Ambrose competition name.");return}
+   if(!date){alert("Please select the competition date.");return}
+   startOtherIntegrated(name,date);
+   return
+ }
  let freezeDate="", frozenHandicaps={};
  if(c==="Green Jacket Day"){
    const snapshot=getActiveGreenJacketFreeze();
@@ -1921,7 +2045,8 @@ function countbackDetail(type,player){
  const opponent=ordered[1];
  if(!opponent)return "";
  let hole=null;
- for(let h=9;h>=6;h--){
+ const minHole=data&&data.isOther?5:6;
+ for(let h=9;h>=minHole;h--){
    const a=actual.holes[h],b=opponent.holes[h];
    if(a!=null&&b!=null&&a!==b){hole=h;break}
  }
@@ -1973,6 +2098,16 @@ function openNovelty(){
  syncNoveltyState(true)
 }
 function showAdjustments(){
+ if(round.competition==="Green Jacket Day"){
+   round.adjustments=[];
+   document.getElementById("finalFilePanel").classList.add("hidden");
+   document.getElementById("emailJsonBtn").classList.add("hidden");
+   document.getElementById("finalisePanel").classList.add("hidden");
+   document.getElementById("adjustmentRule").innerHTML="<b>GREEN JACKET DAY — HANDICAPS LOCKED.</b><br>The frozen GJD handicaps and the live current handicaps will not be changed by this competition.";
+   document.getElementById("adjustmentList").innerHTML='<div class="card other-nochange"><h3 style="margin-top:0">No Handicap Changes</h3><p>Green Jacket Day uses the locked handicap snapshot only. Results are recorded, but no handicap penalty or gain is applied.</p></div>';
+   showScreen("adjustments");
+   return
+ }
  syncNoveltyState(true);
  document.getElementById("emailJsonBtn").classList.toggle("hidden",!round.applied);
  document.getElementById("finalFilePanel").classList.toggle("hidden",!round.applied);
@@ -2022,6 +2157,15 @@ if (playerCount >= 20) {
  showScreen("adjustments")
 }
 function reviewUpdatedHandicaps(){
+ if(round.competition==="Green Jacket Day"){
+   document.getElementById("confirmHandicapList").innerHTML=round.scores.map(s=>`
+     <div class="player-card">
+       <div><h3>${s.name}</h3><div class="player-meta">Green Jacket Day — locked</div></div>
+       <div style="text-align:right"><div class="small">No change</div><div class="scoreline">${signed(s.handicapUsed)}</div></div>
+     </div>`).join("");
+   showScreen("confirmHandicaps");
+   return
+ }
  document.getElementById("confirmHandicapList").innerHTML=round.adjustments.map(a=>`
    <div class="player-card">
      <div><h3>${a.name}</h3><div class="player-meta">${a.reasons.join(" and ")}</div></div>
@@ -2089,7 +2233,9 @@ async function importPreviousCompetition(event){
   if(matched===0)throw new Error("No player handicaps in this file matched the CLUBHOUSE player list.");
   localStorage.setItem("clubhousePlayers",JSON.stringify(players));
   localStorage.setItem("clubhousePlayerRegistryVersion",PLAYER_REGISTRY_VERSION);
-   if(r.greenJacketFreeze&&r.greenJacketFreeze.freezeDate&&Array.isArray(r.greenJacketFreeze.players)&&r.greenJacketFreeze.players.length){
+   if(!getActiveGreenJacketFreeze()&&r.greenJacketFreeze&&r.greenJacketFreeze.freezeDate&&Array.isArray(r.greenJacketFreeze.players)&&r.greenJacketFreeze.players.length){
+     // Restore a freeze only when this device has no active locked GJD snapshot.
+     // An existing locked GJD snapshot is never overwritten by a previous-round import.
      saveActiveGreenJacketFreeze(r.greenJacketFreeze);
    }
 
@@ -2100,7 +2246,7 @@ async function importPreviousCompetition(event){
   reports.sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")));
   localStorage.setItem("clubhouseReports",JSON.stringify(reports));
   localStorage.setItem("clubhouseLastImportedCompetition",JSON.stringify({date:r.date,competition:r.competition,playerCount,filename:file.name,importedAt:new Date().toISOString()}));
-  updateLastImportStatus();updateGreenJacketHomeStatus();
+  updateLastImportStatus();updateGreenJacketHomeStatus();if(typeof renderOtherSourceStatus==="function")renderOtherSourceStatus();
   removeObsoleteDraftIfCompletedCompetitionExists();
   alert(`Competition imported successfully.\n\n${matched} player handicaps updated.\nCLUBHOUSE is now up to date.`);
  }catch(err){
@@ -2108,7 +2254,7 @@ async function importPreviousCompetition(event){
  }
 }
 function finalJsonFilename(){
- return `Clubhouse_${round.date||"Round"}_${round.competition.replace(/[^a-z0-9]+/gi,"_")}_v0.6.43a.json`
+ return `Clubhouse_${round.date||"Round"}_${round.competition.replace(/[^a-z0-9]+/gi,"_")}_v0.6.44.json`
 }
 function showFinalFileReady(){
  const panel=document.getElementById("finalFilePanel");
@@ -2124,17 +2270,15 @@ function applyAdjustments(){
  // v0.6.42c: preserve novelty winners before the locked snapshot is created.
  syncNoveltyState(true);
 
- if(round.competition==="Green Jacket Day"){
-   players=players.map(p=>{
-     const frozen=round.frozenHandicaps[p.id];
-     return frozen==null?p:{...p,current:capHandicap(frozen)}
-   })
+ if(round.competition!=="Green Jacket Day"){
+   round.adjustments.forEach(a=>{
+     const p=players.find(p=>p.name===a.name);
+     if(p)p.current=capHandicap(a.new)
+   });
+ }else{
+   // HARD RULE: Green Jacket Day never moves frozen or live handicaps.
+   round.adjustments=[];
  }
-
- round.adjustments.forEach(a=>{
-   const p=players.find(p=>p.name===a.name);
-   if(p)p.current=capHandicap(a.new)
- });
 
  if(round.competition==="Green Jacket Day"){
    const snapshot=getActiveGreenJacketFreeze();
@@ -2155,7 +2299,7 @@ function applyAdjustments(){
  const status=document.getElementById("completeJsonStatus");
  if(status)status.textContent="Final results have not yet been prepared.";
  setFinishEnabled();
- alert("Handicaps confirmed. The round is now locked.");
+ alert(round.competition==="Green Jacket Day"?"Green Jacket Day confirmed. No handicaps were changed. The round is now locked.":"Handicaps confirmed. The round is now locked.");
  showScreen("complete")
 }
 function buildHonour(){
@@ -2462,7 +2606,7 @@ async function emailJSON(){
 
  const locked=lockedData();
  if(round.lockedSnapshot)round.lockedSnapshot.novelties=deepCopy(finalNovelties);
- const payload={schemaVersion:"1.0",appVersion:"0.6.43a",exportSource:"CURRENT_LOCKED_ROUND",club:"Royal Park Golf — Old Farts",exportedAt:new Date().toISOString(),emailTo:"robbiem2@live.com.au",round:{date:locked.date,competition:locked.competition,playerCount:locked.playerCount,greenJacketUsed:locked.competition==="Green Jacket Day",freezeDate:locked.freezeDate||null,greenJacketFreeze:getActiveGreenJacketFreeze(),frozenHandicapsUsed:locked.competition==="Green Jacket Day"?players.map(p=>({playerId:p.id,name:p.name,handicap:(locked.frozenHandicaps&&locked.frozenHandicaps[p.id]!=null)?locked.frozenHandicaps[p.id]:p.current})):[],scores:locked.scores,results:locked.results,novelties:deepCopy(finalNovelties),handicapAdjustments:locked.adjustments,currentHandicapsAfterRound:players.map(p=>({playerId:p.id,name:p.name,current:p.current,greenJacketFrozen:p.green})),honourBoardText:honourText(),handicapsReviewedAndSaved:true}};
+ const payload={schemaVersion:"1.0",appVersion:"0.6.44",exportSource:"CURRENT_LOCKED_ROUND",club:"Royal Park Golf — Old Farts",exportedAt:new Date().toISOString(),emailTo:"robbiem2@live.com.au",round:{date:locked.date,competition:locked.competition,playerCount:locked.playerCount,greenJacketUsed:locked.competition==="Green Jacket Day",freezeDate:locked.freezeDate||null,greenJacketFreeze:getActiveGreenJacketFreeze(),frozenHandicapsUsed:locked.competition==="Green Jacket Day"?players.map(p=>({playerId:p.id,name:p.name,handicap:(locked.frozenHandicaps&&locked.frozenHandicaps[p.id]!=null)?locked.frozenHandicaps[p.id]:p.current})):[],scores:locked.scores,results:locked.results,novelties:deepCopy(finalNovelties),handicapAdjustments:locked.adjustments,currentHandicapsAfterRound:players.map(p=>({playerId:p.id,name:p.name,current:p.current,greenJacketFrozen:p.green})),honourBoardText:honourText(),handicapsReviewedAndSaved:true}};
  const json=JSON.stringify(payload,null,2);
  const filename=finalJsonFilename();
  const file=new File([json],filename,{type:"application/json"});
@@ -2565,7 +2709,7 @@ function presentationStartSlide(data){
 function presentationGrossScoresSlide(data){
  const scores=data.scores||[];
  return `<div class="presentation-slide"><div class="presentation-gross-card">
-   <div class="presentation-gross-title">PLAYER GROSS SCORES</div>
+   <div class="presentation-gross-title">${data.isOther?"TEAM GROSS SCORES":"PLAYER GROSS SCORES"}</div>
    <div class="presentation-gross-list">${scores.map(p=>`<div class="presentation-gross-row"><b>${presentationEsc(p.name)}</b><strong>${presentationEsc(p.gross)} Gross</strong></div>`).join("")}</div>
  </div></div>`
 }
@@ -2588,7 +2732,7 @@ function presentationAwardSlide(label,p,score,kind){
  if(kind==="pinkPlace")cls="presentation-pink";
  return `<div class="presentation-slide"><div class="presentation-award ${cls}"${style}>
    <div class="presentation-award-title">${presentationEsc(label)}</div>${hero}
-   <div class="presentation-name">${presentationFormatName(p.name)}</div>
+   <div class="presentation-name ${presentationData&&presentationData.isOther?"other-team-name":""}">${presentationData&&presentationData.isOther?presentationEsc(p.name).replace(/ \/ /g,"<br>"):presentationFormatName(p.name)}</div>
    <div class="presentation-score">${presentationEsc(score)}</div>
  </div></div>`
 }
@@ -2611,7 +2755,8 @@ function presentationTieSlides(label,tied,scoreText){
  if(tied.length<2||!hasAnyHole)return slides;
  slides.push(presentationCountbackIntro(label,tied,scoreText));
  let groups=[tied];
- for(let hole=9;hole>=6;hole--){
+ const minHole=presentationData&&presentationData.isOther?5:6;
+ for(let hole=9;hole>=minHole;hole--){
    const active=groups.flat();
    if(!active.length)break;
    if(!active.every(p=>p.holes&&(p.holes[hole]!=null||p.holes[String(hole)]!=null)))break;
@@ -2677,6 +2822,195 @@ function buildPresentationSlides(data){
  return slides
 }
 
+
+/* ===== CLUBHOUSE v0.6.44 — INTEGRATED OTHER / AMBROSE LOGIC ===== */
+const OTHER_DRAFT_KEY="clubhouseIntegratedOtherDraftV0644";
+let otherState={competition:"",date:"",teams:[],novelties:{n1:"",n3:"",n4:"",n6:"",n7:""},results:null,saved:false,prepared:false,locked:false};
+let otherCbQueue=[],otherCbTask=null,otherCbHole=9,otherHonourActive=false,otherLockedSnapshot=null;
+
+function otherRound2(v){return Math.round((Number(v)+Number.EPSILON)*100)/100}
+function otherTrim(v){return Number.isInteger(Number(v))?String(Number(v)):Number(v).toFixed(2).replace(/0+$/,"").replace(/\.$/,"")}
+function otherSigned(v){v=Number(v);if(v>0)return "+"+otherTrim(v);if(v===0)return "0";return otherTrim(v)}
+function otherPlayer(id){return players.find(p=>p.id===id)}
+function otherSelectedIds(){return otherState.teams.flatMap(t=>t.playerIds).filter(Boolean)}
+function otherTeamName(t,i){const names=t.playerIds.filter(Boolean).map(id=>otherPlayer(id)?.name).filter(Boolean);return names.length?names.join(" / "):`Team ${i+1}`}
+function otherNewTeam(){return {id:"OT"+Date.now()+Math.random().toString(16).slice(2),playerIds:["",""],gross:null,holes:{},teamHandicap:0,nett:null}}
+function otherCalcTeam(t){
+ const members=t.playerIds.filter(Boolean).map(otherPlayer).filter(Boolean);
+ t.teamHandicap=members.length?otherRound2(members.reduce((a,p)=>a+Number(p.current),0)/members.length):0;
+ t.nett=(t.gross!==null&&t.gross!=="")?otherRound2(Number(t.gross)+t.teamHandicap):null;
+ return t
+}
+function renderOtherSourceStatus(){
+ const el=document.getElementById("otherSourceStatus");if(!el)return;
+ let txt="Using the current CLUBHOUSE handicap table.";
+ try{
+   const info=JSON.parse(localStorage.getItem("clubhouseLastImportedCompetition")||"null");
+   if(info)txt=`Using current CLUBHOUSE handicaps · Last imported ${formatDate(info.date)} · ${info.competition} · ${info.playerCount} Players`;
+ }catch(e){}
+ el.innerHTML=`<b>Handicap source</b><br>${txt}<br>OTHER uses these handicaps for team calculations only and will not change them.`
+}
+function startOtherIntegrated(name,date){
+ otherState={competition:name,date,teams:[otherNewTeam()],novelties:{n1:"",n3:"",n4:"",n6:"",n7:""},results:null,saved:false,prepared:false,locked:false};
+ otherLockedSnapshot=null;otherHonourActive=false;historicalBoardData=null;
+ localStorage.removeItem(OTHER_DRAFT_KEY);
+ renderOtherSourceStatus();renderOtherBuild();showScreen("otherBuild")
+}
+function otherOptions(selected){
+ return '<option value="">Select Player</option>'+players.slice().sort((a,b)=>a.name.localeCompare(b.name)).map(p=>`<option value="${p.id}" ${p.id===selected?"selected":""}>${p.name} (${signed(p.current)})</option>`).join("")
+}
+function otherAddTeam(){otherState.teams.push(otherNewTeam());renderOtherBuild()}
+function otherRemoveTeam(i){if(otherState.teams.length===1){alert("At least one team is required.");return}otherState.teams.splice(i,1);renderOtherBuild()}
+function otherAddPlayerSlot(i){if(otherState.teams[i].playerIds.length>=5){alert("Maximum 5 players per team.");return}otherState.teams[i].playerIds.push("");renderOtherBuild()}
+function otherRemovePlayerSlot(ti,pi){if(otherState.teams[ti].playerIds.length<=2){alert("Each team must contain at least 2 players.");return}otherState.teams[ti].playerIds.splice(pi,1);renderOtherBuild()}
+function otherChoosePlayer(ti,pi,val){
+ const before=otherState.teams[ti].playerIds[pi];otherState.teams[ti].playerIds[pi]=val;
+ const ids=otherSelectedIds();
+ if(val&&ids.filter(x=>x===val).length>1){otherState.teams[ti].playerIds[pi]=before;alert("That player is already allocated to another team.");renderOtherBuild();return}
+ otherCalcTeam(otherState.teams[ti]);renderOtherBuild()
+}
+function renderOtherBuild(){
+ renderOtherSourceStatus();
+ const wrap=document.getElementById("otherTeamsBuild");if(!wrap)return;
+ wrap.innerHTML=otherState.teams.map((t,ti)=>{otherCalcTeam(t);return `<div class="card other-team-card"><div class="other-team-head"><h3>TEAM ${ti+1}</h3><button class="btn btn-danger btn-small" onclick="otherRemoveTeam(${ti})">Remove Team</button></div>${t.playerIds.map((id,pi)=>`<div class="other-player-line"><div><label>Player ${pi+1}</label><select onchange="otherChoosePlayer(${ti},${pi},this.value)">${otherOptions(id)}</select></div><div><label>H/C</label><div class="other-hc">${id?signed(otherPlayer(id)?.current):"—"}</div></div><div>${pi>=2?`<button class="btn btn-danger btn-small" onclick="otherRemovePlayerSlot(${ti},${pi})">×</button>`:""}</div></div>`).join("")}<button class="btn btn-secondary btn-small" onclick="otherAddPlayerSlot(${ti})" ${t.playerIds.length>=5?"disabled":""}>+ Add Player</button><div class="other-team-hc">Team Handicap: ${t.playerIds.filter(Boolean).length>=2?otherSigned(t.teamHandicap):"—"}</div></div>`}).join("");
+ const n=otherSelectedIds().length,counts={2:0,3:0,4:0,5:0};otherState.teams.forEach(t=>{const c=t.playerIds.filter(Boolean).length;if(counts[c]!=null)counts[c]++});
+ const bits=[];if(counts[2])bits.push(`${counts[2]} Pair${counts[2]===1?"":"s"}`);if(counts[3])bits.push(`${counts[3]} Trio${counts[3]===1?"":"s"}`);if(counts[4])bits.push(`${counts[4]} Four-player Team${counts[4]===1?"":"s"}`);if(counts[5])bits.push(`${counts[5]} Five-player Team${counts[5]===1?"":"s"}`);
+ document.getElementById("otherAllocSummary").textContent=`${n} Players Allocated · ${otherState.teams.length} Teams${bits.length?" · "+bits.join(" · "):""}`
+}
+function otherValidateTeams(){
+ if(!otherState.teams.length)return "Add at least one team.";
+ for(let i=0;i<otherState.teams.length;i++){const ids=otherState.teams[i].playerIds.filter(Boolean);if(ids.length<2)return `Team ${i+1} needs at least 2 players.`;if(ids.length!==otherState.teams[i].playerIds.length)return `Team ${i+1} has an empty player slot.`}
+ const ids=otherSelectedIds();if(new Set(ids).size!==ids.length)return "A player is allocated more than once.";return ""
+}
+function otherReviewTeams(){const e=otherValidateTeams();if(e){alert(e);return}otherState.teams.forEach(otherCalcTeam);renderOtherReview();showScreen("otherReview")}
+function renderOtherReview(){
+ document.getElementById("otherTeamsReview").innerHTML=otherState.teams.map((t,i)=>`<div class="card other-team-card"><div class="other-team-head"><h3>TEAM ${i+1}</h3><b>${t.playerIds.length} players</b></div>${t.playerIds.map(id=>{const p=otherPlayer(id);return `<div class="row" style="padding:7px 0;border-bottom:1px solid #eef1ef"><span>${p.name}</span><b>${signed(p.current)}</b></div>`}).join("")}<div class="other-team-hc">Team Handicap: ${otherSigned(t.teamHandicap)}</div></div>`).join("");
+ document.getElementById("otherReviewSummary").textContent=`${otherSelectedIds().length} Players · ${otherState.teams.length} Teams · Team handicaps calculated from current CLUBHOUSE values.`
+}
+function otherConfirmTeams(){const e=otherValidateTeams();if(e){alert(e);return}if(!confirm("Confirm these Ambrose teams for scoring?"))return;renderOtherScores();showScreen("otherScores")}
+function otherSetGross(i,val){otherState.teams[i].gross=val===""?null:Number(val);otherCalcTeam(otherState.teams[i]);otherState.results=null;renderOtherScores()}
+function renderOtherScores(){
+ otherState.teams.forEach(otherCalcTeam);
+ document.getElementById("otherScoreCards").innerHTML=otherState.teams.map((t,i)=>`<div class="card"><div class="other-team-head"><h3>TEAM ${i+1}</h3><span class="small">${otherTeamName(t,i)}</span></div><div class="other-scorebox"><div></div><div class="head">Gross</div><div class="head">H/C</div><div class="head netthead">Nett</div><div><b>${otherTeamName(t,i)}</b></div><input type="number" min="1" step="1" inputmode="numeric" value="${t.gross??""}" onchange="otherSetGross(${i},this.value)"><div class="value">${otherSigned(t.teamHandicap)}</div><div class="value nettcol">${t.nett===null?"—":otherTrim(t.nett)}</div></div></div>`).join("");
+ const entered=otherState.teams.filter(t=>t.gross!==null&&Number(t.gross)>0).length;document.getElementById("otherScoreSummary").textContent=`${entered} of ${otherState.teams.length} Team Scores Entered`
+}
+function otherCompareCB(a,b,mode="low"){
+ for(let h=9;h>=5;h--){const av=a.holes?.[h],bv=b.holes?.[h];if(av==null||bv==null)continue;if(av!==bv)return mode==="high"?bv-av:av-bv}
+ return 0
+}
+function otherFieldSlots(){return otherSelectedIds().length>=20?3:2}
+function otherAwardTieGroups(){
+ const valid=otherState.teams.filter(t=>t.gross!==null),groups=[],slots=otherFieldSlots();
+ const grossSorted=[...valid].sort((a,b)=>Number(a.gross)-Number(b.gross));
+ const nettSorted=[...valid].sort((a,b)=>Number(a.nett)-Number(b.nett));
+ const pinkSorted=[...valid].sort((a,b)=>Number(b.nett)-Number(a.nett));
+ const lowGross=Number(grossSorted[0]?.gross);
+ const stick=valid.filter(t=>Number(t.gross)===lowGross);if(stick.length>1)groups.push({kind:"gross",mode:"low",label:"Winner Off the Stick",score:lowGross,idxs:stick.map(t=>otherState.teams.indexOf(t))});
+ const addRankTies=(sorted,kind,mode,labelFor)=>{
+   const boundary=sorted.slice(0,slots).map(t=>Number(t.nett));
+   [...new Set(boundary)].forEach(v=>{
+     const tied=valid.filter(t=>Number(t.nett)===v);
+     if(tied.length>1){
+       const before=sorted.filter(t=>mode==="low"?Number(t.nett)<v:Number(t.nett)>v).length;
+       const labels=[];for(let i=before;i<Math.min(before+tied.length,slots);i++)labels.push(labelFor(i));
+       groups.push({kind,mode,label:labels.join(" / "),score:v,idxs:tied.map(t=>otherState.teams.indexOf(t))})
+     }
+   })
+ };
+ addRankTies(nettSorted,"nett","low",i=>i===0?"Nett Winner":i===1?"Nett Runner-up":"Nett 2nd Runner-up");
+ addRankTies(pinkSorted,"pinkies","high",i=>i===0?"Pinkies Winner":i===1?"Pinkies Runner-up":"Pinkies 2nd Runner-up");
+ return groups
+}
+function otherComputeResults(){
+ const gross=[...otherState.teams].sort((a,b)=>Number(a.gross)-Number(b.gross)||otherCompareCB(a,b,"low"));
+ const nett=[...otherState.teams].sort((a,b)=>Number(a.nett)-Number(b.nett)||otherCompareCB(a,b,"low"));
+ const pink=[...otherState.teams].sort((a,b)=>Number(b.nett)-Number(a.nett)||otherCompareCB(a,b,"high"));
+ const large=otherSelectedIds().length>=20;
+ return {stick:gross[0],nettWinner:nett[0],nettRunner:nett[1]||null,nettSecond:large?(nett[2]||null):null,pinkWinner:pink[0],pinkRunner:pink[1]||null,pinkSecond:large?(pink[2]||null):null}
+}
+function otherPrepareResults(){
+ if(otherState.teams.some(t=>t.gross===null||!Number.isFinite(Number(t.gross))||Number(t.gross)<1)){alert("Enter a valid Gross score for every team.");return}
+ otherState.teams.forEach(otherCalcTeam);otherCbQueue=otherAwardTieGroups();if(otherCbQueue.length)otherStartNextCountback();else{otherState.results=otherComputeResults();renderOtherNovelty();showScreen("otherNovelty")}
+}
+function otherStartNextCountback(){if(!otherCbQueue.length){otherState.results=otherComputeResults();renderOtherNovelty();showScreen("otherNovelty");return}otherCbTask=otherCbQueue.shift();otherCbHole=otherCbTask.hole??9;otherOpenCB()}
+function otherCBSignature(t,from=9,to=otherCbHole){const a=[];for(let h=from;h>=to;h--)a.push(t.holes?.[h]??null);return a.join("|")}
+function otherOpenCB(){
+ const teams=otherCbTask.idxs.map(i=>otherState.teams[i]);document.getElementById("otherCountbackTitle").textContent=`${otherCbTask.label} — Hole ${otherCbHole}`;
+ document.getElementById("otherCountbackHelp").textContent=`Score ${otherTrim(otherCbTask.score)} is tied. Enter Hole ${otherCbHole} only. ${otherCbTask.mode==="high"?"Higher":"Lower"} hole score wins this countback. If still tied, CLUBHOUSE will ask for Hole ${otherCbHole-1}.`;
+ document.getElementById("otherCountbackInputs").innerHTML=teams.map((t,k)=>`<div class="card"><b>${otherTeamName(t,otherCbTask.idxs[k])}</b><label>Hole ${otherCbHole}</label><input type="number" min="1" step="1" inputmode="numeric" data-ti="${otherCbTask.idxs[k]}" value="${t.holes?.[otherCbHole]??""}"></div>`).join("");
+ document.getElementById("otherCountbackModal").classList.add("show")
+}
+function otherSaveCountbackHole(){
+ const inputs=[...document.querySelectorAll("#otherCountbackInputs input")];if(inputs.some(i=>!i.value||Number(i.value)<1)){alert("Enter the hole score for every tied team.");return}
+ inputs.forEach(i=>{const t=otherState.teams[Number(i.dataset.ti)];t.holes=t.holes||{};t.holes[otherCbHole]=Number(i.value)});
+ const buckets={};otherCbTask.idxs.forEach(i=>{const k=otherCBSignature(otherState.teams[i]);(buckets[k]??=[]).push(i)});const unresolved=Object.values(buckets).filter(a=>a.length>1);
+ document.getElementById("otherCountbackModal").classList.remove("show");
+ if(!unresolved.length||otherCbHole===5){if(unresolved.length&&otherCbHole===5)alert("Tie remains after Hole 5. The organisers must decide manually.");otherStartNextCountback();return}
+ const next=[];unresolved.forEach(ids=>next.push({...otherCbTask,idxs:ids,hole:otherCbHole-1}));otherCbQueue=next.concat(otherCbQueue);otherStartNextCountback()
+}
+function otherNoveltyDefs(){return [["n1","1st NTP","Hole 1"],["n3","3rd Drive & Pitch","Hole 3"],["n4","4th NTP","Hole 4"],["n6","6th NTP","Hole 6"],["n7","7th Longest Drive","Hole 7"]]}
+function renderOtherNovelty(){document.getElementById("otherNoveltyGrid").innerHTML=otherNoveltyDefs().map(([k,l,h])=>`<div class="card"><b>${l}</b><div class="small">${h}</div><select onchange="otherState.novelties.${k}=this.value"><option value="NADA" ${otherState.novelties[k]==="NADA"?"selected":""}>NADA</option>${players.slice().sort((a,b)=>a.name.localeCompare(b.name)).map(p=>`<option ${otherState.novelties[k]===p.name?"selected":""}>${p.name}</option>`).join("")}</select></div>`).join("")}
+function otherConfirmNovelties(){for(const k of ["n1","n3","n4","n6","n7"])if(!otherState.novelties[k])otherState.novelties[k]="NADA";otherState.results=otherState.results||otherComputeResults();renderOtherResults();showScreen("otherResults")}
+function otherCountbackNote(team,kind){
+ if(!team)return "";const mode=kind==="pinkies"?"high":"low",value=kind==="gross"?Number(team.gross):Number(team.nett),tied=otherState.teams.filter(t=>t!==team&&Number(kind==="gross"?t.gross:t.nett)===value);
+ if(!tied.length)return "";const ordered=[team,...tied].sort((a,b)=>otherCompareCB(a,b,mode));if(ordered[0]!==team)return "";const opp=ordered[1];if(!opp||otherCompareCB(team,opp,mode)===0)return "Tie remains after Hole 5";
+ for(let h=9;h>=5;h--){const a=team.holes?.[h],b=opp.holes?.[h];if(a!=null&&b!=null&&a!==b)return `Won on countback over ${otherTeamName(opp,otherState.teams.indexOf(opp))} (Hole ${h})`}
+ return ""
+}
+function otherAwardHtml(cls,label,t,kind){if(!t)return "";const note=otherCountbackNote(t,kind);return `<div class="award ${cls}"><span>${label}</span><b>${otherTeamName(t,otherState.teams.indexOf(t))} — ${kind==="gross"?otherTrim(t.gross)+" Gross":otherTrim(t.nett)+" Nett"}</b><div class="small">Team H/C ${otherSigned(t.teamHandicap)}${kind!=="gross"?` · Gross ${otherTrim(t.gross)}`:""}</div>${note?`<div class="countback-note">${note}</div>`:""}</div>`}
+function renderOtherResults(){
+ const r=otherState.results||otherComputeResults(),large=otherSelectedIds().length>=20;otherState.results=r;
+ document.getElementById("otherResultAwards").innerHTML=otherAwardHtml("stick","Winner off the Stick",r.stick,"gross")+(large?otherAwardHtml("runner","Nett 2nd Runner-up",r.nettSecond,"nett"):"")+otherAwardHtml("runner","Nett Runner-up",r.nettRunner,"nett")+otherAwardHtml("nett","Nett Winner",r.nettWinner,"nett")+(large?otherAwardHtml("purple","Pinkies 2nd Runner-up",r.pinkSecond,"pinkies"):"")+otherAwardHtml("purple","Pinkies Runner-up",r.pinkRunner,"pinkies")+otherAwardHtml("pink","Pinkies Winner",r.pinkWinner,"pinkies");
+ document.getElementById("otherNoveltyResults").innerHTML=otherNoveltyDefs().map(([k,l,h])=>`<div class="card"><b>${l}</b><div class="small">${h}</div><div style="font-size:1.08rem;font-weight:900;margin-top:8px">${otherState.novelties[k]||"NADA"}</div></div>`).join("")
+}
+function otherTeamResult(t){
+ if(!t)return null;const i=otherState.teams.indexOf(t);
+ return {name:otherTeamName(t,i),teamNumber:i+1,playerIds:[...t.playerIds],members:t.playerIds.map(id=>{const p=otherPlayer(id);return {playerId:p.id,name:p.name,handicap:p.current}}),teamHandicap:t.teamHandicap,handicapUsed:t.teamHandicap,gross:t.gross,nett:t.nett,holes:deepCopy(t.holes||{})}
+}
+function otherSnapshot(){
+ const r=otherState.results||otherComputeResults();
+ return {isOther:true,date:otherState.date,competition:otherState.competition,playerCount:otherSelectedIds().length,teamCount:otherState.teams.length,
+   scores:otherState.teams.map(otherTeamResult),results:{stick:otherTeamResult(r.stick),nettWinner:otherTeamResult(r.nettWinner),nettRunner:otherTeamResult(r.nettRunner),nettSecond:otherTeamResult(r.nettSecond),pinkWinner:otherTeamResult(r.pinkWinner),pinkRunner:otherTeamResult(r.pinkRunner),pinkSecond:otherTeamResult(r.pinkSecond)},
+   novelties:deepCopy(otherState.novelties),adjustments:[],handicapAdjustmentsApplied:false,reportsIntegration:false}
+}
+function buildOtherHonour(){
+ otherLockedSnapshot=otherSnapshot();historicalBoardData=deepCopy(otherLockedSnapshot);otherHonourActive=true;buildHonour();
+ const cont=document.getElementById("honourContinueBtn"),back=document.getElementById("honourBackResultsBtn"),hist=document.getElementById("honourBackHistoryBtn");
+ if(cont){cont.classList.remove("hidden");cont.textContent="Continue to Handicap Review";cont.onclick=showOtherNoAdjust}
+ if(back){back.classList.remove("hidden");back.textContent="Back to Results";back.onclick=()=>showScreen("otherResults")}
+ if(hist)hist.classList.add("hidden");
+ document.getElementById("honourMeta").textContent=`${formatDate(otherLockedSnapshot.date)} · ${otherLockedSnapshot.competition} · ${otherLockedSnapshot.playerCount} Players · ${otherLockedSnapshot.teamCount} Teams`
+}
+function showOtherNoAdjust(){
+ document.getElementById("otherNoAdjustList").innerHTML=otherSelectedIds().map(id=>{const p=otherPlayer(id);return `<div class="row" style="padding:7px 0;border-bottom:1px solid #dfe8e1"><span>${p.name}</span><b>${signed(p.current)} → ${signed(p.current)}</b></div>`}).join("");
+ showScreen("otherNoAdjust")
+}
+function otherConfirmNoAdjust(){if(!confirm("Confirm NO handicap changes for this OTHER / Ambrose competition?"))return;otherState.locked=true;otherLockedSnapshot=otherSnapshot();historicalBoardData=deepCopy(otherLockedSnapshot);otherSaveProgress();showScreen("otherComplete")}
+function otherSaveProgress(){localStorage.setItem(OTHER_DRAFT_KEY,JSON.stringify({state:otherState,snapshot:otherLockedSnapshot}));otherState.saved=true;const s=document.getElementById("otherFinalStatus");if(s)s.textContent="Progress saved on this device. Now share the OTHER JSON to Robbie."}
+function otherJsonObject(){
+ const snap=otherLockedSnapshot||otherSnapshot();
+ return {schemaVersion:"OTHER-1.1",appVersion:"0.6.44",exportSource:"OTHER_ARCHIVE_ONLY",club:"Royal Park Golf — Old Farts",exportedAt:new Date().toISOString(),emailTo:"robbiem2@live.com.au",
+  round:{date:snap.date,competition:"OTHER",competitionName:snap.competition,playerCount:snap.playerCount,teamCount:snap.teamCount,handicapAdjustmentsApplied:false,reportsIntegration:false,teams:snap.scores,results:snap.results,novelties:snap.novelties,currentHandicapsAfterRound:players.map(p=>({playerId:p.id,name:p.name,current:p.current,greenJacketFrozen:p.green}))}}
+}
+async function otherShareJson(){
+ if(!otherState.saved)otherSaveProgress();
+ const data=otherJsonObject(),blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),safe=String(otherState.competition||"OTHER").replace(/[^a-z0-9]+/gi,"_"),file=new File([blob],`Clubhouse_OTHER_${otherState.date}_${safe}_v0.6.44.json`,{type:"application/json"});
+ if(navigator.canShare&&navigator.canShare({files:[file]})&&navigator.share){
+   try{await navigator.share({title:"CLUBHOUSE OTHER JSON",files:[file]});otherState.prepared=true;localStorage.setItem(OTHER_DRAFT_KEY,JSON.stringify({state:otherState,snapshot:otherLockedSnapshot}));document.getElementById("otherFinalStatus").textContent="OTHER JSON shared. Ready to finish the round.";return}catch(e){if(e.name==="AbortError")return}
+ }
+ const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=file.name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);otherState.prepared=true;localStorage.setItem(OTHER_DRAFT_KEY,JSON.stringify({state:otherState,snapshot:otherLockedSnapshot}));document.getElementById("otherFinalStatus").textContent="OTHER JSON downloaded. Send it to Robbie, then finish the round."
+}
+function otherFinaliseRound(){
+ if(!otherState.saved){alert("Please Save Progress first.");return}
+ if(!otherState.prepared&&!confirm("The OTHER JSON has not been shared in this session. Finish anyway?"))return;
+ if(!confirm("Finish this OTHER competition? No individual handicaps will be changed. Presentation will begin."))return;
+ const completed=deepCopy(otherLockedSnapshot||otherSnapshot());
+ localStorage.removeItem(OTHER_DRAFT_KEY);otherState={competition:"",date:"",teams:[],novelties:{n1:"",n3:"",n4:"",n6:"",n7:""},results:null,saved:false,prepared:false,locked:false};
+ otherLockedSnapshot=null;otherHonourActive=false;historicalBoardData=null;
+ document.getElementById("competition").value="";document.getElementById("otherComp").value="";document.getElementById("roundDate").value="";competitionChanged();
+ startPresentation(completed)
+}
+
 const PRESENTATION_DEMO_DATA={"date":"2026-08-07","competition":"Green Jacket Day","playerCount":21,"scores":[{"playerId":"P007","name":"Gary Bull","gross":42,"handicapUsed":0,"currentBefore":0,"nett":42,"holes":{"8":6,"9":4}},{"playerId":"P018","name":"Jim Isabella","gross":50,"handicapUsed":-6,"currentBefore":-6,"nett":44,"holes":{}},{"playerId":"P043","name":"John Taylor","gross":49,"handicapUsed":0,"currentBefore":0,"nett":49,"holes":{}},{"playerId":"P020","name":"Mick Keohane","gross":50,"handicapUsed":-5,"currentBefore":-5,"nett":45,"holes":{}},{"playerId":"P004","name":"John Bastow","gross":44,"handicapUsed":2,"currentBefore":2,"nett":46,"holes":{}},{"playerId":"P013","name":"Allan Freeman","gross":51,"handicapUsed":-1,"currentBefore":-1,"nett":50,"holes":{}},{"playerId":"P044","name":"Glenn Todd","gross":46,"handicapUsed":-2,"currentBefore":-2,"nett":44,"holes":{}},{"playerId":"P030","name":"Robbie Menezes","gross":46,"handicapUsed":0,"currentBefore":0,"nett":46,"holes":{}},{"playerId":"P024","name":"Peter Macleod","gross":44,"handicapUsed":2,"currentBefore":2,"nett":46,"holes":{}},{"playerId":"P027","name":"Lui Marini","gross":44,"handicapUsed":3,"currentBefore":3,"nett":47,"holes":{}},{"playerId":"P025","name":"Ian (NARKY) Macmillan","gross":46,"handicapUsed":-4,"currentBefore":-4,"nett":42,"holes":{"8":8,"9":4}},{"playerId":"P006","name":"Garry Brown","gross":55,"handicapUsed":-6,"currentBefore":-6,"nett":49,"holes":{}},{"playerId":"P021","name":"Chris Koo","gross":57,"handicapUsed":-3,"currentBefore":-3,"nett":54,"holes":{}},{"playerId":"P029","name":"Dave Matthews","gross":50,"handicapUsed":-4,"currentBefore":-4,"nett":46,"holes":{}},{"playerId":"P041","name":"Stephen Squirrell","gross":50,"handicapUsed":-6,"currentBefore":-6,"nett":44,"holes":{}},{"playerId":"P022","name":"Roy Krul","gross":57,"handicapUsed":-5,"currentBefore":-5,"nett":52,"holes":{}},{"playerId":"P012","name":"Glen (SHARKY) Fisher","gross":40,"handicapUsed":0,"currentBefore":0,"nett":40,"holes":{}},{"playerId":"P036","name":"Tony Ring","gross":61,"handicapUsed":-8,"currentBefore":-8,"nett":53,"holes":{}},{"playerId":"P014","name":"Peter Guest","gross":52,"handicapUsed":-1,"currentBefore":-1,"nett":51,"holes":{}},{"playerId":"P040","name":"Peter Smith","gross":48,"handicapUsed":-6,"currentBefore":-6,"nett":42,"holes":{"9":5}},{"playerId":"P026","name":"Bernie Magennis","gross":47,"handicapUsed":1,"currentBefore":1,"nett":48,"holes":{}}],"results":{"stick":{"playerId":"P012","name":"Glen (SHARKY) Fisher","gross":40,"handicapUsed":0,"currentBefore":0,"nett":40,"holes":{}},"nettWinner":{"playerId":"P012","name":"Glen (SHARKY) Fisher","gross":40,"handicapUsed":0,"currentBefore":0,"nett":40,"holes":{}},"nettRunner":{"playerId":"P007","name":"Gary Bull","gross":42,"handicapUsed":0,"currentBefore":0,"nett":42,"holes":{"8":6,"9":4}},"nettSecond":{"playerId":"P025","name":"Ian (NARKY) Macmillan","gross":46,"handicapUsed":-4,"currentBefore":-4,"nett":42,"holes":{"8":8,"9":4}},"pinkWinner":{"playerId":"P021","name":"Chris Koo","gross":57,"handicapUsed":-3,"currentBefore":-3,"nett":54,"holes":{}},"pinkRunner":{"playerId":"P036","name":"Tony Ring","gross":61,"handicapUsed":-8,"currentBefore":-8,"nett":53,"holes":{}},"pinkSecond":{"playerId":"P022","name":"Roy Krul","gross":57,"handicapUsed":-5,"currentBefore":-5,"nett":52,"holes":{}}},"novelties":{"n1":"John Taylor","n4":"Dave Matthews","n6":"Ian (NARKY) Macmillan","n3":"Glen (SHARKY) Fisher","n7":"Robbie Menezes"}};
 function startPresentationDemo(){
   const demo=deepCopy(PRESENTATION_DEMO_DATA);
@@ -2711,7 +3045,7 @@ function finishPresentation(){goHome()}
 function finaliseRound(){
  if(!round.applied){alert("Please save the handicap changes first.");return}
  if(!round.prepared){alert("Please share the final JSON to Robbie first.");return}
- if(!confirm("Finalise this round? Updated handicaps will remain saved. The competition will close and Presentation will begin."))return;
+ if(!confirm(round.competition==="Green Jacket Day"?"Finalise Green Jacket Day? The locked handicaps remain unchanged. The competition will close and Presentation will begin.":"Finalise this round? Updated handicaps will remain saved. The competition will close and Presentation will begin."))return;
  const completed=deepCopy(round.lockedSnapshot||lockedData());
  clearRoundDraft();
  round={competition:"",date:"",freezeDate:"",frozenHandicaps:{},scores:[],results:null,novelties:{},adjustments:[],applied:false,prepared:false,locked:false,lockedSnapshot:null,reportSaved:false};
