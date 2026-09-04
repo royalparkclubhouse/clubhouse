@@ -43,11 +43,17 @@ label{display:block;font-weight:800;font-size:.82rem;color:#52645a;margin:9px 0 
 </head>
 <body>
 <div class="app">
-<header><span class="version">OTHER v0.3b</span><h1>OLD FARTS — CLUBHOUSE</h1><p>OTHER Team Competition</p></header>
+<header><span class="version">OTHER v0.3c</span><h1>OLD FARTS — CLUBHOUSE</h1><p>OTHER Team Competition</p></header>
 <main>
 <section id="s1" class="screen active">
  <div class="eyebrow">Screen 1</div><h2>Today's Competition</h2><p class="sub">Use this file only for an OTHER team competition. Normal CLUBHOUSE remains untouched.</p>
  <div class="card"><label>Competition Type</label><select id="compType"><option>OTHER</option></select><label>Competition Name</label><input id="compName" placeholder="e.g. Italian Ambrose"><label>Date</label><input id="compDate" type="date"></div>
+ <div class="card">
+   <label>Update Handicaps</label>
+   <button class="btn secondary" type="button" onclick="document.getElementById('previousJsonInput').click()">UPDATE CLUBHOUSE FROM PREVIOUS COMPETITION</button>
+   <input id="previousJsonInput" type="file" accept=".json,application/json" style="display:none" onchange="importPreviousJson(event)">
+   <div id="importStatus" class="notice" style="margin-top:10px">No previous-round JSON imported in this session.</div>
+ </div>
  <div class="notice">Existing CLUBHOUSE handicaps are used only to calculate team handicaps. No permanent player handicap changes are made.</div>
  <div class="nav"><span></span><button class="btn orange" onclick="startOther()">BUILD TEAMS →</button></div>
 </section>
@@ -99,7 +105,20 @@ label{display:block;font-weight:800;font-size:.82rem;color:#52645a;margin:9px 0 
 const officialPlayers=[
 {id:"P001",name:"Ken Anderson",current:-5},{id:"P002",name:"Stephen (Ando) Anderson",current:-5},{id:"P003",name:"Michael Barnes",current:-3},{id:"P004",name:"John Bastow",current:2},{id:"P005",name:"Greg Bennett",current:1},{id:"P006",name:"Garry Brown",current:-6},{id:"P007",name:"Gary Bull",current:1},{id:"P008",name:"Jason Cuthbertson",current:-8},{id:"P009",name:"Charles Eliot",current:-4},{id:"P010",name:"Chris Falzon",current:-6},{id:"P011",name:"John Featherston",current:-7},{id:"P012",name:"Glen (SHARKY) Fisher",current:1},{id:"P013",name:"Allan Freeman",current:-1},{id:"P014",name:"Peter Guest",current:-1},{id:"P015",name:"Philip Hayes",current:-7},{id:"P016",name:"Ross Higgins",current:0},{id:"P017",name:"Gerard Holdstock",current:-5},{id:"P018",name:"Jim Isabella",current:-8},{id:"P019",name:"Denis James",current:1},{id:"P020",name:"Mick Keohane",current:-5},{id:"P021",name:"Chris Koo",current:-4},{id:"P022",name:"Roy Krul",current:-6},{id:"P023",name:"Sam LaRosa",current:0},{id:"P024",name:"Peter Macleod",current:1},{id:"P025",name:"Ian (NARKY) Macmillan",current:-3},{id:"P026",name:"Bernie Magennis",current:1},{id:"P027",name:"Lui Marini",current:3},{id:"P028",name:"Ian (RED) Martyn",current:-5},{id:"P029",name:"Dave Matthews",current:-3},{id:"P030",name:"Robbie Menezes",current:1},{id:"P031",name:"Eren Monza",current:-6},{id:"P032",name:"Stephen Munro",current:-3},{id:"P033",name:"Mick Murray",current:0},{id:"P034",name:"Barry Ogston",current:-8},{id:"P035",name:"Grant Pearse",current:-6},{id:"P036",name:"Tony Ring",current:-7},{id:"P037",name:"Andrew Sandilands",current:0},{id:"P038",name:"Perry Sandilands",current:-8},{id:"P039",name:"Peter Slevison",current:2},{id:"P040",name:"Peter Smith",current:-4},{id:"P041",name:"Stephen Squirrell",current:-6},{id:"P042",name:"Philip Taylor",current:1},{id:"P043",name:"John Taylor",current:-1},{id:"P044",name:"Glenn Todd",current:-2},{id:"P045",name:"Rich Watkiss",current:3}
 ];
-function loadPlayers(){try{const saved=JSON.parse(localStorage.getItem('clubhousePlayers')||'null');if(Array.isArray(saved)&&saved.length){return officialPlayers.map(op=>{const s=saved.find(x=>x.id===op.id||x.name===op.name);return s?{...op,current:Number(s.current)}:{...op}})}}catch(e){}return officialPlayers.map(x=>({...x}))}
+const IMPORT_KEY='clubhouseOtherImportedHandicapsV03c';
+function loadPlayers(){
+  const base=officialPlayers.map(x=>({...x}));
+  try{
+    const saved=JSON.parse(localStorage.getItem(IMPORT_KEY)||'null');
+    if(saved&&Array.isArray(saved.players)){
+      saved.players.forEach(sp=>{
+        const p=base.find(x=>x.id===sp.playerId||x.name===sp.name);
+        if(p&&Number.isFinite(Number(sp.current)))p.current=Number(sp.current);
+      });
+    }
+  }catch(e){}
+  return base;
+}
 const players=loadPlayers();
 const KEY='clubhouseOtherDraftV02';
 let state={competition:'',date:'',teams:[],novelties:{n1:'',n3:'',n4:'',n6:'',n7:''},results:null,saved:false,jsonDownloaded:false};
@@ -108,6 +127,57 @@ function signed(v){v=Number(v);if(v>0)return '+'+trim(v);if(v===0)return '0';ret
 function trim(v){return Number.isInteger(Number(v))?String(Number(v)):Number(v).toFixed(2).replace(/0+$/,'').replace(/\.$/,'')}
 function round2(v){return Math.round((Number(v)+Number.EPSILON)*100)/100}
 function show(id){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');scrollTo(0,0);if(id==='s2')renderBuild();if(id==='s3')renderReview();if(id==='s4')renderScores();if(id==='s5')renderNovelties();if(id==='s6')renderResults();}
+function setImportStatus(msg,type='ok'){
+  const el=document.getElementById('importStatus');if(!el)return;
+  el.textContent=msg;
+  el.className='notice'+(type==='error'?' error':type==='warn'?' warn':'');
+}
+function restoreImportStatus(){
+  try{
+    const saved=JSON.parse(localStorage.getItem(IMPORT_KEY)||'null');
+    if(saved&&saved.sourceDate){
+      setImportStatus(`${saved.count||saved.players?.length||0} player handicaps loaded · Source round: ${saved.sourceDate}`);
+    }
+  }catch(e){}
+}
+function importPreviousJson(event){
+  const file=event.target.files&&event.target.files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    try{
+      const data=JSON.parse(reader.result);
+      const round=data&&data.round;
+      const list=round&&round.currentHandicapsAfterRound;
+      if(!Array.isArray(list)||!list.length)throw new Error('No currentHandicapsAfterRound list found.');
+      let updated=0,unknown=[];
+      list.forEach(sp=>{
+        const p=players.find(x=>x.id===sp.playerId||x.name===sp.name);
+        if(p&&Number.isFinite(Number(sp.current))){p.current=Number(sp.current);updated++}
+        else if(sp&&sp.name)unknown.push(sp.name);
+      });
+      if(!updated)throw new Error('No matching player handicaps could be imported.');
+      const snapshot={
+        sourceDate:round.date||'Unknown date',
+        sourceCompetition:round.competition||'Previous competition',
+        importedAt:new Date().toISOString(),
+        count:updated,
+        players:players.map(p=>({playerId:p.id,name:p.name,current:p.current}))
+      };
+      localStorage.setItem(IMPORT_KEY,JSON.stringify(snapshot));
+      state.teams.forEach(calcTeam);
+      setImportStatus(`${updated} player handicaps updated successfully · Source round: ${snapshot.sourceDate}${unknown.length?` · ${unknown.length} unmatched player(s) ignored`:''}`);
+      alert(`Handicaps updated from ${snapshot.sourceDate}. ${updated} players matched.`);
+    }catch(err){
+      setImportStatus(`Import failed: ${err.message}`,'error');
+      alert(`Could not update handicaps from this JSON.\n\n${err.message}`);
+    }finally{
+      event.target.value='';
+    }
+  };
+  reader.onerror=()=>{setImportStatus('Import failed: could not read the selected file.','error');alert('Could not read the selected JSON file.');event.target.value=''};
+  reader.readAsText(file);
+}
 function startOther(){const name=document.getElementById('compName').value.trim(),date=document.getElementById('compDate').value;if(!name){alert('Enter the OTHER competition name.');return}if(!date){alert('Select the competition date.');return}state.competition=name;state.date=date;if(!state.teams.length)addTeam(false);show('s2')}
 function playerById(id){return players.find(p=>p.id===id)}
 function selectedIds(){return state.teams.flatMap(t=>t.playerIds).filter(Boolean)}
@@ -203,11 +273,11 @@ function renderNovelties(){const ns=noveltyDefs();document.getElementById('novel
 function confirmNovelties(){for(const k of ['n1','n3','n4','n6','n7'])if(!state.novelties[k])state.novelties[k]='NADA';show('s6')}
 function renderResults(){if(!state.results)state.results=computeResults();const r=state.results;document.getElementById('resultAwards').innerHTML=awardHtml('stick','Best Off the Stick',r.stick,'gross',state.teams.indexOf(r.stick))+awardHtml('runner','Nett Runner-up',r.nettRunner,'nett',state.teams.indexOf(r.nettRunner))+awardHtml('nett','Nett Winner',r.nettWinner,'nett',state.teams.indexOf(r.nettWinner))+awardHtml('purple','Pinkies Nett Runner-up',r.pinkRunner,'pinkies',state.teams.indexOf(r.pinkRunner))+awardHtml('pink','Pinkies Nett Winner',r.pinkWinner,'pinkies',state.teams.indexOf(r.pinkWinner));document.getElementById('noveltyResults').innerHTML=noveltyDefs().map(([k,l,h])=>`<div class="card novelty-result-card"><div class="novelty-art">${noveltyIcon(k)}</div><div class="novelty-result-label">${l}</div><div class="novelty-result-hole">${h}</div><div class="novelty-result-name">${state.novelties[k]||'NADA'}</div></div>`).join('')}
 function confirmResults(){if(!confirm('Confirm these OTHER competition results and novelty winners? No player handicaps will be changed.'))return;show('s7')}
-function jsonObject(){const r=state.results||computeResults();const teamObj=t=>t?{teamNumber:state.teams.indexOf(t)+1,players:t.playerIds.map(id=>{const p=playerById(id);return {playerId:p.id,name:p.name,handicap:p.current}}),teamHandicap:t.teamHandicap,gross:t.gross,nett:t.nett,holes:t.holes||{}}:null;return {schemaVersion:'OTHER-1.0',appVersion:'CLUBHOUSE OTHER v0.3b',exportSource:'OTHER_ARCHIVE_ONLY',club:'Royal Park Golf — Old Farts',exportedAt:new Date().toISOString(),emailTo:'robbiem2@live.com.au',round:{date:state.date,competition:'OTHER',competitionName:state.competition,handicapAdjustmentsApplied:false,reportsIntegration:false,teamCount:state.teams.length,playerCount:selectedIds().length,teams:state.teams.map(teamObj),results:{stick:teamObj(r.stick),nettRunner:teamObj(r.nettRunner),nettWinner:teamObj(r.nettWinner),pinkRunner:teamObj(r.pinkRunner),pinkWinner:teamObj(r.pinkWinner)},novelties:{...state.novelties}}}}
+function jsonObject(){const r=state.results||computeResults();const teamObj=t=>t?{teamNumber:state.teams.indexOf(t)+1,players:t.playerIds.map(id=>{const p=playerById(id);return {playerId:p.id,name:p.name,handicap:p.current}}),teamHandicap:t.teamHandicap,gross:t.gross,nett:t.nett,holes:t.holes||{}}:null;return {schemaVersion:'OTHER-1.0',appVersion:'CLUBHOUSE OTHER v0.3c',exportSource:'OTHER_ARCHIVE_ONLY',club:'Royal Park Golf — Old Farts',exportedAt:new Date().toISOString(),emailTo:'robbiem2@live.com.au',round:{date:state.date,competition:'OTHER',competitionName:state.competition,handicapAdjustmentsApplied:false,reportsIntegration:false,teamCount:state.teams.length,playerCount:selectedIds().length,teams:state.teams.map(teamObj),results:{stick:teamObj(r.stick),nettRunner:teamObj(r.nettRunner),nettWinner:teamObj(r.nettWinner),pinkRunner:teamObj(r.pinkRunner),pinkWinner:teamObj(r.pinkWinner)},novelties:{...state.novelties}}}}
 function saveProgress(){state.saved=true;localStorage.setItem(KEY,JSON.stringify(state));document.getElementById('finalStatus').textContent='Progress saved on this device. Now send the OTHER JSON to Robbie.'}
 function safeName(s){return s.replace(/[^a-z0-9]+/gi,'_').replace(/^_+|_+$/g,'')}
 function downloadJson(){if(!state.saved){if(!confirm('SAVE PROGRESS has not been pressed yet. Save now before creating the JSON?'))return;saveProgress()}const data=jsonObject(),blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a'),url=URL.createObjectURL(blob);a.href=url;a.download=`Clubhouse_OTHER_${state.date}_${safeName(state.competition)}.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);state.jsonDownloaded=true;localStorage.setItem(KEY,JSON.stringify(state));document.getElementById('finalStatus').textContent='OTHER JSON downloaded. Share that downloaded file to robbiem2@live.com.au, then return here and FINISH ROUND.'}
-function finishOther(){if(!state.saved){alert('Press SAVE PROGRESS first.');return}if(!state.jsonDownloaded){if(!confirm('The OTHER JSON has not been downloaded in this session. Finish anyway?'))return}if(!confirm('Finish this OTHER competition? Individual CLUBHOUSE handicaps will remain unchanged.'))return;localStorage.removeItem(KEY);state={competition:'',date:'',teams:[],novelties:{n1:'',n3:'',n4:'',n6:'',n7:''},results:null,saved:false,jsonDownloaded:false};document.getElementById('compName').value='';document.getElementById('compDate').value=new Date().toISOString().slice(0,10);document.getElementById('finalStatus').textContent='Round complete.';alert('OTHER competition complete. No player handicaps were changed.');show('s1')}
+function finishOther(){if(!state.saved){alert('Press SAVE PROGRESS first.');return}if(!state.jsonDownloaded){if(!confirm('The OTHER JSON has not been downloaded in this session. Finish anyway?'))return}if(!confirm('Finish this OTHER competition? Individual CLUBHOUSE handicaps will remain unchanged.'))return;localStorage.removeItem(KEY);state={competition:'',date:'',teams:[],novelties:{n1:'',n3:'',n4:'',n6:'',n7:''},results:null,saved:false,jsonDownloaded:false};document.getElementById('compName').value='';document.getElementById('compDate').value=new Date().toISOString().slice(0,10);restoreImportStatus();document.getElementById('finalStatus').textContent='Round complete.';alert('OTHER competition complete. No player handicaps were changed.');show('s1')}
 document.getElementById('compDate').value=new Date().toISOString().slice(0,10);
 </script>
 
