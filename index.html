@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0060)file:///C:/Users/robbi/Downloads/index(20260912-042954).html -->
+<!-- saved from url=(0060)file:///C:/Users/robbi/Downloads/index(20260912-044445).html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -2411,21 +2411,58 @@ function bbCollectCountbacks(r){
  if(Array.isArray(r.countbacks))r.countbacks.forEach(c=>out.push({label:c.category||c.award||"Countback",note:c.note||c.text||`${c.winner||""}${c.over?` over ${c.over}`:""}${c.hole?` — Hole ${c.hole}`:""}`}));
  const seen=new Set();return out.filter(x=>{const k=x.label+"|"+x.note;if(seen.has(k))return false;seen.add(k);return true})
 }
+function bbResultName(v){
+ if(v==null)return "";
+ if(typeof v==="string")return v;
+ if(typeof v==="object")return v.name||v.player||v.winner||"";
+ return String(v)
+}
+function bbResultNote(v){
+ return v&&typeof v==="object"?(v.countbackNote||v.tieNote||v.note||""):""
+}
+function bbPick(obj,keys){
+ for(const k of keys)if(obj&&obj[k]!=null)return obj[k];
+ return null
+}
+function bbResultCard(label,v){
+ const name=bbResultName(v); if(!name)return "";
+ const note=bbResultNote(v);
+ return `<div class="player-card"><div><b>${bbEsc(label)}</b><div>${bbEsc(name)}</div>${note?`<div class="blackbox-note">${bbEsc(note)}</div>`:""}</div></div>`
+}
 function bbResultsHTML(r){
  if(r.cancelled||r.status==="CANCELLED_NO_PLAY")return '<div class="notice">No competition results — ROUND CANCELLED / NO PLAY.</div>';
  const res=r.results||{};
- const preferred=["stick","winnerOfStick","nettWinner","netWinner","nettRunnerUp","netRunnerUp","nettSecondRunnerUp","netSecondRunnerUp","pinkiesWinner","pinkiesRunnerUp","pinkiesSecondRunnerUp"];
- const labels={stick:"Winner (OFF) the STICK",winnerOfStick:"Winner (OFF) the STICK",nettWinner:"Nett Winner",netWinner:"Nett Winner",nettRunnerUp:"Nett Runner-up",netRunnerUp:"Nett Runner-up",nettSecondRunnerUp:"Nett 2nd Runner-up",netSecondRunnerUp:"Nett 2nd Runner-up",pinkiesWinner:"Pinkies Winner",pinkiesRunnerUp:"Pinkies Runner-up",pinkiesSecondRunnerUp:"Pinkies 2nd Runner-up"};
- const rows=[];const used=new Set();
- preferred.forEach(k=>{if(res[k]!=null){used.add(k);const v=res[k],name=typeof v==="object"?(v.name||v.player||JSON.stringify(v)):v;rows.push(`<div class="player-card"><div><b>${labels[k]}</b><div>${bbEsc(name)}</div>${typeof v==="object"&&(v.countbackNote||v.tieNote)?`<div class="blackbox-note">${bbEsc(v.countbackNote||v.tieNote)}</div>`:""}</div></div>`)}})
- Object.entries(res).forEach(([k,v])=>{if(used.has(k)||v==null||typeof v==="object")return;rows.push(`<div class="player-card"><div><b>${bbEsc(k)}</b><div>${bbEsc(v)}</div></div></div>`)});
- return rows.join("")||'<div class="notice">Final result details are not available in this older record.</div>'
+ // Historical JSON uses these CLUBHOUSE result keys. Aliases preserve older exports.
+ const ordered=[
+  ["Winner (OFF) the STICK",["stick","winnerOfStick","stickWinner"]],
+  ["Nett 2nd Runner-up",["nettSecondRunnerUp","netSecondRunnerUp","secondRunnerUp"]],
+  ["Nett Runner-up",["nettRunnerUp","netRunnerUp","runnerUp"]],
+  ["Nett Winner",["nettWinner","netWinner","winner"]],
+  ["Pinkies 2nd Runner-up",["pinkSecondRunnerUp","pinkiesSecondRunnerUp"]],
+  ["Pinkies Runner-up",["pinkRunnerUp","pinkiesRunnerUp"]],
+  ["Pinkies Winner",["pinkWinner","pinkiesWinner"]]
+ ];
+ const cards=ordered.map(([label,keys])=>bbResultCard(label,bbPick(res,keys))).filter(Boolean);
+ return cards.join("")||'<div class="notice">Final result details are not available in this historical record.</div>'
 }
 function bbNoveltiesHTML(r){
  const n=r.novelties||{};
- const entries=Object.entries(n);
- if(!entries.length)return '<div class="notice">No novelty winners recorded.</div>';
- return entries.map(([k,v])=>`<div class="player-card"><div><b>${bbEsc(k)}</b><div>${bbEsc(typeof v==="object"?(v.name||v.player||"NADA"):v||"NADA")}</div></div></div>`).join("")
+ const ordered=[
+  ["1st NTP",["n1","1","hole1","ntp1"]],
+  ["3rd D&P",["n3","3","hole3","dp3"]],
+  ["4th NTP",["n4","4","hole4","ntp4"]],
+  ["6th NTP",["n6","6","hole6","ntp6"]],
+  ["7th L/D",["n7","7","hole7","ld7"]]
+ ];
+ const cards=[];
+ for(const [label,keys] of ordered){
+  const v=bbPick(n,keys);
+  if(v!=null){
+   const name=typeof v==="object"?(v.name||v.player||v.winner||"NADA"):(v||"NADA");
+   cards.push(`<div class="player-card"><div><b>${bbEsc(label)}</b><div>${bbEsc(name)}</div></div></div>`)
+  }
+ }
+ return cards.join("")||'<div class="notice">No novelty winners recorded.</div>'
 }
 function openBlackboxByIndex(index){
  const reports=JSON.parse(localStorage.getItem("clubhouseReports")||"[]");
