@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- saved from url=(0066)file:///C:/Users/robbi/Downloads/index(20260912-034958)%20(1).html -->
+<!-- saved from url=(0060)file:///C:/Users/robbi/Downloads/index(20260912-042954).html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#184c37">
-<title>CLUBHOUSE v0.6.46 – PREFLIGHT</title>
+<title>CLUBHOUSE v0.6.47 – PREFLIGHT</title>
 <style>
 :root{
   --green:#184c37;--green2:#24684c;--gold:#c8a44d;--ink:#18211c;--muted:#66736b;
@@ -335,7 +335,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
 @media(max-height:760px){.pinkies-live-panel{margin-top:17%;padding:18px 13px}.pinkies-live-name{font-size:2.45rem}.pinkies-live-score{font-size:1.7rem}.pinkies-live-kicker{font-size:1rem}}
 
 
-/* ===== CLUBHOUSE v0.6.46 — PREFLIGHT CORRECTED + INTEGRATED OTHER / AMBROSE ===== */
+/* ===== CLUBHOUSE v0.6.47 — PREFLIGHT + BLACKBOX + INTEGRATED OTHER / AMBROSE ===== */
 .other-team-card{border-left:7px solid var(--orange)}
 .other-team-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .other-team-head h3{margin:0;color:var(--green)}
@@ -363,7 +363,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
 @media(max-height:760px){.presentation-name.other-team-name{font-size:1.8rem}}
 
 
-/* ===== CLUBHOUSE v0.6.46 — PREFLIGHT ===== */
+/* ===== CLUBHOUSE v0.6.47 — PREFLIGHT ===== */
 .preflight-card{border:2px solid #c9d7ce;border-radius:16px;padding:14px;background:#f8fbf9;margin:12px 0}
 .preflight-title{font-weight:950;color:#184c37;font-size:1.05rem;margin-bottom:8px}
 .preflight-row{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid #dfe7e1}
@@ -377,6 +377,17 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
 .preflight-ready{background:#edf7f0;border:1px solid #b9d9c2;color:#1d5b40;padding:11px;border-radius:11px;margin-top:10px;font-weight:900}
 .btn-locked{opacity:.48!important;cursor:not-allowed!important}
 .cancel-card{border:2px solid #d6b35a;background:#fff8df}
+
+
+/* ===== CLUBHOUSE v0.6.47 — BLACKBOX READ ONLY ===== */
+.blackbox-banner{background:#171717;color:#fff;border-radius:14px;padding:13px 15px;margin:12px 0;font-weight:950}
+.blackbox-step{border:1px solid #d8dfda;border-radius:14px;padding:13px;margin:12px 0;background:#fbfcfb}
+.blackbox-step h3{margin:0 0 10px;color:#184c37}
+.blackbox-table{width:100%;border-collapse:collapse;font-size:.86rem}
+.blackbox-table th,.blackbox-table td{padding:7px 5px;border-bottom:1px solid #e3e7e4;text-align:left}
+.blackbox-table th{font-weight:950}
+.blackbox-note{font-size:.8rem;color:#5f6b64}
+.blackbox-readonly{background:#f0f2f1;border:1px solid #cfd5d1;border-radius:12px;padding:11px;font-weight:900;text-align:center;margin-top:14px}
 
 </style>
 </head>
@@ -396,7 +407,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
   <div class="hero"><h2>Clubhouse</h2><p>Enter completed scorecards, calculate prizes, update handicaps and prepare the Honour Board.</p></div>
   <div id="preflightCard" class="preflight-card">
     <div class="preflight-title">✈️ CLUBHOUSE PREFLIGHT</div>
-    <div class="preflight-row"><div><div class="preflight-label">Software Version</div><div id="preflightVersionDetail" class="preflight-detail">This device: v0.6.46</div></div><div id="preflightVersionStatus" class="preflight-bad">NOT VERIFIED</div></div>
+    <div class="preflight-row"><div><div class="preflight-label">Software Version</div><div id="preflightVersionDetail" class="preflight-detail">This device: v0.6.47</div></div><div id="preflightVersionStatus" class="preflight-bad">NOT VERIFIED</div></div>
     <div class="preflight-row"><div><div class="preflight-label">Latest Round Data / JSON</div><div id="preflightRoundDetail" class="preflight-detail">Unable to reach the authoritative CLUBHOUSE control record.</div></div><div id="preflightRoundStatus" class="preflight-bad">NOT VERIFIED</div></div>
     <div id="preflightSummary" class="preflight-lock">🔒 START ROUND LOCKED — CLUBHOUSE cannot verify PREFLIGHT.</div>
     <button class="btn btn-secondary btn-small" onclick="runPreflight(true)">↻ Check Again</button>
@@ -442,6 +453,19 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
     <button class="btn btn-primary" onclick="shareCancelledJson()">2. SEND JSON TO ROBBIE</button>
     <button class="btn btn-dark" onclick="finishCancelledRound()">3. END ROUND</button>
   </div>
+</section>
+
+
+<section id="blackboxReplay" class="screen">
+ <div class="blackbox-banner">⬛ BLACKBOX — COMPLETED ROUND REPLAY</div>
+ <div id="blackboxHeader" class="card"></div>
+ <div class="blackbox-step"><h3>1. Players &amp; Scores</h3><div id="blackboxScores"></div></div>
+ <div class="blackbox-step"><h3>2. Handicap Adjustments</h3><div id="blackboxAdjustments"></div></div>
+ <div class="blackbox-step"><h3>3. Countbacks</h3><div id="blackboxCountbacks"></div></div>
+ <div class="blackbox-step"><h3>4. Final Results</h3><div id="blackboxResults"></div></div>
+ <div class="blackbox-step"><h3>5. Novelty Winners</h3><div id="blackboxNovelties"></div></div>
+ <div class="blackbox-readonly">🔒 READ ONLY — this replay cannot alter scores, results or current handicaps.</div>
+ <button class="btn btn-secondary" onclick="showScreen(&#39;reports&#39;)">Back to Previous Results</button>
 </section>
 
 <section id="greenJacketSetup" class="screen">
@@ -1136,42 +1160,42 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
 <section id="reports" class="screen">
   <h2>Previous Results / Round History</h2>
   <p class="sub">Saved competition results are kept here, separate from Current Handicaps.</p>
-  <div id="reportsList"><button type="button" class="report-card history-card history-button" onclick="openHistoricalResultsBoard(0)">
+  <div id="reportsList"><button type="button" class="report-card history-card history-button" onclick="openBlackboxByIndex(0)">
          <div class="history-title">Wednesday 2 September 2026 — Stroke</div>
          <div class="history-count">19 Players</div>
          <div class="history-stick">Winner off the Stick: <b>Denis James</b></div>
          <div class="history-nett">Nett Winner: <b>Denis James</b></div>
          <div class="history-pink">Pinkies Winner: <b>Stephen Munro</b></div>
          <div class="history-open">Tap to open the exact Results Board</div>
-       </button><button type="button" class="report-card history-card history-button" onclick="openHistoricalResultsBoard(1)">
+       </button><button type="button" class="report-card history-card history-button" onclick="openBlackboxByIndex(1)">
          <div class="history-title">Wednesday 12 August 2026 — Stroke</div>
          <div class="history-count">14 Players</div>
          <div class="history-stick">Winner off the Stick: <b>Robbie Menezes</b></div>
          <div class="history-nett">Nett Winner: <b>Dave Matthews</b></div>
          <div class="history-pink">Pinkies Winner: <b>Glen (SHARKY) Fisher</b></div>
          <div class="history-open">Tap to open the exact Results Board</div>
-       </button><button type="button" class="report-card history-card history-button" onclick="openHistoricalResultsBoard(2)">
+       </button><button type="button" class="report-card history-card history-button" onclick="openBlackboxByIndex(2)">
          <div class="history-title">Tuesday 11 August 2026 — Stroke</div>
          <div class="history-count">8 Players</div>
          <div class="history-stick">Winner off the Stick: <b>Glen (SHARKY) Fisher</b></div>
          <div class="history-nett">Nett Winner: <b>Glen (SHARKY) Fisher</b></div>
          <div class="history-pink">Pinkies Winner: <b>Chris Koo</b></div>
          <div class="history-open">Tap to open the exact Results Board</div>
-       </button><button type="button" class="report-card history-card history-button" onclick="openHistoricalResultsBoard(3)">
+       </button><button type="button" class="report-card history-card history-button" onclick="openBlackboxByIndex(3)">
          <div class="history-title">Wednesday 22 July 2026 — Stroke</div>
          <div class="history-count">17 Players</div>
          <div class="history-stick">Winner off the Stick: <b>Sam LaRosa</b></div>
          <div class="history-nett">Nett Winner: <b>Dave Matthews</b></div>
          <div class="history-pink">Pinkies Winner: <b>Philip Hayes</b></div>
          <div class="history-open">Tap to open the exact Results Board</div>
-       </button><button type="button" class="report-card history-card history-button" onclick="openHistoricalResultsBoard(4)">
+       </button><button type="button" class="report-card history-card history-button" onclick="openBlackboxByIndex(4)">
          <div class="history-title">Friday 17 July 2026 — Stroke</div>
          <div class="history-count">13 Players</div>
          <div class="history-stick">Winner off the Stick: <b>Peter Macleod</b></div>
          <div class="history-nett">Nett Winner: <b>Peter Macleod</b></div>
          <div class="history-pink">Pinkies Winner: <b>Charles Eliot</b></div>
          <div class="history-open">Tap to open the exact Results Board</div>
-       </button><button type="button" class="report-card history-card history-button" onclick="openHistoricalResultsBoard(5)">
+       </button><button type="button" class="report-card history-card history-button" onclick="openBlackboxByIndex(5)">
          <div class="history-title">Wednesday 15 July 2026 — Stroke</div>
          <div class="history-count">12 Players</div>
          <div class="history-stick">Winner off the Stick: <b>Gary Bull</b></div>
@@ -1226,7 +1250,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
 </section>
 
 </main>
-<footer>CLUBHOUSE v0.6.46 – PREFLIGHT · Draft Protected</footer>
+<footer>CLUBHOUSE v0.6.47 – PREFLIGHT · Draft Protected</footer>
 </div>
 
 <div id="editModal" class="modal"><div class="modal-sheet">
@@ -1562,7 +1586,7 @@ function saveRoundDraft(silent=true){
  try{
    if(!hasRoundProgress()){updateDraftBar();return false}
    const payload={
-     version:"0.6.46",
+     version:"0.6.47",
      savedAt:new Date().toISOString(),
      screen:activeScreenId(),
      round:deepCopy(round),
@@ -1749,8 +1773,8 @@ function signed(n){return(n>=0?"+":"−")+Math.abs(n)}
 function capHandicap(n){return Math.max(-8,Math.min(3,Number(n)))}
 function showScreen(id){const blocked=["entry","recap","results","novelty","adjustments","confirmHandicaps"];if(round.locked&&blocked.includes(id)){alert("This round is locked. Please complete the final steps.");id="complete"}document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));document.getElementById(id).classList.add("active");window.scrollTo({top:0,behavior:"smooth"});if(id==="handicaps")renderHandicaps();if(id==="reports")renderReports()}
 
-/* ===== CLUBHOUSE v0.6.46 — PREFLIGHT CORRECTED ===== */
-const CLUBHOUSE_VERSION="0.6.46";
+/* ===== CLUBHOUSE v0.6.47 — PREFLIGHT CORRECTED ===== */
+const CLUBHOUSE_VERSION="0.6.47";
 const PREFLIGHT_CONTROL_URL="clubhouse_control.json";
 const PREFLIGHT_EVENT_KEY="clubhousePreflightLatestEvent";
 const PREFLIGHT_HCAP_KEY="clubhousePreflightHandicapSource";
@@ -2335,7 +2359,7 @@ function saveCancelledProgress(){
 async function shareCancelledJson(){
  if(!cancelledRoundState)return;
  if(!cancelledRoundState.saved)saveCancelledProgress();
- const data=cancelledJsonObject(),blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),file=new File([blob],`Clubhouse_${cancelledRoundState.date}_CANCELLED_NO_PLAY_v0.6.46.json`,{type:"application/json"});
+ const data=cancelledJsonObject(),blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),file=new File([blob],`Clubhouse_${cancelledRoundState.date}_CANCELLED_NO_PLAY_v0.6.47.json`,{type:"application/json"});
  if(navigator.canShare&&navigator.canShare({files:[file]})&&navigator.share){
    try{await navigator.share({title:"CLUBHOUSE Cancelled Round JSON",files:[file]});cancelledRoundState.prepared=true;return}catch(e){if(e.name==="AbortError")return}
  }
@@ -2356,6 +2380,77 @@ function finishCancelledRound(){
  renderReports();
  goHome();
  runPreflight(false);
+}
+
+
+/* ===== BLACKBOX v0.6.47 — READ ONLY ROUND REPLAY ===== */
+function bbEsc(v){return String(v==null?"":v).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+function bbSigned(v){const n=Number(v);return Number.isFinite(n)?(n>0?`+${n}`:`${n}`):"—"}
+function bbRows(scores){
+ if(!Array.isArray(scores)||!scores.length)return '<div class="notice">No player scores were recorded for this event.</div>';
+ return `<table class="blackbox-table"><thead><tr><th>Player</th><th>H/C Used</th><th>Gross</th><th>Nett</th></tr></thead><tbody>${scores.map(s=>`<tr><td>${bbEsc(s.name)}</td><td>${bbSigned(s.handicapUsed??s.handicap)}</td><td>${bbEsc(s.gross??"—")}</td><td>${bbEsc(s.nett??"—")}</td></tr>`).join("")}</tbody></table>`
+}
+function bbAdjustmentRows(r){
+ const a=Array.isArray(r.adjustments)?r.adjustments:[];
+ if(r.cancelled||r.status==="CANCELLED_NO_PLAY")return '<div class="notice">ROUND CANCELLED / NO PLAY — no handicap changes.</div>';
+ if(!a.length)return '<div class="notice">No handicap adjustments were applied in this round.</div>';
+ return `<table class="blackbox-table"><thead><tr><th>Player</th><th>Before</th><th>Movement</th><th>After</th></tr></thead><tbody>${a.map(x=>`<tr><td>${bbEsc(x.name)}</td><td>${bbSigned(x.old??x.before??x.previous)}</td><td>${bbSigned(x.delta??x.change)}</td><td>${bbSigned(x.new??x.after??x.current)}</td></tr>`).join("")}</tbody></table>`
+}
+function bbCollectCountbacks(r){
+ const out=[];
+ const walk=(x,label)=>{
+  if(!x)return;
+  if(Array.isArray(x)){x.forEach(v=>walk(v,label));return}
+  if(typeof x==="object"){
+   const note=x.countbackNote||x.tieNote||x.note;
+   if(note&&/countback/i.test(String(note)))out.push({label:label||x.name||"Result",note});
+   Object.entries(x).forEach(([k,v])=>{if(k!=="countbackNote"&&k!=="tieNote"&&k!=="note")walk(v,k)})
+  }else if(typeof x==="string"&&/countback/i.test(x))out.push({label:label||"Result",note:x})
+ };
+ walk(r.results,"Results");
+ if(Array.isArray(r.countbacks))r.countbacks.forEach(c=>out.push({label:c.category||c.award||"Countback",note:c.note||c.text||`${c.winner||""}${c.over?` over ${c.over}`:""}${c.hole?` — Hole ${c.hole}`:""}`}));
+ const seen=new Set();return out.filter(x=>{const k=x.label+"|"+x.note;if(seen.has(k))return false;seen.add(k);return true})
+}
+function bbResultsHTML(r){
+ if(r.cancelled||r.status==="CANCELLED_NO_PLAY")return '<div class="notice">No competition results — ROUND CANCELLED / NO PLAY.</div>';
+ const res=r.results||{};
+ const preferred=["stick","winnerOfStick","nettWinner","netWinner","nettRunnerUp","netRunnerUp","nettSecondRunnerUp","netSecondRunnerUp","pinkiesWinner","pinkiesRunnerUp","pinkiesSecondRunnerUp"];
+ const labels={stick:"Winner (OFF) the STICK",winnerOfStick:"Winner (OFF) the STICK",nettWinner:"Nett Winner",netWinner:"Nett Winner",nettRunnerUp:"Nett Runner-up",netRunnerUp:"Nett Runner-up",nettSecondRunnerUp:"Nett 2nd Runner-up",netSecondRunnerUp:"Nett 2nd Runner-up",pinkiesWinner:"Pinkies Winner",pinkiesRunnerUp:"Pinkies Runner-up",pinkiesSecondRunnerUp:"Pinkies 2nd Runner-up"};
+ const rows=[];const used=new Set();
+ preferred.forEach(k=>{if(res[k]!=null){used.add(k);const v=res[k],name=typeof v==="object"?(v.name||v.player||JSON.stringify(v)):v;rows.push(`<div class="player-card"><div><b>${labels[k]}</b><div>${bbEsc(name)}</div>${typeof v==="object"&&(v.countbackNote||v.tieNote)?`<div class="blackbox-note">${bbEsc(v.countbackNote||v.tieNote)}</div>`:""}</div></div>`)}})
+ Object.entries(res).forEach(([k,v])=>{if(used.has(k)||v==null||typeof v==="object")return;rows.push(`<div class="player-card"><div><b>${bbEsc(k)}</b><div>${bbEsc(v)}</div></div></div>`)});
+ return rows.join("")||'<div class="notice">Final result details are not available in this older record.</div>'
+}
+function bbNoveltiesHTML(r){
+ const n=r.novelties||{};
+ const entries=Object.entries(n);
+ if(!entries.length)return '<div class="notice">No novelty winners recorded.</div>';
+ return entries.map(([k,v])=>`<div class="player-card"><div><b>${bbEsc(k)}</b><div>${bbEsc(typeof v==="object"?(v.name||v.player||"NADA"):v||"NADA")}</div></div></div>`).join("")
+}
+function openBlackboxByIndex(index){
+ const reports=JSON.parse(localStorage.getItem("clubhouseReports")||"[]");
+ const r=reports[index];
+ if(!r){alert("BLACKBOX could not find that completed round.");return}
+ const id=(r.roundId!=null?r.roundId:r.id);
+ if(id!=null){openBlackboxById(id);return}
+ // Older locally stored reports may have neither ID; replay directly after assigning a temporary safe ID.
+ r.id="bb-"+index+"-"+String(r.date||"");
+ reports[index]=r;localStorage.setItem("clubhouseReports",JSON.stringify(reports));
+ openBlackboxById(r.id)
+}
+
+function openBlackboxById(id){
+ const reports=JSON.parse(localStorage.getItem("clubhouseReports")||"[]");
+ const r=reports.find(x=>String(x.id)===String(id)||String(x.roundId)===String(id));
+ if(!r){alert("BLACKBOX could not find that completed round.");return}
+ document.getElementById("blackboxHeader").innerHTML=`<h2 style="margin-top:0">${bbEsc(formatDate(r.date))}</h2><div><b>${bbEsc(r.competition||"Competition")}</b> · ${Number(r.playerCount??(r.scores||[]).length)} players</div>${r.status==="CANCELLED_NO_PLAY"?'<div class="notice" style="margin-top:10px"><b>ROUND CANCELLED / NO PLAY</b></div>':""}`;
+ document.getElementById("blackboxScores").innerHTML=bbRows(r.scores);
+ document.getElementById("blackboxAdjustments").innerHTML=bbAdjustmentRows(r);
+ const cb=bbCollectCountbacks(r);
+ document.getElementById("blackboxCountbacks").innerHTML=cb.length?cb.map(x=>`<div class="player-card"><div><b>${bbEsc(x.label)}</b><div>${bbEsc(x.note)}</div></div></div>`).join(""):'<div class="notice">No countbacks were required.</div>';
+ document.getElementById("blackboxResults").innerHTML=bbResultsHTML(r);
+ document.getElementById("blackboxNovelties").innerHTML=bbNoveltiesHTML(r);
+ showScreen("blackboxReplay")
 }
 
 function importedReportFromPayload(payload){
@@ -2435,7 +2530,7 @@ async function importPreviousCompetition(event){
  }
 }
 function finalJsonFilename(){
- return `Clubhouse_${round.date||"Round"}_${round.competition.replace(/[^a-z0-9]+/gi,"_")}_v0.6.46.json`
+ return `Clubhouse_${round.date||"Round"}_${round.competition.replace(/[^a-z0-9]+/gi,"_")}_v0.6.47.json`
 }
 function showFinalFileReady(){
  const panel=document.getElementById("finalFilePanel");
@@ -2551,7 +2646,7 @@ function renderReports(){
        const stick=r.results&&r.results.stick&&r.results.stick.name ? r.results.stick.name : "Not recorded";
        const nett=r.results&&r.results.nettWinner&&r.results.nettWinner.name ? r.results.nettWinner.name : "Not recorded";
        const pink=r.results&&r.results.pinkWinner&&r.results.pinkWinner.name ? r.results.pinkWinner.name : "Not recorded";
-       return `<button type="button" class="report-card history-card history-button" onclick="openHistoricalResultsBoard(${index})">
+       return `<button type="button" class="report-card history-card history-button" onclick="openBlackboxByIndex(${index})">
          <div class="history-title">${formatDate(r.date)} — ${r.competition||"Competition"}</div>
          <div class="history-count">${countText}</div>
          <div class="history-stick">Winner off the Stick: <b>${stick}</b></div>
@@ -2790,7 +2885,7 @@ async function emailJSON(){
 
  const locked=lockedData();
  if(round.lockedSnapshot)round.lockedSnapshot.novelties=deepCopy(finalNovelties);
- const payload={schemaVersion:"1.0",appVersion:"0.6.46",exportSource:"CURRENT_LOCKED_ROUND",club:"Royal Park Golf — Old Farts",exportedAt:new Date().toISOString(),emailTo:"robbiem2@live.com.au",round:{date:locked.date,competition:locked.competition,roundStatus:"COMPLETED",roundId:preflightRoundId(locked.date,locked.competition,"COMPLETED"),handicapAdjustmentsApplied:true,playerCount:locked.playerCount,greenJacketUsed:locked.competition==="Green Jacket Day",freezeDate:locked.freezeDate||null,greenJacketFreeze:getActiveGreenJacketFreeze(),frozenHandicapsUsed:locked.competition==="Green Jacket Day"?players.map(p=>({playerId:p.id,name:p.name,handicap:(locked.frozenHandicaps&&locked.frozenHandicaps[p.id]!=null)?locked.frozenHandicaps[p.id]:p.current})):[],scores:locked.scores,results:locked.results,novelties:deepCopy(finalNovelties),handicapAdjustments:locked.adjustments,currentHandicapsAfterRound:players.map(p=>({playerId:p.id,name:p.name,current:p.current,greenJacketFrozen:p.green})),honourBoardText:honourText(),handicapsReviewedAndSaved:true}};
+ const payload={schemaVersion:"1.0",appVersion:"0.6.47",exportSource:"CURRENT_LOCKED_ROUND",club:"Royal Park Golf — Old Farts",exportedAt:new Date().toISOString(),emailTo:"robbiem2@live.com.au",round:{date:locked.date,competition:locked.competition,roundStatus:"COMPLETED",roundId:preflightRoundId(locked.date,locked.competition,"COMPLETED"),handicapAdjustmentsApplied:true,playerCount:locked.playerCount,greenJacketUsed:locked.competition==="Green Jacket Day",freezeDate:locked.freezeDate||null,greenJacketFreeze:getActiveGreenJacketFreeze(),frozenHandicapsUsed:locked.competition==="Green Jacket Day"?players.map(p=>({playerId:p.id,name:p.name,handicap:(locked.frozenHandicaps&&locked.frozenHandicaps[p.id]!=null)?locked.frozenHandicaps[p.id]:p.current})):[],scores:locked.scores,results:locked.results,novelties:deepCopy(finalNovelties),handicapAdjustments:locked.adjustments,currentHandicapsAfterRound:players.map(p=>({playerId:p.id,name:p.name,current:p.current,greenJacketFrozen:p.green})),honourBoardText:honourText(),handicapsReviewedAndSaved:true}};
  const json=JSON.stringify(payload,null,2);
  const filename=finalJsonFilename();
  const file=new File([json],filename,{type:"application/json"});
@@ -3007,7 +3102,7 @@ function buildPresentationSlides(data){
 }
 
 
-/* ===== CLUBHOUSE v0.6.46 — PREFLIGHT CORRECTED + INTEGRATED OTHER / AMBROSE LOGIC ===== */
+/* ===== CLUBHOUSE v0.6.47 — PREFLIGHT + BLACKBOX + INTEGRATED OTHER / AMBROSE LOGIC ===== */
 const OTHER_DRAFT_KEY="clubhouseIntegratedOtherDraftV0644";
 let otherState={competition:"",date:"",teams:[],novelties:{n1:"",n3:"",n4:"",n6:"",n7:""},results:null,saved:false,prepared:false,locked:false};
 let otherCbQueue=[],otherCbTask=null,otherCbHole=9,otherHonourActive=false,otherLockedSnapshot=null;
@@ -3173,12 +3268,12 @@ function otherConfirmNoAdjust(){if(!confirm("Confirm NO handicap changes for thi
 function otherSaveProgress(){localStorage.setItem(OTHER_DRAFT_KEY,JSON.stringify({state:otherState,snapshot:otherLockedSnapshot}));otherState.saved=true;const s=document.getElementById("otherFinalStatus");if(s)s.textContent="Progress saved on this device. Now share the OTHER JSON to Robbie."}
 function otherJsonObject(){
  const snap=otherLockedSnapshot||otherSnapshot();
- return {schemaVersion:"OTHER-1.1",appVersion:"0.6.46",exportSource:"OTHER_ARCHIVE_ONLY",club:"Royal Park Golf — Old Farts",exportedAt:new Date().toISOString(),emailTo:"robbiem2@live.com.au",
+ return {schemaVersion:"OTHER-1.1",appVersion:"0.6.47",exportSource:"OTHER_ARCHIVE_ONLY",club:"Royal Park Golf — Old Farts",exportedAt:new Date().toISOString(),emailTo:"robbiem2@live.com.au",
   round:{date:snap.date,competition:"OTHER",competitionName:snap.competition,roundStatus:"COMPLETED",roundId:preflightRoundId(snap.date,`OTHER:${snap.competition}`,"COMPLETED"),playerCount:snap.playerCount,teamCount:snap.teamCount,handicapAdjustmentsApplied:false,reportsIntegration:false,teams:snap.scores,results:snap.results,novelties:snap.novelties,currentHandicapsAfterRound:players.map(p=>({playerId:p.id,name:p.name,current:p.current,greenJacketFrozen:p.green}))}}
 }
 async function otherShareJson(){
  if(!otherState.saved)otherSaveProgress();
- const data=otherJsonObject(),blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),safe=String(otherState.competition||"OTHER").replace(/[^a-z0-9]+/gi,"_"),file=new File([blob],`Clubhouse_OTHER_${otherState.date}_${safe}_v0.6.46.json`,{type:"application/json"});
+ const data=otherJsonObject(),blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),safe=String(otherState.competition||"OTHER").replace(/[^a-z0-9]+/gi,"_"),file=new File([blob],`Clubhouse_OTHER_${otherState.date}_${safe}_v0.6.47.json`,{type:"application/json"});
  if(navigator.canShare&&navigator.canShare({files:[file]})&&navigator.share){
    try{await navigator.share({title:"CLUBHOUSE OTHER JSON",files:[file]});otherState.prepared=true;localStorage.setItem(OTHER_DRAFT_KEY,JSON.stringify({state:otherState,snapshot:otherLockedSnapshot}));document.getElementById("otherFinalStatus").textContent="OTHER JSON shared. Ready to finish the round.";return}catch(e){if(e.name==="AbortError")return}
  }
