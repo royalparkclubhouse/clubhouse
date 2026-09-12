@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.1",
-  "currentVersion": "0.6.46",
+  "currentVersion": "0.6.47",
   "latestEvent": {
     "date": "2026-09-11",
     "competition": "Stroke",
@@ -13,5 +13,5 @@
     "status": "COMPLETED",
     "roundId": "2026-09-11|Stroke|COMPLETED"
   },
-  "note": "latestEvent tracks chronology. latestHandicapSource changes only when a round establishes new live handicaps. CANCELLED/NO PLAY and OTHER/Ambrose advance latestEvent only."
+  "note": "v0.6.47 adds BLACKBOX read-only round replay. latestEvent tracks chronology; latestHandicapSource changes only when a round establishes new live handicaps."
 }
