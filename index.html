@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0060)file:///C:/Users/robbi/Downloads/index(20260912-044445).html -->
+<!-- saved from url=(0060)file:///C:/Users/robbi/Downloads/index(20260912-045703).html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -2435,11 +2435,11 @@ function bbResultsHTML(r){
  // Historical JSON uses these CLUBHOUSE result keys. Aliases preserve older exports.
  const ordered=[
   ["Winner (OFF) the STICK",["stick","winnerOfStick","stickWinner"]],
-  ["Nett 2nd Runner-up",["nettSecondRunnerUp","netSecondRunnerUp","secondRunnerUp"]],
-  ["Nett Runner-up",["nettRunnerUp","netRunnerUp","runnerUp"]],
+  ["Nett 2nd Runner-up",["nettSecond","nettSecondRunnerUp","netSecondRunnerUp","secondRunnerUp"]],
+  ["Nett Runner-up",["nettRunner","nettRunnerUp","netRunnerUp","runnerUp"]],
   ["Nett Winner",["nettWinner","netWinner","winner"]],
-  ["Pinkies 2nd Runner-up",["pinkSecondRunnerUp","pinkiesSecondRunnerUp"]],
-  ["Pinkies Runner-up",["pinkRunnerUp","pinkiesRunnerUp"]],
+  ["Pinkies 2nd Runner-up",["pinkSecond","pinkSecondRunnerUp","pinkiesSecondRunnerUp"]],
+  ["Pinkies Runner-up",["pinkRunner","pinkRunnerUp","pinkiesRunnerUp"]],
   ["Pinkies Winner",["pinkWinner","pinkiesWinner"]]
  ];
  const cards=ordered.map(([label,keys])=>bbResultCard(label,bbPick(res,keys))).filter(Boolean);
