@@ -1,17 +1,17 @@
 {
   "schemaVersion": "1.1",
-  "currentVersion": "0.6.47",
+  "currentVersion": "0.6.48",
   "latestEvent": {
-    "date": "2026-09-11",
+    "date": "2026-09-16",
     "competition": "Stroke",
     "status": "COMPLETED",
-    "roundId": "2026-09-11|Stroke|COMPLETED"
+    "roundId": "2026-09-16|Stroke|COMPLETED"
   },
   "latestHandicapSource": {
-    "date": "2026-09-11",
+    "date": "2026-09-16",
     "competition": "Stroke",
     "status": "COMPLETED",
-    "roundId": "2026-09-11|Stroke|COMPLETED"
+    "roundId": "2026-09-16|Stroke|COMPLETED"
   },
-  "note": "v0.6.47 adds BLACKBOX read-only round replay. latestEvent tracks chronology; latestHandicapSource changes only when a round establishes new live handicaps."
+  "note": "v0.6.48 fixes PREFLIGHT so a valid newer local event or handicap source is accepted; latestEvent tracks chronology and latestHandicapSource tracks the round establishing live handicaps."
 }
