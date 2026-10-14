@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<!-- saved from url=(0058)file:///C:/Users/robbi/Downloads/clubhouse-email-test.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Clubhouse Google connection test</title><style>body{font:18px Arial;max-width:600px;margin:30px auto;padding:20px;color:#184c37;background:#f2f6f3}input,button{font:inherit;box-sizing:border-box;width:100%;padding:12px;margin:10px 0}button{background:#184c37;color:white;border:0;border-radius:8px}#status{white-space:pre-wrap}iframe{display:none}</style></head><body><h1>Clubhouse email connection test</h1><p>This separate test sends a completed JSON to Robbie. It does not change Clubhouse rounds or handicaps.</p><label>Completed round JSON<input id="file" type="file" accept=".json,application/json"></label><label>Private Clubhouse access code<input id="code" type="password" autocomplete="off"></label><button id="send">Send test JSON</button><p id="status" role="status">Ready.</p><iframe name="receipt" title="Google sending response" src="./clubhouse-email-test_files/saved_resource.html"></iframe><form id="form" method="post" target="receipt" action="https://script.google.com/macros/s/AKfycbwBaCihevwVMsEXA38SiwLhvSpiymLSyOtQXUT9feSfzUOHxRrhBGQXwsf3LcQEwLSE/exec"><input type="hidden" name="json"><input type="hidden" name="accessCode"><input type="hidden" name="nonce"></form><script>
+let pending=null,timer;
+const button=document.getElementById('send'),status=document.getElementById('status'),form=document.getElementById('form');
+window.addEventListener('message',function(e){
+ let origin;try{origin=new URL(e.origin);}catch(_){return;}
+ if(origin.protocol!=='https:' || !(origin.hostname==='script.google.com'||origin.hostname==='script.googleusercontent.com'||origin.hostname.endsWith('.script.googleusercontent.com')))return;
+ const r=e.data;if(!pending||!r||r.type!=='CLUBHOUSE_EMAIL_RECEIPT'||r.nonce!==pending)return;
+ clearTimeout(timer);pending=null;button.disabled=false;
+ status.textContent=r.ok?(r.duplicate?'PASS: Google acknowledged this exact file was already sent. No duplicate email.':'PASS: Google acknowledged email submission. Check Robbie’s inbox and JSON attachment.'):'FAILED: '+r.error;
+});
+button.addEventListener('click',async function(){
+ const file=document.getElementById('file').files[0],code=document.getElementById('code').value;
+ if(!file||!code){status.textContent='Choose a completed JSON and enter your access code.';return;}
+ button.disabled=true;
+ try{
+ const json=await file.text();const data=JSON.parse(json);if(!data.round||!data.round.date)throw new Error('Select a Clubhouse round JSON.');
+ pending=crypto.randomUUID();form.elements.json.value=json;form.elements.accessCode.value=code;form.elements.nonce.value=pending;
+ status.textContent='Submitting to Google… Keep this page open.';form.submit();form.elements.accessCode.value='';
+ timer=setTimeout(function(){pending=null;button.disabled=false;status.textContent='No acknowledgement received. The email may have been sent. Check the inbox before retrying; sending is not confirmed by this page.';},60000);
+ }catch(e){pending=null;button.disabled=false;status.textContent=e.message;}
+});
+</script>
+</body></html>
