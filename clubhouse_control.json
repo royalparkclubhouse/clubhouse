@@ -1,17 +1,17 @@
 {
   "schemaVersion": "1.1",
-  "currentVersion": "0.6.49",
+  "currentVersion": "0.6.50",
   "latestEvent": {
-    "date": "2026-09-18",
+    "date": "2026-10-16",
     "competition": "Stroke",
     "status": "COMPLETED",
-    "roundId": "2026-09-18|Stroke|COMPLETED"
+    "roundId": "2026-10-16|Stroke|COMPLETED"
   },
   "latestHandicapSource": {
-    "date": "2026-09-18",
+    "date": "2026-10-16",
     "competition": "Stroke",
     "status": "COMPLETED",
-    "roundId": "2026-09-18|Stroke|COMPLETED"
+    "roundId": "2026-10-16|Stroke|COMPLETED"
   },
-  "note": "v0.6.49 preserves v0.6.48 competition and handicap rules; adds validated multi-player progressive countbacks, position-specific countback wording and persistent countback audit display. Authoritative live handicaps are from the completed 18 September 2026 Stroke round."
+  "note": "v0.6.50: confirmed automatic JSON email, durable retries, final Results Board sharing and updated training demo. Real handicap source: completed Stroke round 16 October 2026."
 }
