@@ -407,7 +407,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
   <button type="button" class="btn btn-secondary" onclick="manualSaveProgress()">SAVE PROGRESS</button>
 </div>
 
-<main><div role="note" style="background:#fff2bd;padding:12px;border:2px solid #ad8300;border-radius:10px"><b>CLUBHOUSE v0.6.51 — TEST PAGE · BOARD TRAIL FIX</b><br>Uses this browser’s existing saved Clubhouse data. Keep your latest real JSON as backup. Test emails are real.</div>
+<main><div role="note" style="background:#fff2bd;padding:12px;border:2px solid #ad8300;border-radius:10px"><b>CLUBHOUSE v0.6.51 — TEST PAGE · BOARD TRAIL FIX 3</b><br>Uses this browser’s existing saved Clubhouse data. Keep your latest real JSON as backup. Test emails are real.</div>
 <section id="home" class="screen active">
   <div class="hero"><h2>Clubhouse</h2><p>Enter completed scorecards, calculate prizes, update handicaps and prepare the Honour Board.</p></div>
   <div id="preflightCard" class="preflight-card">
@@ -2272,10 +2272,18 @@ function buildCountbackAudit(){
  });
  round.countbackAudit=out;return out
 }
+function countbackDecisionLabel(a,player){
+ const label=String(a.label||"").split(" / ")[Math.max(0,(player.rank||1)-1)]||String(a.label||"");
+ if(/2nd runner-up/i.test(label))return "2nd Runner-up decided";
+ if(/runner-up/i.test(label))return "Runner-up decided";
+ if(a.type==="stick"||/winner/i.test(label))return "Winner decided";
+ return "Result decided"
+}
+
 function countbackAuditHtml(data=lockedData()){
  const audits=(data&&data.countbackAudit)||round.countbackAudit||[];if(!audits.length)return "";
  const esc=x=>String(x).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
- return `<div class="card" style="margin-top:14px;border:2px solid #b8c9bd"><h3 style="margin:0 0 8px">COUNTBACK AUDIT TRAIL</h3>${audits.map(a=>`<div style="padding:8px 0;border-top:1px solid #dce5df"><b>${esc(a.label)}</b><div class="small">Original tie (${a.players.length}): ${a.players.map(esc).join(" · ")}</div>${a.holes.map(h=>`<div class="countback-note">Hole ${h.hole}: ${h.scores.map(x=>`${esc(x.name)} ${x.score}`).join(" · ")}${h.dropped?.length?`<br>Dropped from this placing: ${h.dropped.map(esc).join(" · ")}`:""}${h.placed?.length?`<br>Placing decided: ${h.placed.map(x=>`${esc(x.name)} (position ${x.rank} within original tie)`).join(" · ")}`:""}${h.advancing?.length?`<br>Still tied (${h.advancing.length}): ${h.advancing.map(esc).join(" · ")} — ${h.hole>6?`continue to Hole ${h.hole-1}`:"unresolved after Hole 6"}`:""}</div>`).join("")}</div>`).join("")}</div>`
+ return `<div class="card" style="margin-top:14px;border:2px solid #b8c9bd"><h3 style="margin:0 0 8px">COUNTBACK AUDIT TRAIL</h3>${audits.map(a=>`<div style="padding:8px 0;border-top:1px solid #dce5df"><b>${esc(a.label)}</b><div class="small">Original tie (${a.players.length}): ${a.players.map(esc).join(" · ")}</div>${a.holes.map(h=>`<div class="countback-note">Hole ${h.hole}: ${h.scores.map(x=>`${esc(x.name)} ${x.score}`).join(" · ")}${h.dropped?.length?`<br>Dropped from this placing: ${h.dropped.map(esc).join(" · ")}`:""}${h.placed?.length?`<br>${h.placed.map(x=>`${countbackDecisionLabel(a,x)}: ${esc(x.name)}`).join(" · ")}`:""}${h.advancing?.length?`<br>Still tied (${h.advancing.length}): ${h.advancing.map(esc).join(" · ")} — ${h.hole>6?`continue to Hole ${h.hole-1}`:"unresolved after Hole 6"}`:""}</div>`).join("")}</div>`).join("")}</div>`
 }
 
 function calculateResults(){
@@ -2690,10 +2698,10 @@ function boardCountbackEntries(data){
    const outcome=[];
    if(h.dropped?.length)outcome.push(`Out: ${h.dropped.join(" · ")}`);
    if(h.advancing?.length)outcome.push(`Still tied (${h.advancing.length}): ${h.advancing.join(" · ")}`);
-   if(h.placed?.length)outcome.push(`Placing decided: ${h.placed.map(p=>p.name).join(" · ")}`);
+   if(h.placed?.length)outcome.push(h.placed.map(p=>`${countbackDecisionLabel(a,p)}: ${p.name}`).join(" · "));
    if(outcome.length)lines.push(outcome.join(" | "));
   });
-  return {label:a.label||"Countback",lines};
+  return {label:`${a.label||"Countback"} — COUNTBACK REQUIRED`,lines};
  }).filter(a=>a.lines.length)
 }
 function boardCountbackHtml(data){
