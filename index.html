@@ -4,7 +4,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#184c37">
-<title>CLUBHOUSE v0.6.50</title>
+<title>CLUBHOUSE v0.6.51</title>
 <style>
 :root{
   --green:#184c37;--green2:#24684c;--gold:#c8a44d;--ink:#18211c;--muted:#66736b;
@@ -155,6 +155,11 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
   color:#4d4d4d;
   font-weight:800
 }
+.board-countback-trail{padding:10px 12px;background:#fffdf5;border-top:2px solid #b9c9bd;color:#243e30;text-align:left}
+.board-countback-trail h3{margin:0 0 7px;font-size:.95rem}
+.board-countback-entry{font-size:.82rem;line-height:1.35;overflow-wrap:anywhere;padding:5px 0}
+.board-countback-entry + .board-countback-entry{border-top:1px solid #d6dfd8}
+.board-countback-entry b{display:block;margin-bottom:3px}
 .novelty-title{
   background:#12662f;
   color:#fff;
@@ -407,7 +412,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
   <div class="hero"><h2>Clubhouse</h2><p>Enter completed scorecards, calculate prizes, update handicaps and prepare the Honour Board.</p></div>
   <div id="preflightCard" class="preflight-card">
     <div class="preflight-title">✈️ CLUBHOUSE PREFLIGHT</div>
-    <div class="preflight-row"><div><div class="preflight-label">Software Version</div><div id="preflightVersionDetail" class="preflight-detail">This device: v0.6.50</div></div><div id="preflightVersionStatus" class="preflight-bad">NOT VERIFIED</div></div>
+    <div class="preflight-row"><div><div class="preflight-label">Software Version</div><div id="preflightVersionDetail" class="preflight-detail">This device: v0.6.51</div></div><div id="preflightVersionStatus" class="preflight-bad">NOT VERIFIED</div></div>
     <div class="preflight-row"><div><div class="preflight-label">Latest Round Data / JSON</div><div id="preflightRoundDetail" class="preflight-detail">Unable to reach the authoritative CLUBHOUSE control record.</div></div><div id="preflightRoundStatus" class="preflight-bad">NOT VERIFIED</div></div>
     <div id="preflightSummary" class="preflight-lock">🔒 START ROUND LOCKED — CLUBHOUSE cannot verify PREFLIGHT.</div>
     <button class="btn btn-secondary btn-small" onclick="runPreflight(true)">↻ Check Again</button>
@@ -465,6 +470,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
  <div class="blackbox-step"><h3>4. Final Results</h3><div id="blackboxResults"></div></div>
  <div class="blackbox-step"><h3>5. Novelty Winners</h3><div id="blackboxNovelties"></div></div>
  <div class="blackbox-readonly">🔒 READ ONLY — this replay cannot alter scores, results or current handicaps.</div>
+ <button id="blackboxBoardBtn" class="btn btn-primary hidden">View Results Board</button>
  <button class="btn btn-secondary" onclick="showScreen('reports')">Back to Previous Results</button>
 </section>
 
@@ -662,7 +668,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
 </section>
 
 
-<section id="complete" class="screen">
+<section id="complete" class="screen"><div id="finalCountbackTrail"></div>
 <h2>Final Results</h2><p class="sub">Review and share the Results Board, then send the complete JSON to Robbie. Google confirmation finishes the round and opens Presentation.</p>
 <div class="notice">Results and updated handicaps are locked and saved on this device.</div>
 <button class="btn btn-secondary" onclick="viewFinalBoard()">Review Results Board</button>
@@ -1263,7 +1269,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
 </section>
 
 </main>
-<footer>CLUBHOUSE v0.6.50</footer>
+<footer>CLUBHOUSE v0.6.51</footer>
 </div>
 
 <div id="editModal" class="modal"><div class="modal-sheet">
@@ -1402,7 +1408,7 @@ function trainingShell(title, instruction, body){
 function buildClubhouseTrainingSlides(){
   return [
     trainingShell("1. Home",
-      "Start here. For a competition, tap <b>Today’s Round</b>. The other buttons are for Green Jacket setup, checking handicaps, previous results, importing the previous competition, and demos.",
+      "Start here. PREFLIGHT uses your phone date: Friday requires Wednesday’s JSON; Wednesday requires the previous Friday’s JSON. Import a Cancelled / No Play record if no round was played. For a competition, tap <b>Today’s Round</b>. The other buttons are for Green Jacket setup, checking handicaps, previous results, importing the previous competition, and demos.",
       `<h3>Clubhouse</h3>
        <div class="training-btn">Today’s Round</div>
        <div class="training-btn secondary">🟢 Green Jacket Manager</div>
@@ -1434,7 +1440,7 @@ function buildClubhouseTrainingSlides(){
        <div class="training-btn">Continue</div>`),
 
     trainingShell("5. Countback — only if required",
-      "If players are tied, CLUBHOUSE asks for the latest hole first: <b>Hole 9</b>. If still tied, it then asks Hole 8, then 7, then 6 only as needed.",
+      "If players are tied, CLUBHOUSE asks for the latest hole first: <b>Hole 9</b>. If still tied, it then asks Hole 8, then 7, then 6 only as needed. The Countback Audit Trail names each player who drops out, advances or secures a placing, including separate tied groups. The trail is also included on the Results Board and its shared image, with the novelty prizes.",
       `<h3>COUNTBACK REQUIRED</h3>
        <div class="training-row"><b>Gary Bull — Hole 9</b><strong>4</strong></div>
        <div class="training-row"><b>Ian (NARKY) Macmillan — Hole 9</b><strong>4</strong></div>
@@ -1584,7 +1590,7 @@ function saveRoundDraft(silent=true){
  try{
    if(!hasRoundProgress()){updateDraftBar();return false}
    const payload={
-     version:"0.6.50",
+     version:"0.6.51",
      savedAt:new Date().toISOString(),
      screen:activeScreenId(),
      round:deepCopy(round),
@@ -1771,10 +1777,10 @@ let editingName=null,pendingTies=[],currentTieIndex=0,currentCountbackHole=9;
 
 function signed(n){return(n>=0?"+":"−")+Math.abs(n)}
 function capHandicap(n){return Math.max(-8,Math.min(3,Number(n)))}
-function showScreen(id){const blocked=["entry","recap","results","novelty","adjustments","confirmHandicaps"];if(round.locked&&blocked.includes(id)){alert("This round is locked. Please complete the final steps.");id="complete"}document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));document.getElementById(id).classList.add("active");window.scrollTo({top:0,behavior:"smooth"});if(id==="handicaps")renderHandicaps();if(id==="reports")renderReports()}
+function showScreen(id){if(id==="complete"){const audit=document.getElementById("finalCountbackTrail");if(audit)audit.innerHTML=countbackAuditHtml()}const blocked=["entry","recap","results","novelty","adjustments","confirmHandicaps"];if(round.locked&&blocked.includes(id)){alert("This round is locked. Please complete the final steps.");id="complete"}document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));document.getElementById(id).classList.add("active");window.scrollTo({top:0,behavior:"smooth"});if(id==="handicaps")renderHandicaps();if(id==="reports")renderReports()}
 
-/* ===== CLUBHOUSE v0.6.47 — PREFLIGHT CORRECTED ===== */
-const CLUBHOUSE_VERSION="0.6.50";
+/* ===== CLUBHOUSE v0.6.51 — CALENDAR PREFLIGHT AND FULL COUNTBACK TRAIL ===== */
+const CLUBHOUSE_VERSION="0.6.51";
 const PREFLIGHT_CONTROL_URL="clubhouse_control.json";
 const PREFLIGHT_EVENT_KEY="clubhousePreflightLatestEvent";
 const PREFLIGHT_HCAP_KEY="clubhousePreflightHandicapSource";
@@ -1806,6 +1812,23 @@ function eventIsCurrent(local,required){
  if(String(local.roundId)===String(required.roundId))return true;
  return pfDate(local.date)>pfDate(required.date)
 }
+function phoneDateISO(now=new Date()){
+ return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,"0")}-${String(now.getDate()).padStart(2,"0")}`
+}
+function previousScheduledRound(now=new Date()){
+ const d=new Date(now.getFullYear(),now.getMonth(),now.getDate(),12);
+ do{d.setDate(d.getDate()-1)}while(d.getDay()!==3&&d.getDay()!==5);
+ return phoneDateISO(d)
+}
+function calendarPreflight(event,handicaps,now=new Date()){
+ const expected=previousScheduledRound(now),today=phoneDateISO(now);
+ const valid=x=>x&&/^\d{4}-\d{2}-\d{2}$/.test(x.date||"")&&x.date<=today;
+ if(!valid(event)||event.date<expected)return {ok:false,expected,reason:`Import the completed round or Cancelled / No Play JSON for ${formatDate(expected)} before starting another round.`};
+ if(!valid(handicaps))return {ok:false,expected,reason:"Import the latest handicap source JSON."};
+ const unchanged=event.status==="CANCELLED_NO_PLAY"||String(event.competition||"").startsWith("OTHER:");
+ if(!unchanged&&handicaps.date<event.date)return {ok:false,expected,reason:"The latest round is present but its updated handicaps are missing. Import that round JSON."};
+ return {ok:true,expected,reason:""}
+}
 function setPreflightUI(){
  const vs=document.getElementById("preflightVersionStatus"),vd=document.getElementById("preflightVersionDetail");
  const rs=document.getElementById("preflightRoundStatus"),rd=document.getElementById("preflightRoundDetail");
@@ -1823,9 +1846,12 @@ function setPreflightUI(){
  vs.textContent=preflightState.versionOK?"CURRENT":"UPDATE REQUIRED";vs.className=preflightState.versionOK?"preflight-ok":"preflight-bad";
  const e=x=>x&&x.date?`${formatDate(x.date)} · ${x.competition}${x.status==="CANCELLED_NO_PLAY"?" · CANCELLED / NO PLAY":""}`:"none";
  rd.innerHTML=`Latest event — Required: ${e(reqE)} · Device: ${e(locE)}<br>Handicap source — Required: ${e(reqH)} · Device: ${e(locH)}`;
- preflightState.roundOK=preflightState.eventOK&&preflightState.handicapOK;
+ const calendar=calendarPreflight(locE,locH);
+ preflightState.calendarOK=calendar.ok;
+ rd.textContent+=` · Phone date: ${formatDate(phoneDateISO())}. Previous scheduled round: ${formatDate(calendar.expected)}. ${calendar.reason}`;
+ preflightState.roundOK=preflightState.eventOK&&preflightState.handicapOK&&calendar.ok;
  rs.textContent=preflightState.roundOK?"CURRENT":"JSON REQUIRED";rs.className=preflightState.roundOK?"preflight-ok":"preflight-bad";
- const ready=preflightState.versionOK&&preflightState.eventOK&&preflightState.handicapOK;
+ const ready=preflightState.versionOK&&preflightState.roundOK;
  sum.className=ready?"preflight-ready":"preflight-lock";sum.textContent=ready?"🟢 PREFLIGHT PASSED — READY TO START ROUND":"🔒 START ROUND LOCKED — correct the item shown above.";
  if(btn){btn.disabled=!ready;btn.classList.toggle("btn-locked",!ready)}
 }
@@ -1843,7 +1869,7 @@ async function runPreflight(showAlert=false){
  if(showAlert)alert(preflightState.versionOK&&preflightState.roundOK?"PREFLIGHT PASSED.\n\nSoftware, event sequence and live handicaps are current.":"PREFLIGHT FAILED.\n\nSTART ROUND remains locked until CLUBHOUSE is current.");
  return preflightState.versionOK&&preflightState.roundOK
 }
-function preflightReady(){return preflightState.checked&&preflightState.versionOK&&preflightState.eventOK&&preflightState.handicapOK&&!preflightState.error}
+function preflightReady(){setPreflightUI();return preflightState.checked&&preflightState.versionOK&&preflightState.roundOK&&!preflightState.error}
 function goHome(){historicalBoardData=null;showScreen("home")}
 function openTodayRound(){
  if(!preflightReady()){
@@ -1851,7 +1877,7 @@ function openTodayRound(){
    runPreflight(false);
    return
  }
- if(!document.getElementById("roundDate").value)document.getElementById("roundDate").value=new Date().toISOString().slice(0,10);
+ if(!document.getElementById("roundDate").value)document.getElementById("roundDate").value=phoneDateISO();
  showScreen("setup")
 }
 const GREEN_JACKET_ACTIVE_KEY="clubhouseGreenJacketActiveFreezeV1";
@@ -1900,8 +1926,12 @@ function openGreenJacketSetup(){
 }
 
 function freezeOfficialGreenJacketHandicaps(){
+  if(hasRoundProgress()){alert("Finish or discard the active round before replacing the Green Jacket freeze.");return}
+  if(!preflightReady()){alert("Import the latest round JSON before freezing handicaps.");return}
+
   const date=document.getElementById("greenJacketOfficialFreezeDate").value;
   if(!date){alert("Please select the Green Jacket freeze date.");return}
+  if(date>phoneDateISO()){alert("The freeze date cannot be in the future.");return}
   const existing=getActiveGreenJacketFreeze();
   if(existing){
     if(!confirm(`A Green Jacket handicap freeze already exists.\n\nFreeze date: ${formatDate(existing.freezeDate)}\n${existing.players.length} players\n\nReplace it with the current handicaps as at ${formatDate(date)}?`))return
@@ -1921,6 +1951,7 @@ function freezeOfficialGreenJacketHandicaps(){
 }
 
 function removeGreenJacketFreeze(){
+  if(hasRoundProgress()){alert("Finish or discard the active round before removing the Green Jacket freeze.");return}
   const snapshot=getActiveGreenJacketFreeze();
   if(!snapshot)return;
   if(!confirm(`Remove the Green Jacket handicap freeze from ${formatDate(snapshot.freezeDate)}?\n\nThis does not change current live handicaps.`))return;
@@ -1993,6 +2024,8 @@ function competitionChanged(){
 
 
 function continueRound(){
+ if(!preflightReady()){alert("PREFLIGHT FAILED. Import the previous scheduled round JSON before starting a new round.");showScreen("home");runPreflight(false);return}
+
  const c=document.getElementById("competition").value;
  if(!c){alert("Please select the competition.");return}
  const other=document.getElementById("otherComp").value.trim();
@@ -2011,6 +2044,8 @@ function continueRound(){
      alert("No active Green Jacket handicap freeze exists. Please use Green Jacket Manager before starting Green Jacket Day.");
      return
    }
+   if(snapshot.freezeDate>date){alert("The Green Jacket freeze date must be on or before the round date.");return}
+   if(players.some(p=>!snapshot.players.some(x=>x.playerId===p.id&&Number.isFinite(x.handicap)))){alert("The frozen snapshot does not cover every player. Check Green Jacket Manager before starting; live handicaps must not be substituted.");return}
    freezeDate=snapshot.freezeDate;
    snapshot.players.forEach(p=>frozenHandicaps[p.playerId]=p.handicap)
  }
@@ -2063,6 +2098,7 @@ function addScorecard(){
  if(!p){alert("Please type and select the full player name from the list.");return}
  if(round.scores.some(s=>s.playerId===p.id)){alert("This player's scorecard has already been entered.");return}
  if(!gross||gross<1){alert("Please enter the gross score.");return}
+ if(round.competition==="Green Jacket Day"&&!Number.isFinite(round.frozenHandicaps[p.id])){alert("This player has no frozen Green Jacket handicap. Stop and check the saved snapshot.");return}
  const h=activeHandicap(p);
  round.scores.push({playerId:p.id,name:p.name,gross,handicapUsed:h,currentBefore:p.current,nett:gross+h,holes:{}});
  round.results=null;round.applied=false;
@@ -2211,24 +2247,44 @@ function countbackDetail(type,player,awardLabel=""){
 function countbackHtml(type,player,awardLabel=""){const note=countbackDetail(type,player,awardLabel);return note?`<div class="countback-note">${note}</div>`:""}
 
 function buildCountbackAudit(){
- const source=round.scores||[],out=[],specs=[],slots=awardSlots();if(!source.length){round.countbackAudit=[];return []}
- const lowGross=Math.min(...source.map(s=>s.gross)),stick=source.filter(s=>s.gross===lowGross);
- if(stick.length>1)specs.push({type:"stick",label:"Winner off the Stick",mode:"low",players:stick,needed:1});
- const add=(mode,type,labelBase,sorter)=>{const sorted=[...source].sort(sorter),vals=[...new Set(sorted.slice(0,slots).map(s=>s.nett))];
- vals.forEach(v=>{const tied=source.filter(s=>s.nett===v);if(tied.length>1){const before=sorted.filter(s=>mode==="low"?s.nett<v:s.nett>v).length,needed=Math.max(0,Math.min(tied.length,slots-before));if(needed)specs.push({type,label:`${labelBase} — Nett ${v}`,mode,players:tied,needed})}})};
- add("low","nett","Nett countback",(a,b)=>a.nett-b.nett);add("high","pinkies","Pinkies countback",(a,b)=>b.nett-a.nett);
- specs.forEach(sp=>{let active=[...sp.players],needed=sp.needed;const holes=[];
- for(let h=9;h>=6&&active.length>1&&needed>0;h--){if(active.some(p=>p.holes?.[h]==null))break;
- holes.push({hole:h,scores:active.map(p=>({name:p.name,score:Number(p.holes[h])}))});
- const map=new Map();active.forEach(p=>{const v=Number(p.holes[h]);if(!map.has(v))map.set(v,[]);map.get(v).push(p)});
- const keys=[...map.keys()].sort((a,b)=>sp.mode==="high"?b-a:a-b);let consumed=0,next=[];
- for(const k of keys){const g=map.get(k);if(consumed>=needed)break;const take=Math.min(g.length,needed-consumed);if(g.length>1&&take>0){next=[...g];needed=take;break}consumed+=g.length}active=next}
- if(holes.length)out.push({type:sp.type,label:sp.label,players:sp.players.map(p=>p.name),holes})});
+ const out=[];
+ tiedAwardGroups().forEach(spec=>{
+  const audit={type:spec.type,label:spec.label,players:spec.players.map(p=>p.name),holes:[]};
+  const queue=[{players:spec.players,needed:spec.slotsNeeded,hole:9,rank:1}];
+  while(queue.length){
+   const task=queue.shift(),{players,needed,hole,rank}=task;
+   if(hole<6||players.some(p=>p.holes?.[hole]==null))continue;
+   const buckets=tieBucketsForHole({...spec,players},hole);
+   const step={hole,scores:players.map(p=>({name:p.name,score:Number(p.holes[hole])})),advancing:[],placed:[],dropped:[]};
+   let consumed=0;
+   buckets.forEach(group=>{
+    const take=Math.max(0,Math.min(group.length,needed-consumed));
+    if(!take)step.dropped.push(...group.map(p=>p.name));
+    else if(group.length===1)step.placed.push({name:group[0].name,rank:rank+consumed});
+    else{
+     step.advancing.push(...group.map(p=>p.name));
+     queue.push({players:group,needed:take,hole:hole-1,rank:rank+consumed});
+    }
+    consumed+=group.length;
+   });
+   audit.holes.push(step);
+  }
+  if(audit.holes.length)out.push(audit);
+ });
  round.countbackAudit=out;return out
 }
+function countbackDecisionLabel(a,player){
+ const label=String(a.label||"").split(" / ")[Math.max(0,(player.rank||1)-1)]||String(a.label||"");
+ if(/2nd runner-up/i.test(label))return "2nd Runner-up decided";
+ if(/runner-up/i.test(label))return "Runner-up decided";
+ if(a.type==="stick"||/winner/i.test(label))return "Winner decided";
+ return "Result decided"
+}
+
 function countbackAuditHtml(data=lockedData()){
  const audits=(data&&data.countbackAudit)||round.countbackAudit||[];if(!audits.length)return "";
- return `<div class="card" style="margin-top:14px;border:2px solid #b8c9bd"><h3 style="margin:0 0 8px">COUNTBACK AUDIT TRAIL</h3>${audits.map(a=>`<div style="padding:8px 0;border-top:1px solid #dce5df"><b>${a.label}</b><div class="small">Original tie: ${a.players.join(" · ")}</div>${a.holes.map(h=>`<div class="countback-note">Hole ${h.hole}: ${h.scores.map(x=>`${x.name} ${x.score}`).join(" · ")}</div>`).join("")}</div>`).join("")}</div>`
+ const esc=x=>String(x).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+ return `<div class="card" style="margin-top:14px;border:2px solid #b8c9bd"><h3 style="margin:0 0 8px">COUNTBACK AUDIT TRAIL</h3>${audits.map(a=>`<div style="padding:8px 0;border-top:1px solid #dce5df"><b>${esc(a.label)}</b><div class="small">Original tie (${a.players.length}): ${a.players.map(esc).join(" · ")}</div>${a.holes.map(h=>`<div class="countback-note">Hole ${h.hole}: ${h.scores.map(x=>`${esc(x.name)} ${x.score}`).join(" · ")}${h.dropped?.length?`<br>Dropped from this placing: ${h.dropped.map(esc).join(" · ")}`:""}${h.placed?.length?`<br>${h.placed.map(x=>`${countbackDecisionLabel(a,x)}: ${esc(x.name)}`).join(" · ")}`:""}${h.advancing?.length?`<br>Still tied (${h.advancing.length}): ${h.advancing.map(esc).join(" · ")} — ${h.hole>6?`continue to Hole ${h.hole-1}`:"unresolved after Hole 6"}`:""}</div>`).join("")}</div>`).join("")}</div>`
 }
 
 function calculateResults(){
@@ -2349,17 +2405,21 @@ function choosePreviousCompetitionFile(){
 /* ===== ROUND CANCELLED / NO PLAY ===== */
 let cancelledRoundState=null;
 function openCancelledRound(){
- if(!preflightReady()){
-   alert("PREFLIGHT has not passed. The cancellation record cannot be created until CLUBHOUSE is current.");
-   runPreflight(false);return
- }
- document.getElementById("cancelledDate").value=new Date().toISOString().slice(0,10);
+ if(!preflightState.checked||!preflightState.versionOK||preflightState.error){alert("Verify the software and import the latest available round before recording no play.");runPreflight(false);return}
+ document.getElementById("cancelledDate").value=phoneDateISO();
  showScreen("cancelledRound")
 }
 function prepareCancelledRound(){
  const date=document.getElementById("cancelledDate").value;
  const comp=document.getElementById("cancelledCompetition").value;
  if(!date){alert("Select the scheduled round date.");return}
+ const prior=getLocalLatestEvent(),source=getLocalHandicapSource(),when=new Date(date+"T12:00:00");
+ if(date>phoneDateISO()||![3,5].includes(when.getDay())){alert("Select a Wednesday or Friday on or before today.");return}
+ if(prior&&date<=prior.date){alert("That date is already recorded or precedes the latest event. Import the correct latest record instead.");return}
+ const known=preflightState.control?.latestEvent||preflightState.control?.latestRound;
+ if(known?.date&&date<=known.date){alert("The control record already covers this date. Import that record instead of creating a cancellation.");return}
+ const check=calendarPreflight(prior,source,when);
+ if(!preflightState.versionOK||!check.ok){alert("Import the round preceding this cancelled date first. "+check.reason);return}
  if(!confirm(`Confirm ROUND CANCELLED / NO PLAY?\\n\\nDate: ${formatDate(date)}\\nScheduled competition: ${comp}\\n\\nNo scores or handicap changes will be recorded.`))return;
  cancelledRoundState={date,competition:comp,status:"CANCELLED_NO_PLAY",roundId:preflightRoundId(date,comp,"CANCELLED_NO_PLAY"),saved:false,prepared:false};
  document.getElementById("cancelledSummary").innerHTML=`<b>ROUND CANCELLED / NO PLAY</b><br>${formatDate(date)} · ${comp}<br>No scores · No handicap changes`;
@@ -2492,11 +2552,20 @@ function openBlackboxById(id){
  const reports=JSON.parse(localStorage.getItem("clubhouseReports")||"[]");
  const r=reports.find(x=>String(x.id)===String(id)||String(x.roundId)===String(id));
  if(!r){alert("BLACKBOX could not find that completed round.");return}
+ const boardButton=document.getElementById("blackboxBoardBtn");
+ boardButton.classList.toggle("hidden",!r.results||r.cancelled||r.status==="CANCELLED_NO_PLAY");
+ boardButton.disabled=!r.results||!!r.cancelled||r.status==="CANCELLED_NO_PLAY";
+ boardButton.onclick=()=>{
+  const latest=JSON.parse(localStorage.getItem("clubhouseReports")||"[]");
+  const index=latest.findIndex(x=>String(x.id)===String(id)||String(x.roundId)===String(id));
+  if(index<0){alert("This saved round could not be found. Return to Previous Results.");return}
+  openHistoricalResultsBoard(index)
+ };
  document.getElementById("blackboxHeader").innerHTML=`<h2 style="margin-top:0">${bbEsc(formatDate(r.date))}</h2><div><b>${bbEsc(r.competition||"Competition")}</b> · ${Number(r.playerCount??(r.scores||[]).length)} players</div>${r.status==="CANCELLED_NO_PLAY"?'<div class="notice" style="margin-top:10px"><b>ROUND CANCELLED / NO PLAY</b></div>':""}`;
  document.getElementById("blackboxScores").innerHTML=bbRows(r.scores);
  document.getElementById("blackboxAdjustments").innerHTML=bbAdjustmentRows(r);
  const cb=bbCollectCountbacks(r);
- document.getElementById("blackboxCountbacks").innerHTML=cb.length?cb.map(x=>`<div class="player-card"><div><b>${bbEsc(x.label)}</b><div>${bbEsc(x.note)}</div></div></div>`).join(""):'<div class="notice">No countbacks were required.</div>';
+ document.getElementById("blackboxCountbacks").innerHTML=r.countbackAudit?.length?countbackAuditHtml(r):cb.length?cb.map(x=>`<div class="player-card"><div><b>${bbEsc(x.label)}</b><div>${bbEsc(x.note)}</div></div></div>`).join(""):'<div class="notice">No countbacks were required.</div>';
  document.getElementById("blackboxResults").innerHTML=bbResultsHTML(r);
  document.getElementById("blackboxNovelties").innerHTML=bbNoveltiesHTML(r);
  showScreen("blackboxReplay")
@@ -2630,6 +2699,27 @@ function applyAdjustments(){
  alert(round.competition==="Green Jacket Day"?"Green Jacket Day handicaps applied from the locked snapshot. The round is now locked.":"Handicaps confirmed. The round is now locked.");
  showScreen("complete")
 }
+// One countback description shared by the on-screen board and exported image.
+function boardCountbackEntries(data){
+ return (data.countbackAudit||[]).map(a=>{
+  const lines=[];
+  (a.holes||[]).forEach(h=>{
+   lines.push(`Hole ${h.hole}: ${(h.scores||[]).map(p=>`${p.name} ${p.score}`).join(" · ")}`);
+   const outcome=[];
+   if(h.dropped?.length)outcome.push(`Out: ${h.dropped.join(" · ")}`);
+   if(h.advancing?.length)outcome.push(`Still tied (${h.advancing.length}): ${h.advancing.join(" · ")}`);
+   if(h.placed?.length)outcome.push(h.placed.map(p=>`${countbackDecisionLabel(a,p)}: ${p.name}`).join(" · "));
+   if(outcome.length)lines.push(outcome.join(" | "));
+  });
+  return {label:`${a.label||"Countback"} — COUNTBACK REQUIRED`,lines};
+ }).filter(a=>a.lines.length)
+}
+function boardCountbackHtml(data){
+ const entries=boardCountbackEntries(data);
+ if(!entries.length)return "";
+ return `<div class="board-countback-trail"><h3>COUNTBACK TRAIL</h3>${entries.map(a=>`<div class="board-countback-entry"><b>${bbEsc(a.label)}</b>${a.lines.map(line=>`<div>${bbEsc(line)}</div>`).join("")}</div>`).join("")}</div>`
+}
+
 function buildHonour(){
 if(!historicalBoardData){
   if(!round.locked)syncNoveltyState(true);
@@ -2652,6 +2742,7 @@ ${row("nett-winner","Nett<br>Winner",r.nettWinner,`${r.nettWinner.nett}<br>Nett`
 ${largeField&&r.pinkSecond?row("pink-runner","Pinkies 2nd<br>Runner-up",r.pinkSecond,`${r.pinkSecond.nett}<br>Nett`,"pinkies"):""}
 ${row("pink-runner","Pinkies<br>Runner-up",r.pinkRunner,`${r.pinkRunner.nett}<br>Nett`,"pinkies")}
 ${row("pink-winner","Pinkies<br>Winner",r.pinkWinner,`${r.pinkWinner.nett}<br>Nett`,"pinkies")}
+${boardCountbackHtml(d)}
 <div class="novelty-title">Novelty Prizes</div><div class="novelty-grid">
 ${novelty("1st NTP",n.n1,flagIcon,"Hole 1")}${novelty("3rd D&P",n.n3,golfIcon,"Hole 3")}${novelty("4th NTP",n.n4,flagIcon,"Hole 4")}${novelty("6th NTP",n.n6,flagIcon,"Hole 6")}${novelty("7th L/D",n.n7,golfIcon,"Hole 7")}
 </div></div>`;
@@ -2668,7 +2759,7 @@ function openHistoricalResultsBoard(index){
  const reports=JSON.parse(localStorage.getItem("clubhouseReports")||"[]");
  const r=reports[index];
  if(!r||!r.results){alert("This saved round does not contain a complete Results Board.");return}
- historicalBoardData={date:r.date,competition:r.competition||"Competition",freezeDate:r.freezeDate||"",scores:Array.isArray(r.scores)?r.scores:[],results:r.results,novelties:r.novelties||{},adjustments:Array.isArray(r.adjustments)?r.adjustments:[],playerCount:Number(r.playerCount)||(Array.isArray(r.scores)?r.scores.length:0)};
+ historicalBoardData={date:r.date,competition:r.competition||"Competition",freezeDate:r.freezeDate||"",scores:Array.isArray(r.scores)?r.scores:[],results:r.results,novelties:r.novelties||{},countbackAudit:r.countbackAudit||[],adjustments:Array.isArray(r.adjustments)?r.adjustments:[],playerCount:Number(r.playerCount)||(Array.isArray(r.scores)?r.scores.length:0)};
  buildHonour();
 }
 function closeHistoricalResultsBoard(){historicalBoardData=null;showScreen("reports")}
@@ -2760,8 +2851,32 @@ async function shareHonour(){
   ["PINKIES WINNER",r.pinkWinner,`${r.pinkWinner.nett} NETT`,"#f7bfd0","pinkies"]
  ];
 
- const W=1080,H=1920;
- const c=document.createElement("canvas");c.width=W;c.height=H;const x=c.getContext("2d");
+ const W=1080;
+ const c=document.createElement("canvas"),x=c.getContext("2d");
+ // Measure every trail line first. Grow the image instead of shrinking or clipping names.
+ const auditRows=[];
+ const wrapAudit=(text,width)=>{
+   const lines=[];let line="";
+   for(const word of String(text).trim().split(/\s+/)){
+     const next=line?line+" "+word:word;
+     if(line&&x.measureText(next).width>width){lines.push(line);line=word}else line=next;
+   }
+   if(line)lines.push(line);return lines;
+ };
+ const auditEntries=boardCountbackEntries(d);
+ if(auditEntries.length){
+   auditRows.push({text:"COUNTBACK TRAIL",heading:true});
+   auditEntries.forEach(a=>{
+     x.font="bold 25px Arial";
+     wrapAudit(a.label,960).forEach(text=>auditRows.push({text,heading:true}));
+     x.font="24px Arial";
+     a.lines.forEach(line=>wrapAudit(line,960).forEach(text=>auditRows.push({text,heading:false})));
+     auditRows.push({text:"",heading:false});
+   });
+ }
+ const auditHeight=auditRows.length?24+auditRows.length*32:0;
+ const H=1920+auditHeight;
+ c.width=W;c.height=H;
  const margin=28,innerW=W-margin*2;
 
  const fitText=(text,maxWidth,startSize,minSize=22,weight="bold",style="")=>{
@@ -2867,8 +2982,14 @@ async function shareHonour(){
    y+=rowH+rowGap;
  });
 
+ // The entire trail is included in the same PNG as the results and novelties.
+ if(auditHeight){
+   roundRect(margin,1140,innerW,auditHeight-8,12,"#fffdf5","#b9c9bd");
+   x.textAlign="left";x.fillStyle="#243e30";
+   auditRows.forEach((line,i)=>{x.font=line.heading?"bold 25px Arial":"24px Arial";x.fillText(line.text,margin+24,1172+i*32)});
+ }
  // Novelty section.
- y=1140;
+ y=1140+auditHeight;
  roundRect(margin,y,innerW,58,12,"#12662f","#12662f");
  x.fillStyle="#fff";x.font="bold 30px Arial";x.textAlign="center";x.fillText("NOVELTY PRIZES",W/2,y+39);
  y+=69;
@@ -2905,7 +3026,7 @@ async function shareHonour(){
  });
 
  // Footer.
- y=1806;
+ y=1806+auditHeight;
  roundRect(margin,y,innerW,82,12,"#071b43","#071b43");
  x.fillStyle="#fff";x.textAlign="center";x.font="bold 29px Arial";
  x.fillText(`TOTAL PLAYERS: ${d.playerCount}`,W/2,y+52);
@@ -3359,7 +3480,7 @@ runPreflight(false);
 document.addEventListener("change",()=>queueDraftSave());
 document.addEventListener("click",()=>queueDraftSave());
 window.addEventListener("pagehide",()=>saveRoundDraft(true));
-document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden")saveRoundDraft(true)});
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden")saveRoundDraft(true);else runPreflight(false)});
 
 // Offer recovery only after the existing page has fully initialised.
 setTimeout(()=>offerDraftResume(),150);
@@ -3370,7 +3491,7 @@ document.addEventListener("DOMContentLoaded",()=>{
 });
 
 
-// v0.6.50: automatic mail with a durable, byte-identical retry payload.
+// v0.6.51: automatic mail with a durable, byte-identical retry payload.
 const CLUBHOUSE_EMAIL_URL='https://script.google.com/macros/s/AKfycbwBaCihevwVMsEXA38SiwLhvSpiymLSyOtQXUT9feSfzUOHxRrhBGQXwsf3LcQEwLSE/exec';
 let mailRequest=null;
 function acceptedMailOrigin(value){
