@@ -155,6 +155,11 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
   color:#4d4d4d;
   font-weight:800
 }
+.board-countback-trail{padding:10px 12px;background:#fffdf5;border-top:2px solid #b9c9bd;color:#243e30;text-align:left}
+.board-countback-trail h3{margin:0 0 7px;font-size:.95rem}
+.board-countback-entry{font-size:.82rem;line-height:1.35;overflow-wrap:anywhere;padding:5px 0}
+.board-countback-entry + .board-countback-entry{border-top:1px solid #d6dfd8}
+.board-countback-entry b{display:block;margin-bottom:3px}
 .novelty-title{
   background:#12662f;
   color:#fff;
@@ -402,7 +407,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
   <button type="button" class="btn btn-secondary" onclick="manualSaveProgress()">SAVE PROGRESS</button>
 </div>
 
-<main><div role="note" style="background:#fff2bd;padding:12px;border:2px solid #ad8300;border-radius:10px"><b>CLUBHOUSE v0.6.51 — TEST PAGE</b><br>Uses this browser’s existing saved Clubhouse data. Keep your latest real JSON as backup. Test emails are real.</div>
+<main><div role="note" style="background:#fff2bd;padding:12px;border:2px solid #ad8300;border-radius:10px"><b>CLUBHOUSE v0.6.51 — TEST PAGE · BOARD TRAIL FIX</b><br>Uses this browser’s existing saved Clubhouse data. Keep your latest real JSON as backup. Test emails are real.</div>
 <section id="home" class="screen active">
   <div class="hero"><h2>Clubhouse</h2><p>Enter completed scorecards, calculate prizes, update handicaps and prepare the Honour Board.</p></div>
   <div id="preflightCard" class="preflight-card">
@@ -1434,7 +1439,7 @@ function buildClubhouseTrainingSlides(){
        <div class="training-btn">Continue</div>`),
 
     trainingShell("5. Countback — only if required",
-      "If players are tied, CLUBHOUSE asks for the latest hole first: <b>Hole 9</b>. If still tied, it then asks Hole 8, then 7, then 6 only as needed. The Countback Audit Trail names each player who drops out, advances or secures a placing, including separate tied groups.",
+      "If players are tied, CLUBHOUSE asks for the latest hole first: <b>Hole 9</b>. If still tied, it then asks Hole 8, then 7, then 6 only as needed. The Countback Audit Trail names each player who drops out, advances or secures a placing, including separate tied groups. The trail is also included on the Results Board and its shared image, with the novelty prizes.",
       `<h3>COUNTBACK REQUIRED</h3>
        <div class="training-row"><b>Gary Bull — Hole 9</b><strong>4</strong></div>
        <div class="training-row"><b>Ian (NARKY) Macmillan — Hole 9</b><strong>4</strong></div>
@@ -2676,6 +2681,27 @@ function applyAdjustments(){
  alert(round.competition==="Green Jacket Day"?"Green Jacket Day handicaps applied from the locked snapshot. The round is now locked.":"Handicaps confirmed. The round is now locked.");
  showScreen("complete")
 }
+// One countback description shared by the on-screen board and exported image.
+function boardCountbackEntries(data){
+ return (data.countbackAudit||[]).map(a=>{
+  const lines=[];
+  (a.holes||[]).forEach(h=>{
+   lines.push(`Hole ${h.hole}: ${(h.scores||[]).map(p=>`${p.name} ${p.score}`).join(" · ")}`);
+   const outcome=[];
+   if(h.dropped?.length)outcome.push(`Out: ${h.dropped.join(" · ")}`);
+   if(h.advancing?.length)outcome.push(`Still tied (${h.advancing.length}): ${h.advancing.join(" · ")}`);
+   if(h.placed?.length)outcome.push(`Placing decided: ${h.placed.map(p=>p.name).join(" · ")}`);
+   if(outcome.length)lines.push(outcome.join(" | "));
+  });
+  return {label:a.label||"Countback",lines};
+ }).filter(a=>a.lines.length)
+}
+function boardCountbackHtml(data){
+ const entries=boardCountbackEntries(data);
+ if(!entries.length)return "";
+ return `<div class="board-countback-trail"><h3>COUNTBACK TRAIL</h3>${entries.map(a=>`<div class="board-countback-entry"><b>${bbEsc(a.label)}</b>${a.lines.map(line=>`<div>${bbEsc(line)}</div>`).join("")}</div>`).join("")}</div>`
+}
+
 function buildHonour(){
 if(!historicalBoardData){
   if(!round.locked)syncNoveltyState(true);
@@ -2698,6 +2724,7 @@ ${row("nett-winner","Nett<br>Winner",r.nettWinner,`${r.nettWinner.nett}<br>Nett`
 ${largeField&&r.pinkSecond?row("pink-runner","Pinkies 2nd<br>Runner-up",r.pinkSecond,`${r.pinkSecond.nett}<br>Nett`,"pinkies"):""}
 ${row("pink-runner","Pinkies<br>Runner-up",r.pinkRunner,`${r.pinkRunner.nett}<br>Nett`,"pinkies")}
 ${row("pink-winner","Pinkies<br>Winner",r.pinkWinner,`${r.pinkWinner.nett}<br>Nett`,"pinkies")}
+${boardCountbackHtml(d)}
 <div class="novelty-title">Novelty Prizes</div><div class="novelty-grid">
 ${novelty("1st NTP",n.n1,flagIcon,"Hole 1")}${novelty("3rd D&P",n.n3,golfIcon,"Hole 3")}${novelty("4th NTP",n.n4,flagIcon,"Hole 4")}${novelty("6th NTP",n.n6,flagIcon,"Hole 6")}${novelty("7th L/D",n.n7,golfIcon,"Hole 7")}
 </div></div>`;
@@ -2806,8 +2833,32 @@ async function shareHonour(){
   ["PINKIES WINNER",r.pinkWinner,`${r.pinkWinner.nett} NETT`,"#f7bfd0","pinkies"]
  ];
 
- const W=1080,H=1920;
- const c=document.createElement("canvas");c.width=W;c.height=H;const x=c.getContext("2d");
+ const W=1080;
+ const c=document.createElement("canvas"),x=c.getContext("2d");
+ // Measure every trail line first. Grow the image instead of shrinking or clipping names.
+ const auditRows=[];
+ const wrapAudit=(text,width)=>{
+   const lines=[];let line="";
+   for(const word of String(text).trim().split(/\s+/)){
+     const next=line?line+" "+word:word;
+     if(line&&x.measureText(next).width>width){lines.push(line);line=word}else line=next;
+   }
+   if(line)lines.push(line);return lines;
+ };
+ const auditEntries=boardCountbackEntries(d);
+ if(auditEntries.length){
+   auditRows.push({text:"COUNTBACK TRAIL",heading:true});
+   auditEntries.forEach(a=>{
+     x.font="bold 25px Arial";
+     wrapAudit(a.label,960).forEach(text=>auditRows.push({text,heading:true}));
+     x.font="24px Arial";
+     a.lines.forEach(line=>wrapAudit(line,960).forEach(text=>auditRows.push({text,heading:false})));
+     auditRows.push({text:"",heading:false});
+   });
+ }
+ const auditHeight=auditRows.length?24+auditRows.length*32:0;
+ const H=1920+auditHeight;
+ c.width=W;c.height=H;
  const margin=28,innerW=W-margin*2;
 
  const fitText=(text,maxWidth,startSize,minSize=22,weight="bold",style="")=>{
@@ -2913,8 +2964,14 @@ async function shareHonour(){
    y+=rowH+rowGap;
  });
 
+ // The entire trail is included in the same PNG as the results and novelties.
+ if(auditHeight){
+   roundRect(margin,1140,innerW,auditHeight-8,12,"#fffdf5","#b9c9bd");
+   x.textAlign="left";x.fillStyle="#243e30";
+   auditRows.forEach((line,i)=>{x.font=line.heading?"bold 25px Arial":"24px Arial";x.fillText(line.text,margin+24,1172+i*32)});
+ }
  // Novelty section.
- y=1140;
+ y=1140+auditHeight;
  roundRect(margin,y,innerW,58,12,"#12662f","#12662f");
  x.fillStyle="#fff";x.font="bold 30px Arial";x.textAlign="center";x.fillText("NOVELTY PRIZES",W/2,y+39);
  y+=69;
@@ -2951,7 +3008,7 @@ async function shareHonour(){
  });
 
  // Footer.
- y=1806;
+ y=1806+auditHeight;
  roundRect(margin,y,innerW,82,12,"#071b43","#071b43");
  x.fillStyle="#fff";x.textAlign="center";x.font="bold 29px Arial";
  x.fillText(`TOTAL PLAYERS: ${d.playerCount}`,W/2,y+52);
