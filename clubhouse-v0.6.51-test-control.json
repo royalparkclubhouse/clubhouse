@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "1.1",
+  "currentVersion": "0.6.51",
+  "latestEvent": {
+    "date": "2026-10-23",
+    "competition": "Stroke",
+    "status": "COMPLETED",
+    "roundId": "2026-10-23|Stroke|COMPLETED"
+  },
+  "latestHandicapSource": {
+    "date": "2026-10-23",
+    "competition": "Stroke",
+    "status": "COMPLETED",
+    "roundId": "2026-10-23|Stroke|COMPLETED"
+  },
+  "note": "Calendar-based previous Wednesday/Friday preflight; complete branched countback audit. Existing phone data is preserved. Import the latest real round JSON."
+}
