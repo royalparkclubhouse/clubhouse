@@ -407,7 +407,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
   <button type="button" class="btn btn-secondary" onclick="manualSaveProgress()">SAVE PROGRESS</button>
 </div>
 
-<main><div role="note" style="background:#fff2bd;padding:12px;border:2px solid #ad8300;border-radius:10px"><b>CLUBHOUSE v0.6.51 — TEST PAGE · BOARD TRAIL FIX 3</b><br>Uses this browser’s existing saved Clubhouse data. Keep your latest real JSON as backup. Test emails are real.</div>
+<main><div role="note" style="background:#fff2bd;padding:12px;border:2px solid #ad8300;border-radius:10px"><b>CLUBHOUSE v0.6.51 — TEST PAGE · BOARD TRAIL FIX 4</b><br>Uses this browser’s existing saved Clubhouse data. Keep your latest real JSON as backup. Test emails are real.</div>
 <section id="home" class="screen active">
   <div class="hero"><h2>Clubhouse</h2><p>Enter completed scorecards, calculate prizes, update handicaps and prepare the Honour Board.</p></div>
   <div id="preflightCard" class="preflight-card">
@@ -470,6 +470,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
  <div class="blackbox-step"><h3>4. Final Results</h3><div id="blackboxResults"></div></div>
  <div class="blackbox-step"><h3>5. Novelty Winners</h3><div id="blackboxNovelties"></div></div>
  <div class="blackbox-readonly">🔒 READ ONLY — this replay cannot alter scores, results or current handicaps.</div>
+ <button id="blackboxBoardBtn" class="btn btn-primary hidden">View Results Board</button>
  <button class="btn btn-secondary" onclick="showScreen('reports')">Back to Previous Results</button>
 </section>
 
@@ -2551,6 +2552,15 @@ function openBlackboxById(id){
  const reports=JSON.parse(localStorage.getItem("clubhouseReports")||"[]");
  const r=reports.find(x=>String(x.id)===String(id)||String(x.roundId)===String(id));
  if(!r){alert("BLACKBOX could not find that completed round.");return}
+ const boardButton=document.getElementById("blackboxBoardBtn");
+ boardButton.classList.toggle("hidden",!r.results||r.cancelled||r.status==="CANCELLED_NO_PLAY");
+ boardButton.disabled=!r.results||!!r.cancelled||r.status==="CANCELLED_NO_PLAY";
+ boardButton.onclick=()=>{
+  const latest=JSON.parse(localStorage.getItem("clubhouseReports")||"[]");
+  const index=latest.findIndex(x=>String(x.id)===String(id)||String(x.roundId)===String(id));
+  if(index<0){alert("This saved round could not be found. Return to Previous Results.");return}
+  openHistoricalResultsBoard(index)
+ };
  document.getElementById("blackboxHeader").innerHTML=`<h2 style="margin-top:0">${bbEsc(formatDate(r.date))}</h2><div><b>${bbEsc(r.competition||"Competition")}</b> · ${Number(r.playerCount??(r.scores||[]).length)} players</div>${r.status==="CANCELLED_NO_PLAY"?'<div class="notice" style="margin-top:10px"><b>ROUND CANCELLED / NO PLAY</b></div>':""}`;
  document.getElementById("blackboxScores").innerHTML=bbRows(r.scores);
  document.getElementById("blackboxAdjustments").innerHTML=bbAdjustmentRows(r);
