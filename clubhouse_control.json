@@ -1,17 +1,17 @@
 {
   "schemaVersion": "1.1",
-  "currentVersion": "0.6.53",
+  "currentVersion": "0.6.54",
   "latestEvent": {
-    "date": "2026-11-11",
-    "competition": "Stroke",
+    "date": "2026-11-20",
+    "competition": "Green Jacket Day",
     "status": "COMPLETED",
-    "roundId": "2026-11-11|Stroke|COMPLETED"
+    "roundId": "2026-11-20|Green Jacket Day|COMPLETED"
   },
   "latestHandicapSource": {
-    "date": "2026-11-11",
-    "competition": "Stroke",
+    "date": "2026-11-20",
+    "competition": "Green Jacket Day",
     "status": "COMPLETED",
-    "roundId": "2026-11-11|Stroke|COMPLETED"
+    "roundId": "2026-11-20|Green Jacket Day|COMPLETED"
   },
-  "note": "Calendar-based previous Wednesday/Friday preflight; complete branched countback audit. Existing phone data is preserved. Import the latest real round JSON."
+  "note": "v0.6.54: GJD ball-return checkbox; 0/DQ excluded from scoring places and retained for novelties; explicit Green Jacket Winner. Import the amended 20 November GJD JSON. GJD handicaps carry forward from the frozen baseline."
 }
