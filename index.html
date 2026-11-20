@@ -483,6 +483,8 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
     <label>Freeze date</label>
     <input id="greenJacketOfficialFreezeDate" type="date">
     <button type="button" class="btn btn-dark" onclick="freezeOfficialGreenJacketHandicaps()">Freeze Current Handicaps</button>
+    <p class="sub">Freeze Current Handicaps captures today’s values only. For the 20 November GJD, restore the verified historical table below.</p>
+    <button type="button" class="btn btn-primary" onclick="restoreVerifiedOctoberFreeze()">Restore verified 30/10 handicaps</button>
     <div id="greenJacketSetupStatus" class="import-status" style="margin-top:12px"><b>🟢 Green Jacket Freeze Active</b><br>Freeze date: Friday 31 July 2026 · 45 players<br>Status: Awaiting Green Jacket Day</div>
     <div id="greenJacketManagerActions" class="">
       <button type="button" class="btn btn-secondary" onclick="toggleGreenJacketFrozenList()">View Frozen Handicaps</button>
@@ -1305,7 +1307,7 @@ footer{text-align:center;color:#7a877f;font-size:.72rem;padding:20px}
 </section>
 
 </main>
-<footer>CLUBHOUSE v0.6.53 · 49 members · GJD fix 2 · 20 Nov 2026</footer>
+<footer>CLUBHOUSE v0.6.53 · 49 members · GJD fix 3 · 20 Nov 2026</footer>
 </div>
 
 <div id="editModal" class="modal"><div class="modal-sheet">
@@ -1464,9 +1466,42 @@ function importedMemberHandicap(p,rows){
  return rows.find(h=>String(h.playerId)===p.id)||rows.find(h=>memberNameKey(h.name)===memberNameKey(p.name));
 }
 
+// Verified closing handicap table from the completed 30 October round JSON.
+// Restoration is deliberate, backed up and independent of the live player table.
+const VERIFIED_OCTOBER_FREEZE_PLAYERS=[{"playerId":"P001","name":"Ken Anderson","handicap":-5},{"playerId":"P002","name":"Stephen (Ando) Anderson","handicap":-5},{"playerId":"P003","name":"Michael Barnes","handicap":-3},{"playerId":"P004","name":"John Bastow","handicap":2},{"playerId":"P005","name":"Gerrard-Benny","handicap":-4},{"playerId":"P006","name":"Garry Brown","handicap":-7},{"playerId":"P007","name":"Gary Bull","handicap":1},{"playerId":"P008","name":"SHANE-CUPPO","handicap":-4},{"playerId":"P009","name":"Charles Eliot","handicap":-3},{"playerId":"P010","name":"Chris Falzon","handicap":-3},{"playerId":"P011","name":"John Featherston","handicap":-7},{"playerId":"P012","name":"Glen (SHARKY) Fisher","handicap":-2},{"playerId":"P013","name":"Allan Freeman","handicap":-3},{"playerId":"P014","name":"Peter Guest","handicap":-2},{"playerId":"P015","name":"Philip Hayes","handicap":-7},{"playerId":"P016","name":"Peter-Ross","handicap":-4},{"playerId":"P017","name":"Gerard Holdstock","handicap":-8},{"playerId":"P018","name":"Jim Isabella","handicap":-6},{"playerId":"P019","name":"Denis James","handicap":0},{"playerId":"P020","name":"Mick Keohane","handicap":-5},{"playerId":"P021","name":"Chris Koo","handicap":-1},{"playerId":"P022","name":"Roy Krul","handicap":-4},{"playerId":"P023","name":"Sam LaRosa","handicap":2},{"playerId":"P024","name":"Peter Macleod","handicap":1},{"playerId":"P025","name":"Ian (NARKY) Macmillan","handicap":-4},{"playerId":"P026","name":"Bernie Magennis","handicap":1},{"playerId":"P027","name":"Lui Marini","handicap":3},{"playerId":"P028","name":"Ian (RED) Martyn","handicap":-7},{"playerId":"P029","name":"Dave Matthews","handicap":1},{"playerId":"P030","name":"Robbie Menezes","handicap":1},{"playerId":"P031","name":"Eren Monza","handicap":-6},{"playerId":"P032","name":"Stephen Munro","handicap":-2},{"playerId":"P033","name":"Mick Murray","handicap":-3},{"playerId":"P034","name":"Barry Ogston","handicap":-8},{"playerId":"P035","name":"Grant Pearse","handicap":-5},{"playerId":"P036","name":"Tony Ring","handicap":-8},{"playerId":"P037","name":"Andrew Sandilands","handicap":-1},{"playerId":"P038","name":"Perry Sandilands","handicap":-8},{"playerId":"P039","name":"Peter Slevison","handicap":2},{"playerId":"P040","name":"Peter Smith","handicap":-4},{"playerId":"P041","name":"Stephen Squirrell","handicap":-7},{"playerId":"P042","name":"Philip Taylor","handicap":2},{"playerId":"P043","name":"John Taylor","handicap":-3},{"playerId":"P044","name":"Glenn Todd","handicap":-2},{"playerId":"P045","name":"Rich Watkiss","handicap":1}];
+function isVerifiedOctoberFreeze(snapshot){
+ if(!snapshot||snapshot.freezeDate!=="2026-10-30"||!Array.isArray(snapshot.players)||snapshot.players.length!==VERIFIED_OCTOBER_FREEZE_PLAYERS.length)return false;
+ return VERIFIED_OCTOBER_FREEZE_PLAYERS.every(expected=>snapshot.players.filter(p=>p.playerId===expected.playerId).length===1&&snapshot.players.some(p=>p.playerId===expected.playerId&&p.name===expected.name&&p.handicap===expected.handicap));
+}
+function restoreVerifiedOctoberFreeze(){
+ if(hasRoundProgress()){alert("An unfinished round is open. Keep any entered scores safe and contact Robbie before restoring. If it is only an empty setup, discard that empty draft first.");return}
+ if(!confirm("Restore the verified 30 October 2026 closing handicaps for Green Jacket Day?\n\nSource: completed 30/10 JSON. Robbie +1; Shane Gee -4.\nYour live handicaps and previous results will not change. The existing freeze will be backed up. Gary Maclean's approved -4 remains a separate amendment for 20 November."))return;
+ try{
+   const previous=getActiveGreenJacketFreeze();
+   if(previous&&previous.freezeDate!=="2026-10-30"){
+     alert("The active freeze is for a different date. Stop and check with Robbie before replacing it.");return;
+   }
+   if(previous&&Array.isArray(previous.playedDates)&&previous.playedDates.includes("2026-11-20")){
+     alert("This freeze already records the 20 November GJD as played. Stop and check the completed results before replacing it.");return;
+   }
+   const backupKey="clubhouseGreenJacketRecoveryBackups20261120";
+   const backups=JSON.parse(localStorage.getItem(backupKey)||"[]");
+   if(!Array.isArray(backups))throw new Error("The freeze backup list could not be read.");
+   backups.push({backedUpAt:new Date().toISOString(),reason:"Restore verified 30 October closing handicaps",snapshot:previous});
+   localStorage.setItem(backupKey,JSON.stringify(backups));
+   const restored={freezeDate:"2026-10-30",savedAt:new Date().toISOString(),playedDates:[],players:deepCopy(VERIFIED_OCTOBER_FREEZE_PLAYERS),restoration:{sourceFile:"Clubhouse_2026-10-30_Stroke_v0.6.52(1).json",sourceRoundDate:"2026-10-30",sourceAppVersion:"0.6.52",sourceSHA256:"3ec3df01257e40a6fb43e5366349e56fac8ea6c8a2954eeb9c0250f476608a48",basis:"currentHandicapsAfterRound: verified closing values",restoredAt:new Date().toISOString()}};
+   saveActiveGreenJacketFreeze(restored);
+   document.getElementById("greenJacketOfficialFreezeDate").value="2026-10-30";
+   document.getElementById("greenJacketFrozenList").classList.add("hidden");
+   updateGreenJacketSetupStatus();updateGreenJacketHomeStatus();updateFreezeStatus();
+   alert("Verified 30 October handicaps restored. Robbie +1; Shane Gee -4; Peter Banks -4; Gerard Biddlestone -4. Gary Maclean -4 is separately approved for 20 November. Live handicaps have not changed.");
+ }catch(error){alert("Restoration did not finish. Do not enter GJD scores. "+error.message);}
+}
+
 // Resolve identities without rewriting the sealed snapshot or borrowing live values.
 function effectiveGreenJacketFreeze(snapshot,eventDate){
  const handicaps={},identityMappings=[],amendments=[];
+ if(snapshot.freezeDate==="2026-10-30"&&eventDate==="2026-11-20"&&!isVerifiedOctoberFreeze(snapshot))return {handicaps,identityMappings,amendments,requiresVerified:true};
  for(const p of players){
    const h=importedMemberHandicap(p,snapshot.players||[]);
    if(h&&typeof h.handicap==="number"&&Number.isFinite(h.handicap)){
@@ -2023,7 +2058,7 @@ function freezeOfficialGreenJacketHandicaps(){
 
   const date=document.getElementById("greenJacketOfficialFreezeDate").value;
   if(!date){alert("Please select the Green Jacket freeze date.");return}
-  if(date>phoneDateISO()){alert("The freeze date cannot be in the future.");return}
+  if(date!==phoneDateISO()){alert("Freeze Current Handicaps can only capture today’s live values with today’s date. It cannot retrieve a past date. For the 20 November GJD, use Restore verified 30/10 handicaps.");return}
   const existing=getActiveGreenJacketFreeze();
   if(existing){
     if(!confirm(`A Green Jacket handicap freeze already exists.\n\nFreeze date: ${formatDate(existing.freezeDate)}\n${existing.players.length} players\n\nReplace it with the current handicaps as at ${formatDate(date)}?`))return
@@ -2062,7 +2097,12 @@ function toggleGreenJacketFrozenList(){
   const snapshot=getActiveGreenJacketFreeze();
   if(!box||!snapshot)return;
   if(!box.classList.contains("hidden")){box.classList.add("hidden");return}
-  box.innerHTML=snapshot.players.map(p=>`<div class="player-card"><div><h3>${p.name}</h3><div class="player-meta">${p.playerId}</div></div><div class="scoreline">${signed(p.handicap)}</div></div>`).join("");
+  if(isVerifiedOctoberFreeze(snapshot)){
+    const effective=effectiveGreenJacketFreeze(snapshot,"2026-11-20");
+    box.innerHTML='<div class="notice">Verified 30/10 closing handicaps for the 20/11 GJD. Current names are shown below; original source rows remain saved. Gary Maclean −4 is Robbie’s separate approved amendment.</div>'+players.filter(p=>Number.isFinite(effective.handicaps[p.id])).sort((a,b)=>a.name.localeCompare(b.name)).map(p=>`<div class="player-card"><div><h3>${p.name}</h3><div class="player-meta">${p.id}${p.id==="P048"?" · Approved 20/11 amendment":" · Historical 30/10 value"}</div></div><div class="scoreline">${signed(effective.handicaps[p.id])}</div></div>`).join("");
+  }else{
+    box.innerHTML='<div class="notice">This is the stored snapshot. For the 20/11 GJD it must match the verified 30/10 JSON. Use Restore verified 30/10 handicaps if needed.</div>'+snapshot.players.map(p=>`<div class="player-card"><div><h3>${p.name}</h3><div class="player-meta">${p.playerId}</div></div><div class="scoreline">${signed(p.handicap)}</div></div>`).join("");
+  }
   box.classList.remove("hidden")
 }
 
@@ -2079,7 +2119,7 @@ function updateGreenJacketSetupStatus(){
   const played=Array.isArray(snapshot.playedDates)&&snapshot.playedDates.length
     ? `<br>Green Jacket played: ${snapshot.playedDates.map(formatDate).join(", ")}`
     : "<br>Status: Awaiting Green Jacket Day";
-  el.innerHTML=`<b>🟢 Green Jacket Freeze Active</b><br>Freeze date: ${formatDate(snapshot.freezeDate)} · ${snapshot.players.length} players${played}`
+  el.innerHTML=`<b>🟢 Green Jacket Freeze Active</b><br>Freeze date: ${formatDate(snapshot.freezeDate)} · ${snapshot.players.length} source players${isVerifiedOctoberFreeze(snapshot)?" · VERIFIED 30/10 closing values":""}${played}`
 }
 
 function updateGreenJacketHomeStatus(){
@@ -2138,6 +2178,7 @@ function continueRound(){
    }
    if(snapshot.freezeDate>date){alert("The Green Jacket freeze date must be on or before the round date.");return}
    const effective=effectiveGreenJacketFreeze(snapshot,date);
+   if(effective.requiresVerified){alert("The 30 October freeze does not match the verified historical JSON. In Green Jacket Manager, use Restore verified 30/10 handicaps before entering scores.");return}
    if(!Object.keys(effective.handicaps).length){alert("No players have a recognised frozen Green Jacket handicap. Check Green Jacket Manager.");return}
    freezeDate=snapshot.freezeDate;
    frozenHandicaps=effective.handicaps;
